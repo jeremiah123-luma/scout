@@ -1,16 +1,16 @@
 {
- "generated_at": "2026-10-16T12:26:44+00:00",
+ "generated_at": "2026-10-16T15:33:53+00:00",
  "counts": {
-  "rows": 17774,
-  "dropped: inactive": 12609,
+  "rows": 17786,
+  "dropped: inactive": 12590,
   "dropped: not a 2027 term": 2055,
-  "dropped: not a target role": 1162,
+  "dropped: not a target role": 1184,
   "dropped: graduate students only": 446,
   "dropped: older than 240 days": 41,
-  "dropped: duplicate": 262,
-  "kept": 1199
+  "dropped: duplicate": 263,
+  "kept": 1207
  },
- "total_matches": 1199,
+ "total_matches": 1207,
  "matches": [
   {
    "id": "4cf30745-6f3b-4afc-b4a7-8c156b74804c",
@@ -54,7 +54,7 @@
    },
    "score": 100,
    "eligibility": "ok",
-   "eligibility_note": "page mentions freshman/sophomore/underclassmen"
+   "eligibility_note": "page names graduation 2029 to 2030"
   },
   {
    "id": "613293d2-6943-4f9a-ab4a-7bb7883891fc",
@@ -98,7 +98,7 @@
    },
    "score": 96,
    "eligibility": "ok",
-   "eligibility_note": "page mentions freshman/sophomore/underclassmen"
+   "eligibility_note": "page names graduation 2029 to 2030"
   },
   {
    "id": "16259630-05fe-40a2-bf93-dd529c139975",
@@ -145,35 +145,42 @@
    "eligibility_note": "page names graduation 2028 to 2030"
   },
   {
-   "id": "fa621e40-4b60-4912-8246-670d0d5554a6",
+   "id": "1962fda2-9358-4d0b-a814-d0e55e225392",
    "source": "simplify",
-   "company": "Netflix",
-   "title": "Software Engineer Intern",
-   "url": "https://explore.jobs.netflix.net/careers/job/790318904468",
+   "company": "Amazon",
+   "title": "Software Developer Intern",
+   "url": "https://amazon.jobs/en/jobs/10554586/2027-software-dev-engineer-intern-united-kingdom",
    "locations": [
-    "LA",
-    "Los Gatos, CA"
+    "London, UK",
+    "Edinburgh, UK",
+    "Bristol, UK",
+    "Cambridge, UK"
    ],
    "terms": [
-    "Summer 2027"
+    "Summer 2027",
+    "Winter 2027",
+    "Spring 2027",
+    "Fall 2027"
    ],
    "degrees": [
     "Bachelor's",
-    "Master's"
+    "Master's",
+    "MBA",
+    "PhD"
    ],
    "sponsorship": "Other",
    "category": "Software",
-   "date_posted": 1791929715,
-   "date_updated": 1791930147,
+   "date_posted": 1792160266,
+   "date_updated": 1792160339,
    "active": true,
    "tier": 1,
-   "company_key": "netflix",
+   "company_key": "amazon",
    "role": "swe",
    "early_career": "none",
-   "location_class": "us",
+   "location_class": "other",
    "degree_class": "bachelors",
    "keyword_hits": [],
-   "key": "netflix_software-engineer-intern",
+   "key": "amazon_software-developer-intern",
    "sources": [
     "simplify"
    ],
@@ -182,264 +189,8 @@
     "tier": 20,
     "early_career": 0,
     "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 66,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
-  },
-  {
-   "id": "4fda6f3c-c073-469a-90b9-cb1d79c5f369",
-   "source": "simplify",
-   "company": "Pinterest",
-   "title": "Software Engineer Intern",
-   "url": "https://www.pinterestcareers.com/jobs/?gh_jid=7838577",
-   "locations": [
-    "SF",
-    "Remote in USA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790893158,
-   "date_updated": 1790894115,
-   "active": true,
-   "tier": 2,
-   "company_key": "pinterest",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "pinterest_software-engineer-intern",
-   "sources": [
-    "simplify",
-    "vanshb03"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 15,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 65,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
-  },
-  {
-   "id": "4ebbeec3-7c6e-4921-bd4a-0131e3cc0c04",
-   "source": "simplify",
-   "company": "Notion",
-   "title": "Mobile Software Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/notion/2b587e66-deac-421a-a824-9415ba78b5a7/application?embed=true",
-   "locations": [
-    "SF",
-    "NYC"
-   ],
-   "terms": [
-    "Winter 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790288407,
-   "date_updated": 1790289902,
-   "active": true,
-   "tier": 2,
-   "company_key": "notion",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "notion_mobile-software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 15,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 65,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year"
-  },
-  {
-   "id": "c61b3999-cfc9-4184-8e3e-3a21a00ebcef",
-   "source": "simplify",
-   "company": "Notion",
-   "title": "Software Engineer Intern - Winter 2027",
-   "url": "https://jobs.ashbyhq.com/notion/e66c6658-9e65-4c58-8db2-844628b6e8f8/application?embed=true",
-   "locations": [
-    "SF",
-    "NYC"
-   ],
-   "terms": [
-    "Winter 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1786754510,
-   "date_updated": 1786754521,
-   "active": true,
-   "tier": 2,
-   "company_key": "notion",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "notion_software-engineer-intern-winter-2027",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 15,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 65,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year"
-  },
-  {
-   "id": "14e51d14-067b-43b8-80cf-dcf3c6893565",
-   "source": "simplify",
-   "company": "Notion",
-   "title": "Software Engineer Intern - Summer 2027",
-   "url": "https://jobs.ashbyhq.com/notion/3fba1c39-c5cb-47d7-9ad2-1cec4d7e9d0c/application?embed=true",
-   "locations": [
-    "SF",
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1786754510,
-   "date_updated": 1786754521,
-   "active": true,
-   "tier": 2,
-   "company_key": "notion",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "notion_software-engineer-intern-summer-2027",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 15,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 65,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year"
-  },
-  {
-   "id": "3bf282cf-0952-44ca-85dc-2415cb802265",
-   "source": "vanshb03",
-   "company": "Google",
-   "title": "Software Engineering Intern",
-   "url": "https://www.google.com/about/careers/applications/jobs/results/85564713261245126-software-engineering-intern-bs-summer-2027",
-   "locations": [
-    "Mountain View, CA",
-    "Atlanta, GA",
-    "Austin, TX",
-    "Boulder, CO",
-    "Cambridge, MA",
-    "Bellevue, WA",
-    "Chicago, IL",
-    "Houston, TX",
-    "Irvine, CA",
-    "Kirkland, WA",
-    "Los Angeles, CA",
-    "Madison, WI",
-    "New York, NY",
-    "Palo Alto, CA",
-    "Portland, OR",
-    "Pittsburgh, PA",
-    "Raleigh, NC",
-    "Durham, NC",
-    "Reston, VA",
-    "Redmond, WA",
-    "Redwood City, CA",
-    "San Diego, CA",
-    "Goleta, CA",
-    "San Bruno, CA",
-    "Seattle, WA",
-    "San Francisco, CA",
-    "San Jose, CA",
-    "Santa Cruz, CA",
-    "South San Francisco, CA",
-    "Sunnyvale, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1784878468,
-   "date_updated": 1784878468,
-   "active": true,
-   "tier": 1,
-   "company_key": "google",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "google_software-engineering-intern",
-   "sources": [
-    "vanshb03"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 0,
-    "location": 15,
-    "freshness": 0,
+    "location": 0,
+    "freshness": 10,
     "keywords": 0
    },
    "score": 65,
@@ -488,101 +239,7 @@
    },
    "score": 62,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
-  },
-  {
-   "id": "5d67cf04-fc5c-491b-9cb4-99484583ff17",
-   "source": "simplify",
-   "company": "Amazon",
-   "title": "Software Engineer Intern - Embedded Systems",
-   "url": "https://amazon.jobs/en/jobs/10571374/software-development-engineer-embedded-systems-intern-amazon-leo-summer-2027-usa",
-   "locations": [
-    "Redmond, WA",
-    "Northridge, LA"
-   ],
-   "terms": [
-    "Summer 2027",
-    "Fall 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Hardware",
-   "date_posted": 1791335260,
-   "date_updated": 1791335552,
-   "active": true,
-   "tier": 1,
-   "company_key": "amazon",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "amazon_software-engineer-intern-embedded-systems",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 61,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
-  },
-  {
-   "id": "35d12704-75f4-4a19-8d57-c70563db0263",
-   "source": "simplify",
-   "company": "Amazon",
-   "title": "Software Engineer Intern",
-   "url": "https://amazon.jobs/en/jobs/10559746/software-development-engineer-intern-summer-2027-usa-amazon-dedicated-cloud-adc",
-   "locations": [
-    "Seattle, WA",
-    "Jessup, MD",
-    "Arlington County, Arlington, VA",
-    "Denver, CO"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790892579,
-   "date_updated": 1790893369,
-   "active": true,
-   "tier": 1,
-   "company_key": "amazon",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "amazon_software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 61,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "3652392f-5646-4168-b539-ac3e5a186acd",
@@ -626,7 +283,7 @@
    },
    "score": 61,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "44631389-4603-4cbc-bb24-596433854282",
@@ -670,7 +327,7 @@
    },
    "score": 61,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "28da2a86-9f2e-45b0-98d5-9daf28f8a39d",
@@ -715,54 +372,7 @@
    },
    "score": 61,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
-  },
-  {
-   "id": "1ab1a45d-f5cc-4187-9f03-f2e2c5c3e021",
-   "source": "simplify",
-   "company": "Amazon",
-   "title": "Software Development Engineer Intern - Summer",
-   "url": "https://amazon.jobs/en/jobs/10552937/software-development-engineer-internship-summer-2027-usa",
-   "locations": [
-    "Seattle, WA",
-    "Arlington County, Arlington, VA"
-   ],
-   "terms": [
-    "Summer 2027",
-    "Winter 2027",
-    "Fall 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1789693504,
-   "date_updated": 1789693924,
-   "active": true,
-   "tier": 1,
-   "company_key": "amazon",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "amazon_software-development-engineer-intern-summer",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 61,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "4d33923f-011e-4c9c-8e39-4a4f417686d7",
@@ -808,7 +418,7 @@
    },
    "score": 61,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "ea127849-c2ce-48a3-8ef5-8024831dc02e",
@@ -860,7 +470,7 @@
    },
    "score": 61,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "be628885-fde3-4b73-bb0a-58e11856e97b",
@@ -999,49 +609,6 @@
    "eligibility_note": "page says nothing about graduation year"
   },
   {
-   "id": "b0a5003e-7eaf-4778-a4d1-c1cb4dbc92a4",
-   "source": "vanshb03",
-   "company": "Notion",
-   "title": "Software Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/notion/3fba1c39-c5cb-47d7-9ad2-1cec4d7e9d0c",
-   "locations": [
-    "San Francisco, CA",
-    "New York, NY"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1787327046,
-   "date_updated": 1787327046,
-   "active": true,
-   "tier": 2,
-   "company_key": "notion",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "notion_software-engineer-intern",
-   "sources": [
-    "vanshb03"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 15,
-    "early_career": 0,
-    "degrees": 0,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 60,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year"
-  },
-  {
    "id": "12243e5c-7c64-4d17-9472-840926a226d2",
    "source": "vanshb03",
    "company": "Microsoft",
@@ -1083,7 +650,7 @@
    },
    "score": 59,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "e8cdd6c9-273d-4f50-af44-c49ab843704f",
@@ -1127,7 +694,7 @@
    },
    "score": 59,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "0d25edcf-4b13-487c-9567-7ca21a9b042b",
@@ -1171,7 +738,7 @@
    },
    "score": 59,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "8e13a875-b5b1-46d1-ada8-cdc1dfa8b485",
@@ -1255,7 +822,7 @@
    },
    "score": 56,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "adea9c62-2047-4e4f-aebb-a218d42035ee",
@@ -1297,7 +864,7 @@
    },
    "score": 56,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "c81be192-aa12-4a7c-bcfb-0c29b79d282e",
@@ -1339,7 +906,7 @@
    },
    "score": 56,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "db93ac45-a63e-477d-bd8f-98cf17ca4fd7",
@@ -1427,50 +994,6 @@
    "eligibility_note": "page says nothing about graduation year"
   },
   {
-   "id": "bcdcec45-2483-4ebd-8b02-b763219eecec",
-   "source": "simplify",
-   "company": "Point72",
-   "title": "Software Engineer Intern",
-   "url": "https://boards.greenhouse.io/point72/jobs/8885733002",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1791987659,
-   "date_updated": 1791987711,
-   "active": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "point72_software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year"
-  },
-  {
    "id": "4dacd1f1-1a63-461f-9329-95162f1c14bd",
    "source": "simplify",
    "company": "Coinbase",
@@ -1508,52 +1031,6 @@
     "degrees": 5,
     "location": 15,
     "freshness": 5,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year"
-  },
-  {
-   "id": "9d3485fc-e9c9-4315-b9af-f839b852b2a6",
-   "source": "simplify",
-   "company": "Amazon",
-   "title": "Software Development Engineer Intern - Summer 2027",
-   "url": "https://amazon.jobs/en/jobs/10553947/software-development-engineer-intern-summer-2027-can",
-   "locations": [
-    "Vancouver, BC, Canada"
-   ],
-   "terms": [
-    "Summer 2027",
-    "Winter 2027",
-    "Fall 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1789769139,
-   "date_updated": 1789770062,
-   "active": true,
-   "tier": 1,
-   "company_key": "amazon",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "other",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "amazon_software-development-engineer-intern-summer-2027",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 0,
-    "freshness": 0,
     "keywords": 0
    },
    "score": 55,
@@ -1604,7 +1081,7 @@
    },
    "score": 55,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "3cb45823-f475-44c7-aaca-4a1335faf6ff",
@@ -1655,7 +1132,7 @@
    },
    "score": 55,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "cdf19c98-c74e-4082-9b37-51fcaaae298d",
@@ -1747,7 +1224,7 @@
    },
    "score": 53,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "8239ef8b-e07a-4715-bc6d-2036aad271eb",
@@ -1844,53 +1321,6 @@
     "location": 6,
     "freshness": 5,
     "keywords": 6
-   },
-   "score": 52,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
-  },
-  {
-   "id": "75c9bd55-d962-405d-8b35-8302935fa982",
-   "source": "simplify",
-   "company": "Google",
-   "title": "Associate Product Manager Intern",
-   "url": "https://www.google.com/about/careers/applications/jobs/results/103464941339452102",
-   "locations": [
-    "London, UK"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Product",
-   "date_posted": 1790951178,
-   "date_updated": 1790951293,
-   "active": true,
-   "tier": 1,
-   "company_key": "google",
-   "role": "pm",
-   "early_career": "none",
-   "location_class": "other",
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "product"
-   ],
-   "key": "google_associate-product-manager-intern",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 24,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 0,
-    "freshness": 0,
-    "keywords": 3
    },
    "score": 52,
    "eligibility": "unknown",
@@ -4487,6 +3917,71 @@
    "eligibility_note": "not checked (below top rows)"
   },
   {
+   "id": "3c5615c3-8831-41c5-8668-b6072cfc338c",
+   "source": "simplify",
+   "company": "Medtronic",
+   "title": "Software Engineer Intern",
+   "url": "https://medtronic.wd1.myworkdayjobs.com/MedtronicCareers/job/Fridley-Minnesota-United-States-of-America/Software-Engineering-Intern---Summer-2027_R73630-1",
+   "locations": [
+    "Boston, MA",
+    "Santa Ana, CA",
+    "Fridley, MN",
+    "Santa Rosa, CA",
+    "Irvine, CA",
+    "Mansfield, MA",
+    "Mounds View, MN",
+    "Tempe, AZ",
+    "Memphis, TN",
+    "Brooklyn Center, MN",
+    "Plymouth, MN",
+    "Brooklyn Park, MN",
+    "Fort Worth, TX",
+    "Dexter, MI",
+    "North Haven, CT",
+    "Lafayette, CO",
+    "Minneapolis, MN",
+    "Newton, MA",
+    "Jacksonville, FL",
+    "Eatontown, NJ",
+    "Boulder, CO"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1785542400,
+   "date_updated": 1791268433,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "medtronic_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
    "id": "56196707-1bc1-44de-9e0e-a32456792771",
    "source": "simplify",
    "company": "Melius",
@@ -4764,6 +4259,52 @@
     "keywords": 3
    },
    "score": 49,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "2171d14a-e271-49bf-95cf-d6a749318018",
+   "source": "simplify",
+   "company": "Electronic Arts",
+   "title": "Client AI Software Engineer Intern",
+   "url": "https://jobs.ea.com/en_US/careers/JobDetail/Client-AI-Software-Engineer-Intern/216364",
+   "locations": [
+    "Manchester, UK"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1792159777,
+   "date_updated": 1792159922,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "other",
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "key": "electronic-arts_client-ai-software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 0,
+    "freshness": 10,
+    "keywords": 3
+   },
+   "score": 48,
    "eligibility": "unknown",
    "eligibility_note": "not checked (below top rows)"
   },
@@ -6599,50 +6140,6 @@
    "eligibility_note": "not checked (below top rows)"
   },
   {
-   "id": "b135be7e-bf73-4526-9c91-0158ffed7bce",
-   "source": "simplify",
-   "company": "Parsons",
-   "title": "Software Engineer Intern",
-   "url": "https://parsons.wd5.myworkdayjobs.com/en-US/search/job/US---AL-Huntsville/Software-Engineering-Intern--Summer-2027-_R187299",
-   "locations": [
-    "Huntsville, AL"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1791936000,
-   "date_updated": 1791987892,
-   "active": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "parsons_software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 46,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
-  },
-  {
    "id": "785bc0ed-564f-4e73-bdae-30e780d1629b",
    "source": "simplify",
    "company": "Northrop Grumman",
@@ -7308,7 +6805,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "not checked (board can't be read server-side)"
   },
   {
    "id": "af728c56-641d-4f4e-9ae0-8adb5e9b2fef",
@@ -7350,7 +6847,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "not checked (board can't be read server-side)"
   },
   {
    "id": "3afa0d8c-0e35-4e81-8237-c9385920a417",
@@ -7399,7 +6896,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "page could not be read"
   },
   {
    "id": "b066ec62-2588-4e06-bbcd-2b0a5a86967c",
@@ -7440,6 +6937,50 @@
     "keywords": 0
    },
    "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read"
+  },
+  {
+   "id": "e77870f3-55c7-4d18-8364-57029d5adc18",
+   "source": "simplify",
+   "company": "Electronic Arts",
+   "title": "Software Engineer Tools Intern",
+   "url": "https://jobs.ea.com/en_US/careers/JobDetail/Software-Engineer-Intern-Tools/216192",
+   "locations": [
+    "Birmingham, UK"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1792159776,
+   "date_updated": 1792159954,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "other",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "electronic-arts_software-engineer-tools-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 0,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 45,
    "eligibility": "unknown",
    "eligibility_note": "not checked (below top rows)"
   },
@@ -7571,7 +7112,7 @@
    },
    "score": 45,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "c7dca39a-27ef-4e1d-a94e-b69ede82a562",
@@ -11579,52 +11120,6 @@
    "eligibility_note": "not checked (below top rows)"
   },
   {
-   "id": "229a4d5b-5264-4536-9536-3b0b0059c653",
-   "source": "simplify",
-   "company": "Robert Bosch Venture Capital",
-   "title": "Product Management Co-op",
-   "url": "https://jobs.smartrecruiters.com/BoschGroup/744000154671460",
-   "locations": [
-    "Fountain Inn, SC"
-   ],
-   "terms": [
-    "Spring 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Product",
-   "date_posted": 1791554962,
-   "date_updated": 1791555297,
-   "active": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "pm",
-   "early_career": "none",
-   "location_class": "us",
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "product"
-   ],
-   "key": "robert-bosch-venture-capital_product-management-co-op",
-   "sources": [
-    "simplify"
-   ],
-   "breakdown": {
-    "role": 24,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 3
-   },
-   "score": 43,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
-  },
-  {
    "id": "3bcb752a-418d-4efe-88b2-389292a7eed0",
    "source": "simplify",
    "company": "Workday",
@@ -13626,6 +13121,501 @@
    "degree_class": "bachelors",
    "keyword_hits": [],
    "key": "arc_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "2149ec11-ebea-44e9-95ff-a9ef69ecacdf",
+   "source": "simplify",
+   "company": "Harvey",
+   "title": "Software Engineer Intern - Summer 2027",
+   "url": "https://jobs.ashbyhq.com/harvey/3a34578d-d42e-45bb-ac5c-0c3357e8cbb7/application?embed=true",
+   "locations": [
+    "SF"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790979917,
+   "date_updated": 1790980953,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "harvey_software-engineer-intern-summer-2027",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "258b1734-67f6-4bc5-8017-6bd816a41b1e",
+   "source": "simplify",
+   "company": "Scout Clean Energy",
+   "title": "Operations Engineering Intern",
+   "url": "https://apply.workable.com/scout-clean-energy/j/7BF0CEDF9F/apply",
+   "locations": [
+    "Boulder, CO"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "AI/ML/Data",
+   "date_posted": 1790979827,
+   "date_updated": 1790980742,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "scout-clean-energy_operations-engineering-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "507939af-b1b0-42a5-b103-4c941f8ec184",
+   "source": "simplify",
+   "company": "xAI",
+   "title": "Software Engineer Intern/Co-op",
+   "url": "https://job-boards.greenhouse.io/xai/jobs/5255111007",
+   "locations": [
+    "Palo Alto, CA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790979149,
+   "date_updated": 1790980014,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "xai_software-engineer-intern-co-op",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "d9fd892f-4128-4b27-8d13-be649b77a0ba",
+   "source": "simplify",
+   "company": "xAI",
+   "title": "Software Engineering Intern Co-op",
+   "url": "https://job-boards.greenhouse.io/xai/jobs/5252108007",
+   "locations": [
+    "Palo Alto, CA"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790979147,
+   "date_updated": 1790979999,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "xai_software-engineering-intern-co-op",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "5446e738-df78-4160-98ab-eb05d3f23d8f",
+   "source": "simplify",
+   "company": "C3.ai",
+   "title": "AI Product Manager Intern - Summer 2027",
+   "url": "https://c3.ai/job-description/8860563002?gh_jid=8860563002",
+   "locations": [
+    "Redwood City, CA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Product",
+   "date_posted": 1790979038,
+   "date_updated": 1790979928,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "pm",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai",
+    "product"
+   ],
+   "key": "c3-ai_ai-product-manager-intern-summer-2027",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 24,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 6
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "33ae8cab-9f3b-486e-9f60-5c43fd1f1e48",
+   "source": "simplify",
+   "company": "Riot Games",
+   "title": "Software Engineer Intern",
+   "url": "https://www.riotgames.com/en/work-with-us/job/8222014?gh_jid=8222014",
+   "locations": [
+    "LA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790894254,
+   "date_updated": 1790894632,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "riot-games_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "2f4d691e-c368-4b0b-a6ca-641b6441ab48",
+   "source": "simplify",
+   "company": "SAS",
+   "title": "Software Development and Testing Intern",
+   "url": "https://careers-sas.icims.com/jobs/42964/job?mobile=true&needsRedirect=false",
+   "locations": [
+    "Cary, NC"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790892823,
+   "date_updated": 1790893583,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "sas_software-development-and-testing-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "b9e02195-e8aa-4296-8ba7-766a14912486",
+   "source": "simplify",
+   "company": "Corgan",
+   "title": "Software Development Intern",
+   "url": "https://campus-us-corgan.icims.com/jobs/4109/job?mobile=true&needsRedirect=false",
+   "locations": [
+    "Dallas, TX"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790892563,
+   "date_updated": 1790893353,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "corgan_software-development-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "94015ee8-32d2-4ad0-8394-3cb30e464aaa",
+   "source": "simplify",
+   "company": "Glean",
+   "title": "Software Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/gleanwork/jobs/4595665005",
+   "locations": [
+    "Mountain View, CA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790892464,
+   "date_updated": 1790893460,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "glean_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "7f4eeec4-3a57-4a6a-baac-95d259c931a2",
+   "source": "simplify",
+   "company": "Varda Space",
+   "title": "Flight Software Intern",
+   "url": "https://job-boards.greenhouse.io/vardaspace/jobs/8010159003",
+   "locations": [
+    "El Segundo, CA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1790845434,
+   "date_updated": 1790845833,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "varda-space_flight-software-intern",
+   "sources": [
+    "simplify"
+   ],
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)"
+  },
+  {
+   "id": "fad9fce5-3ae4-4bc8-b290-7a858a041a0a",
+   "source": "simplify",
+   "company": "Varda Space",
+   "title": "Avionics Engineering Intern",
+   "url": "https://job-boards.greenhouse.io/vardaspace/jobs/8010158003",
+   "locations": [
+    "El Segundo, CA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1790845433,
+   "date_updated": 1790845921,
+   "active": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "varda-space_avionics-engineering-intern",
    "sources": [
     "simplify"
    ],
