@@ -62,6 +62,12 @@ _UPPERCLASS = re.compile(
     r"junior/senior|third[- ]year or fourth[- ]year|(?:junior|senior) standing)\b", re.I)
 
 
+# Programs built as an alternative to college (Palantir's Meritocracy Fellowship, the Thiel Fellowship) require
+# not being enrolled. A current college student is ruled out whatever the graduation year.
+_NOT_ENROLLED = re.compile(
+    r"\b(?:not|cannot|can't|can not)\s+(?:be )?(?:currently )?enrolled in (?:an? |any )?(?:accredited )?(?:u\.?s\.? )?(?:college|university|degree)", re.I)
+
+
 def is_readable_board(url: str) -> bool:
     return posting.is_readable_board(url)
 
@@ -123,6 +129,8 @@ def verdict_from_text(text: str, graduation_year: int, this_year: int | None = N
     Stated graduation years decide first. A page can say "sophomore" and still ask for 2029 graduates,
     so freshman words only count when no year is stated.
     """
+    if _NOT_ENROLLED.search(_flat(text)):
+        return "ineligible", "page requires not being enrolled in college"
     ranges = grad_ranges(text, this_year)
     if ranges:
         fits = [r for r in ranges if r[0] <= graduation_year <= r[1]]

@@ -26,6 +26,15 @@ class Verdicts(unittest.TestCase):
         text = "This program is for freshmen and sophomores. Graduating 2029 or later preferred."
         self.assertEqual(eligibility.verdict_from_text(text, GRAD)[0], "ok")
 
+    def test_not_enrolled_in_college_rules_him_out(self):
+        # Palantir's Meritocracy Fellowship is for high school graduates who skip college.
+        text = "Applicants must earn a high school diploma and not be enrolled in an accredited U.S. university."
+        verdict, note = eligibility.verdict_from_text(text, GRAD)
+        self.assertEqual(verdict, "ineligible")
+        self.assertIn("not being enrolled", note)
+        lever = "What We Require: Candidates cannot be enrolled in an accredited U.S. university."
+        self.assertEqual(eligibility.verdict_from_text(lever, GRAD)[0], "ineligible")
+
     def test_silence_is_unknown(self):
         text = "We are looking for a motivated intern who loves to code."
         self.assertEqual(eligibility.verdict_from_text(text, GRAD)[0], "unknown")

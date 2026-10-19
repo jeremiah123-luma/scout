@@ -91,7 +91,8 @@ def company_tier(company: str, targets: dict) -> tuple[int, str | None]:
 # ---------------------------------------------------------------- role
 
 # Titles that are for graduate students whatever the degrees field says: "Software Engineering Intern, Masters".
-_GRAD_TITLE = re.compile(r"(?<![a-z])(master['\u2019]?s|mba|ph\.?\s?d|ms/phd|m\.s\.|doctoral|graduate[- ]level)(?![a-z])"
+_GRAD_TITLE = re.compile(r"(?<![a-z])(master['\u2019]?s|mba|ph\.?\s?d|ms/phd|m\.s\.|doctoral|graduate[- ]level"
+                         r"|post-?doc\w*|graduate (?:research )?fellow\w*)(?![a-z])"
                          r"|[-(]\s*ms\s*\)?\s*$", re.I)
 
 
@@ -264,7 +265,9 @@ def passes_filters(listing: dict, cycle_year: str = "2027", max_age_days: int | 
         return False, "inactive"
     if not any(cycle_year in t for t in listing.get("terms", [])):
         return False, "not a 2027 term"
-    if max_age_days and listing.get("date_posted"):
+    # A company board only lists jobs that are open now, so its rows skip the age cutoff: Palantir reposts
+    # the same Meritocracy Fellowship every year, and its posting date is from 2025.
+    if max_age_days and listing.get("date_posted") and listing.get("source") != "boards":
         import time
         age_days = ((now if now is not None else time.time()) - listing["date_posted"]) / 86400
         if age_days > max_age_days:

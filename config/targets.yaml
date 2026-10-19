@@ -36,11 +36,12 @@ tier2:
 # the lists are built around software engineering, so design roles like Figma's Product Design Intern
 # only show up here. Board name: company name as the lists write it. Only intern, co-op, and fellow titles are kept.
 # Anthropic has no internships (its careers FAQ says so); its Fellows Program is the student-reachable door.
+# Palantir is Tier 3 but read for its fellowships (Meritocracy, Neurodivergent), which no list carries.
 # Checked 2026-10-16; the other Tier 1 and 2 companies use Workday or their own sites, which the lists cover.
 boards:
   greenhouse: {figma: Figma, pinterest: Pinterest, airbnb: Airbnb, duolingo: Duolingo, anthropic: Anthropic}
   ashby: {notion: Notion}
-  lever: {spotify: Spotify}
+  lever: {spotify: Spotify, palantir: Palantir}
 
 # Named programs for freshmen and sophomores. A title or company+title hit here is the strongest signal Scout has.
 # Keys are the company (matched like the tiers above), values are words that appear in the title.
@@ -52,7 +53,9 @@ programs:
   # The Fellows Program takes people "regardless of previous experience". Its PhD-only fellowships
   # (Conceptual Reasoning Fellow, STEM Fellow) are not "fellows program" titles, so they get no boost.
   anthropic: ["fellows program"]
-  any: [freshman, freshmen, sophomore, "rising sophomore", "first-year", "first year", "second-year", "second year",
+  # "fellowship" and "fellows program" count anywhere: company fellowships ("Meritocracy Fellowship") name no
+  # role, so without this they were dropped. PhD, graduate, and postdoc fellowships still drop as graduate-only.
+  any: [fellowship, fellowships, "fellows program", freshman, freshmen, sophomore, "rising sophomore", "first-year", "first year", "second-year", "second year",
         underclassman, underclassmen, "early insight", "early insights", "early id", explore, exploratory,
         "explore program", "discovery program", "insight program", externship, "pre-internship", "pre internship",
         "student ambassador", "campus ambassador", "campus expert", "campus leader", "student partner", "campus rep",

@@ -49,6 +49,22 @@ class Boards(unittest.TestCase):
         kept = [r["title"] for r in rows if matching.passes_filters(matching.describe(r, targets))[0]]
         self.assertEqual(kept, ["Anthropic Fellows Program, AI Safety & Security"])
 
+    def test_fellowships_are_programs_and_graduate_fellowships_drop(self):
+        # "Meritocracy Fellowship" names no role, so before fellowships counted as programs it was dropped.
+        from scout import matching
+        lev = [{"id": f"p{i}", "text": title, "hostedUrl": f"https://jobs.lever.co/palantir/p{i}",
+                "categories": {"allLocations": ["New York, NY"]}, "createdAt": 1790000000000}
+               for i, title in enumerate(["Meritocracy Fellowship", "Neurodivergent Fellowship",
+                                          "PhD Fellowship in Machine Learning", "Postdoctoral Fellowship",
+                                          "Graduate Research Fellowship", "Account Executive"])]
+        rows = boards.lever("palantir", "Palantir", NOW, fetch=lambda url: lev)
+        targets = matching.load_targets()
+        kept = [r["title"] for r in rows if matching.passes_filters(matching.describe(r, targets))[0]]
+        self.assertEqual(kept, ["Meritocracy Fellowship", "Neurodivergent Fellowship"])
+        self.assertTrue(all(r["early_career"] == "strong" for r in rows if r["title"] in kept))
+        # The board only lists open jobs, so a posting first published long ago is still kept.
+        self.assertTrue(matching.passes_filters(rows[0], max_age_days=240, now=1790000000 + 400 * 86400)[0])
+
     def test_terms_when_the_title_has_no_year(self):
         self.assertEqual(boards.terms_for("Data Analyst, Intern", NOW), ["Summer 2027 (year not stated)"])
         self.assertEqual(boards.terms_for("Software Engineer Intern (Winter 2027)", NOW), ["Winter 2027"])
