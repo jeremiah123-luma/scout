@@ -8,13 +8,16 @@ tagline. Each of those is checked here. What can't be checked in code (one decis
 a callback ending) stays on the checklist in .claude/commands/prep.md.
 
 FAIL (exit 1): em or en dashes, "instead of" / "not just" more than once, banned corporate words, a retired
-tagline, "my dad's company", [brackets] left in, two names for one company, or 5+ words copied from the posting.
+tagline, a banned personal phrase, [brackets] left in, two names for one company, or 5+ words copied from the posting.
 WARN: relative dates ("last summer", "this year") that need checking against today's date.
 
-Personal lists (retired taglines, company name variants) live in me/voice-check.yaml, which is gitignored:
+Personal lists (retired taglines, company name variants, phrases to avoid) live in me/voice-check.yaml, which
+is gitignored, so each person's own rules stay on their own machine:
 
-    taglines: ["good design should disappear"]
-    entities: [["LumaBooth", "Lumasoft"]]     # names that must not both appear in one answer
+    taglines: ["simple wins"]
+    entities: [["Acme Labs", "AcmeSoft"]]     # names that must not both appear in one answer
+    phrases:                                   # phrase, then what to do instead
+      - ["my old team", "name the team"]
 """
 
 from __future__ import annotations
@@ -84,8 +87,9 @@ def check(text: str, posting: str = "", personal: dict | None = None) -> dict:
     for t in personal.get("taglines", []):
         if t.lower() in low:
             fail.append(f'retired tagline: "{t}"')
-    if "my dad's company" in low or "my father's company" in low:
-        fail.append('"my dad\'s company": name the company')
+    for phrase, fix in personal.get("phrases", []):
+        if phrase.lower() in low:
+            fail.append(f'"{phrase}": {fix}')
     if re.search(r"\[[^\]]*\]", text):
         fail.append("[bracket] placeholder left in")
     for group in personal.get("entities", []):

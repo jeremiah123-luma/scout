@@ -6,7 +6,7 @@ from pathlib import Path
 
 from scout import voicecheck
 
-PERSONAL = {"taglines": ["good design should disappear"], "entities": [["LumaBooth", "Lumasoft"]]}
+PERSONAL = {"taglines": ["simple wins"], "entities": [["Acme Labs", "AcmeSoft"]], "phrases": [["my old team", "name the team"]]}
 POSTING = "Our mission is to make design accessible to all. Launches from early career designers include Figma Draw."
 REGRESSION = Path(__file__).resolve().parent.parent / "me" / "regression"
 
@@ -26,11 +26,11 @@ class Rules(unittest.TestCase):
         self.assertTrue(any("instead of" in f for f in fails("Instead of a file, a canvas, instead of waiting, shipping.")))
         self.assertFalse(any("instead of" in f for f in fails("One canvas instead of a file.")))
         self.assertTrue(any("passionate" in f for f in fails("I am passionate about design.")))
-        self.assertTrue(any("tagline" in f for f in fails("Good design should disappear, they say.")))
-        self.assertTrue(any("dad" in f for f in fails("My dad's company was rebuilding its site.")))
+        self.assertTrue(any("tagline" in f for f in fails("Simple wins, they say.")))
+        self.assertTrue(any("name the team" in f for f in fails("My old team was rebuilding its site.")))
         self.assertTrue(any("bracket" in f for f in fails("We grew by [add the number] users.")))
-        self.assertTrue(any("2 ways" in f for f in fails("Lumasoft's site was rebuilt; LumaBooth's pages came later.")))
-        self.assertTrue(any('"lumabooth"' in f for f in fails("I redesigned lumabooth's website.")))
+        self.assertTrue(any("2 ways" in f for f in fails("AcmeSoft's site was rebuilt; Acme Labs' pages came later.")))
+        self.assertTrue(any('"acme labs"' in f for f in fails("I redesigned acme labs' website.")))
 
     def test_quoting_the_posting_back(self):
         text = "Figma's mission, to make design accessible to all, is what I care about."
@@ -47,19 +47,28 @@ class Rules(unittest.TestCase):
         self.assertEqual([h for h, _ in voicecheck.sections(md)], ["Why us?"])
 
 
-@unittest.skipUnless((REGRESSION / "figma-pd-why-approved.md").exists(), "private regression texts are not in this checkout")
-class FigmaRegression(unittest.TestCase):
-    """The answer he approved must pass; the draft he rejected must fail for the reasons the post-mortem names."""
+PAIRS = sorted(REGRESSION.glob("*-approved.md")) if REGRESSION.exists() else []
 
-    def test_approved_passes(self):
-        text = (REGRESSION / "figma-pd-why-approved.md").read_text(encoding="utf-8")
-        self.assertEqual(voicecheck.check(text, POSTING, voicecheck.load_personal())["fail"], [])
 
-    def test_rejected_fails(self):
-        text = (REGRESSION / "figma-pd-why-rejected.md").read_text(encoding="utf-8")
-        result = " | ".join(voicecheck.check(text, POSTING, voicecheck.load_personal())["fail"])
-        for reason in ("tagline", "2 ways", "instead of", "copied from the posting", "for a living"):
-            self.assertIn(reason, result)
+@unittest.skipUnless(PAIRS, "private regression texts are not in this checkout")
+class PrivateRegression(unittest.TestCase):
+    """Every approved answer in me/regression must pass, and its rejected draft must fail. A <name>-reasons.txt
+    file, one reason per line, names the failures the rejected draft has to show."""
+
+    def test_pairs(self):
+        personal = voicecheck.load_personal()
+        for approved in PAIRS:
+            stem = approved.name[: -len("-approved.md")]
+            with self.subTest(stem):
+                self.assertEqual(voicecheck.check(approved.read_text(encoding="utf-8"), POSTING, personal)["fail"], [])
+                rejected = REGRESSION / f"{stem}-rejected.md"
+                if rejected.exists():
+                    result = " | ".join(voicecheck.check(rejected.read_text(encoding="utf-8"), POSTING, personal)["fail"])
+                    self.assertTrue(result)
+                    reasons = REGRESSION / f"{stem}-reasons.txt"
+                    for reason in (reasons.read_text(encoding="utf-8").split("\n") if reasons.exists() else []):
+                        if reason.strip():
+                            self.assertIn(reason.strip(), result)
 
 
 if __name__ == "__main__":
