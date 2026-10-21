@@ -144,15 +144,27 @@ def print_table(matches: list[dict], top: int, now: float) -> None:
         print(f"      {m['url']}")
 
 
-def write_matches(matches: list[dict], counts: Counter, path: Path = MATCHES_PATH, limit: int = 300) -> None:
-    """Write the top `limit` matches. The cron commits this file every run, so it is kept small on purpose."""
+RULED_OUT_EXTRA = 100  # postings ruled out for the owner that still go up, for students they may fit
+
+
+def write_matches(matches: list[dict], counts: Counter, path: Path = MATCHES_PATH, limit: int = 300,
+                  extra: int = RULED_OUT_EXTRA) -> None:
+    """Write the top `limit` open matches, plus up to `extra` of the best ones the owner's own page check ruled out.
+
+    The dashboard shares this list with every student, and "ruled out" here means ruled out for the owner: a
+    posting that wants 2028 graduates is wrong for a 2030 graduate and exactly right for a junior. Those rows carry
+    their page facts, so each student's own verdict decides (worker/src/match.js). The owner's pages still treat
+    them as ruled out. Kept small on purpose: the cron commits this file every run."""
     path.parent.mkdir(parents=True, exist_ok=True)
+    ruled = lambda m: m.get("eligibility") in ("ineligible", "closed")
+    shared = [m for m in matches if not ruled(m)][:limit]
+    shared += [m for m in matches if ruled(m) and m.get("eligibility") != "closed" and m.get("posting_facts")][:extra]
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "counts": dict(counts),
         "total_matches": len(matches),
-        "open_total": sum(1 for m in matches if m.get("eligibility") not in ("ineligible", "closed")),
-        "matches": matches[:limit],
+        "open_total": sum(1 for m in matches if not ruled(m)),
+        "matches": shared,
     }
     path.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
 

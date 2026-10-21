@@ -73,6 +73,23 @@ class StandingPhrases(unittest.TestCase):
         self.assertEqual(e.default_cycle_year(date(2026, 10, 21)), 2027)
 
 
+class SharedUpload(unittest.TestCase):
+    def test_postings_ruled_out_for_the_owner_still_go_up_with_their_facts(self):
+        import json, tempfile
+        from collections import Counter
+        from pathlib import Path
+        from scout import watch
+        rows = [{"key": f"open{i}", "eligibility": "unknown"} for i in range(5)]
+        rows += [{"key": "for-juniors", "eligibility": "ineligible", "posting_facts": {"grad_ranges": [[2028, 2028]]}},
+                 {"key": "gone", "eligibility": "closed", "posting_facts": {"gone": True}},
+                 {"key": "no-facts", "eligibility": "ineligible"}]
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "m.json"
+            watch.write_matches(rows, Counter(), out, limit=3, extra=5)
+            keys = [m["key"] for m in json.loads(out.read_text())["matches"]]
+        self.assertEqual(keys, ["open0", "open1", "open2", "for-juniors"])
+
+
 class YearInSchool(unittest.TestCase):
     def test_from_graduation_year(self):
         october = date(2026, 10, 20)

@@ -12,10 +12,10 @@ import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocati
 const TRACK_STATES = ["Saved", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn"];
 const SHOWN = 60;
 const ALERT_SENDS_PER_RUN = 40; // free Workers allow 50 outbound requests per run; leave room for the rest
-// Ranking 300 postings for one student takes about 0.8 ms of CPU, and a free Worker gets about 10 ms per run, so
-// each run handles the students who have waited longest. The alert cron runs every 10 minutes (wrangler.toml),
-// which covers about 48 students an hour on the free plan.
-const STUDENTS_PER_RUN = 8;
+// Ranking the shared list (up to 400 postings) for one student takes about 1 ms of CPU, and a free Worker gets
+// about 10 ms per run, so each run handles the students who have waited longest. The alert cron runs every 10
+// minutes (wrangler.toml), which covers about 36 students an hour on the free plan.
+const STUDENTS_PER_RUN = 6;
 
 /* ---------------------------------------------------------------- storage */
 
