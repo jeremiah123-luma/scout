@@ -51,7 +51,7 @@ const cloud = ([x, y, w, speed, op]) => `<div class="cl" data-speed="${speed}" s
 export const SCENE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="wisp" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="4" seed="9"/><feDisplacementMap in="SourceGraphic" scale="28"/><feGaussianBlur stdDeviation="3"/></filter></svg>
 <div class="sky-layer" aria-hidden="true">${CLOUDS.map(cloud).join("")}</div>
 <div class="scene" aria-hidden="true"><div class="sun"></div><div class="lh"><div class="beam"></div></div></div>
-<div class="night" aria-hidden="true"><i class="stars"></i><i class="glow"></i><i class="sweep"></i><svg class="rocks" viewBox="0 0 390 70" preserveAspectRatio="none"><path d="M0 70V54l18-9 14 4 22-14 20 10 12-3 18 12 30-6 16 8 40-4 24-16 18 6 14-10 26 12 22-4 16 9 28-8 20 10 22-6 10 3V70z"/><path class="sea" d="M0 62q24-6 48 0t48 0 48 0 48 0 48 0 48 0 48 0 48 0V70H0z"/></svg></div>`;
+<div class="night" aria-hidden="true"><i class="stars"></i><i class="glow"></i><i class="sweep"></i><i class="tower"></i><i class="lamp"></i><svg class="rocks" viewBox="0 0 390 70" preserveAspectRatio="none"><path d="M0 70V54l18-9 14 4 22-14 20 10 12-3 18 12 30-6 16 8 40-4 24-16 18 6 14-10 26 12 22-4 16 9 28-8 20 10 22-6 10 3V70z"/><path class="sea" d="M0 62q24-6 48 0t48 0 48 0 48 0 48 0 48 0 48 0 48 0V70H0z"/></svg></div>`;
 
 /* ---------------------------------------------------------------- the views */
 
@@ -369,5 +369,11 @@ body.themed main>*{min-width:0;max-width:100%}
 @media (prefers-reduced-motion:no-preference){.night .sweep::before{animation:sweep3 14s ease-in-out infinite}.night .stars{animation:twinkle 6s ease-in-out infinite}}
 @media (max-width:600px){html[data-theme="dark"] .lh{display:none}html[data-theme="dark"] .night{display:block}}
 /* the landing page on a phone shows the lighthouse's beam and glow whatever the theme; stars only at night */
+/* a small lighthouse in the corner, so the beam comes from somewhere. 110px tall; its lamp sits 30px in from the right
+   and 110px up, and the beam, the glow, and the lamp's halo all start there. */
+.night .tower{right:8px;bottom:14px;height:110px;aspect-ratio:558/1300;background:url(/art/lighthouse.webp) bottom/contain no-repeat;filter:drop-shadow(0 0 10px #1a133399)}
+.night .sweep{right:30px;bottom:110px}
+.night .glow{right:-120px;bottom:-40px}
+.night .lamp{right:12px;bottom:92px;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle,rgba(255,225,150,.95),rgba(255,200,100,.3) 40%,rgba(255,200,100,0) 70%)}
 @media (max-width:700px){body[data-page="landing"] .night{display:block}html:not([data-theme="dark"]) body[data-page="landing"] .night .stars{display:none}html:not([data-theme="dark"]) body[data-page="landing"] .night .rocks{opacity:.25}}
 `;

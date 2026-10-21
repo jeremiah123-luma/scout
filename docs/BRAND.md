@@ -15,7 +15,7 @@ Three themes, one per time of day. The app follows the clock where the student i
 |---|---|---|---|
 | light | orange to peach to lavender to sky blue, top to bottom | navy `#1a1333` | a sun rising out of the top-right corner, soft rays turning once every 3 minutes |
 | sky | dusty blue `#9fb6d6` to pink `#e9d6e0` | deep blue `#1d3d6e` | soft clouds drifting up a little slower than the page |
-| dark | navy `#1a1333` to purple to deep teal `#0e3a44` | cream `#f6f9dc` | a navy and cream lighthouse at the bottom-right of the page, its beam sweeping slowly. On a phone the tower goes and its night stays: faint stars, the lamp's glow from the corner, the beam, and the rocks and sea |
+| dark | navy `#1a1333` to purple to deep teal `#0e3a44` | cream `#f6f9dc` | a navy and cream lighthouse at the bottom-right of the page, its beam sweeping slowly. On a phone it shrinks to a small tower in the corner, with faint stars, its glow, the beam, and the rocks and sea it stands on |
 
 The landing page, log in, sign up, and the sign-up questions wear the themes too.
 
