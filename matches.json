@@ -1,18 +1,19 @@
 {
- "generated_at": "2026-10-21T01:37:03+00:00",
+ "generated_at": "2026-10-21T01:44:02+00:00",
  "counts": {
   "rows": 18147,
   "dropped: inactive": 12556,
-  "dropped: not a 2027 term": 2111,
-  "dropped: not a target role": 1056,
-  "dropped: graduate students only": 475,
-  "dropped: outside the US": 402,
+  "dropped: not a 2027 term": 1412,
+  "dropped: not a target role": 1280,
+  "dropped: no term listed, posted over 120 days ago": 33,
+  "dropped: graduate students only": 606,
+  "dropped: outside the US": 549,
   "dropped: older than 240 days": 41,
-  "dropped: duplicate": 308,
-  "kept": 1198
+  "dropped: duplicate": 347,
+  "kept": 1323
  },
- "total_matches": 1198,
- "open_total": 1182,
+ "total_matches": 1323,
+ "open_total": 1196,
  "matches": [
   {
    "id": "anthropic:5183044008",
@@ -183,6 +184,65 @@
    "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/dd90aecf-23a9-478d-a952-262aa2b20ab2/logo.png",
    "logo_slug": "Anthropic"
+  },
+  {
+   "id": "0f01813c-18e9-48c2-9e47-4afaf74c1be9",
+   "source": "simplify",
+   "company": "Hearst",
+   "title": "AI Newsroom Developer Fellow - Hearst Journalism Fellowship Program",
+   "url": "https://eevd.fa.us6.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/2027417",
+   "locations": [
+    "SF"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1788531830,
+   "date_updated": 1788942959,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Hearst",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "strong",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "hearst_ai-newsroom-developer-fellow-hearst-journalism-fellowship-pr-d39832",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://eevd.fa.us6.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/2027417"
+   ],
+   "latest_posted": 1788531830,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 45,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 89,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ec0f396b-23e5-437f-b649-83a01e8127ca/logo.png",
+   "logo_slug": "Hearst"
   },
   {
    "id": "16259630-05fe-40a2-bf93-dd529c139975",
@@ -405,6 +465,121 @@
    "logo_slug": "LinkedIn"
   },
   {
+   "id": "913185e4-c0b8-46bb-add7-d4de9eb77339",
+   "source": "simplify",
+   "company": "Meta",
+   "title": "Software Engineer Intern",
+   "url": "https://www.metacareers.com/jobs/1952991802037374",
+   "locations": [
+    "Seattle, WA",
+    "Menlo Park, CA",
+    "NYC",
+    "Bellevue, WA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791325529,
+   "date_updated": 1791327307,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Meta",
+   "tier": 1,
+   "company_key": "meta",
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "meta_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.metacareers.com/jobs/1952991802037374"
+   ],
+   "latest_posted": 1791325529,
+   "breakdown": {
+    "role": 30,
+    "tier": 20,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 70,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/274bb79f-19a9-4287-b5f6-ae4cd39636ec/logo.png",
+   "logo_slug": "Meta"
+  },
+  {
+   "id": "96db4785-95a0-4cfc-8f96-5a0905a25309",
+   "source": "simplify",
+   "company": "Meta",
+   "title": "Optical Engineering AI and Data Analytics Intern",
+   "url": "https://www.metacareers.com/jobs/1851348099357899",
+   "locations": [
+    "Sunnyvale, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "AI/ML/Data",
+   "date_posted": 1792449186,
+   "date_updated": 1792449398,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Meta",
+   "tier": 1,
+   "company_key": "meta",
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "meta_optical-engineering-ai-and-data-analytics-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.metacareers.com/jobs/1851348099357899"
+   ],
+   "latest_posted": 1792449186,
+   "breakdown": {
+    "role": 30,
+    "tier": 20,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 3
+   },
+   "score": 69,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/274bb79f-19a9-4287-b5f6-ae4cd39636ec/logo.png",
+   "logo_slug": "Meta"
+  },
+  {
    "id": "fc6b4891-c7cc-4215-9a60-59ca673a18b7",
    "source": "vanshb03",
    "company": "Microsoft",
@@ -459,6 +634,66 @@
    "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/527fc2d9-67a9-4418-a8fa-662bdb033151/logo.png",
    "logo_slug": "Microsoft"
+  },
+  {
+   "id": "f8f882fd-ee8e-4b25-ae90-0f2a5746e3ed",
+   "source": "simplify",
+   "company": "Uber",
+   "title": "Software Engineer Intern",
+   "url": "https://iaziqy.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/303922",
+   "locations": [
+    "Seattle, WA",
+    "SF",
+    "Sunnyvale, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1792545218,
+   "date_updated": 1792545350,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Uber",
+   "tier": 2,
+   "company_key": "uber",
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "uber_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://iaziqy.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/303922"
+   ],
+   "latest_posted": 1792545218,
+   "breakdown": {
+    "role": 30,
+    "tier": 15,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 66,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/88c7a242-03a9-4e70-a9d0-72029f41339a/logo.png",
+   "logo_slug": "Uber"
   },
   {
    "id": "43903c88-4d7c-490e-9b84-3643853afba3",
@@ -570,6 +805,171 @@
    "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/e75c9eb7-40e1-4539-abf9-6433a9946636/logo.png",
    "logo_slug": "Apple"
+  },
+  {
+   "id": "145ea10f-04ec-4b67-829b-db26a57c67cd",
+   "source": "simplify",
+   "company": "Meta",
+   "title": "Quality and Reliability Engineer Intern",
+   "url": "https://www.metacareers.com/jobs/1624891432439039",
+   "locations": [
+    "Sunnyvale, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1792103855,
+   "date_updated": 1792103985,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Meta",
+   "tier": 1,
+   "company_key": "meta",
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "meta_quality-and-reliability-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.metacareers.com/jobs/1624891432439039"
+   ],
+   "latest_posted": 1792103855,
+   "breakdown": {
+    "role": 30,
+    "tier": 20,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 66,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/274bb79f-19a9-4287-b5f6-ae4cd39636ec/logo.png",
+   "logo_slug": "Meta"
+  },
+  {
+   "id": "0e475b18-f88f-4d64-85ff-cdf2f7c6190c",
+   "source": "simplify",
+   "company": "Meta",
+   "title": "Display Array Modeling Engineer Intern",
+   "url": "https://www.metacareers.com/jobs/2773227806411499",
+   "locations": [
+    "Sunnyvale, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1792017026,
+   "date_updated": 1792017207,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Meta",
+   "tier": 1,
+   "company_key": "meta",
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "meta_display-array-modeling-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.metacareers.com/jobs/2773227806411499"
+   ],
+   "latest_posted": 1792017026,
+   "breakdown": {
+    "role": 30,
+    "tier": 20,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 66,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/274bb79f-19a9-4287-b5f6-ae4cd39636ec/logo.png",
+   "logo_slug": "Meta"
+  },
+  {
+   "id": "ff8c6d26-6328-4435-940f-7c9a1cb6f9bb",
+   "source": "simplify",
+   "company": "Meta",
+   "title": "Optical Engineer Intern - Camera, Depth & Cover Window Optics",
+   "url": "https://www.metacareers.com/jobs/2271558583687956",
+   "locations": [
+    "Sunnyvale, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1791988002,
+   "date_updated": 1791988054,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Meta",
+   "tier": 1,
+   "company_key": "meta",
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "meta_optical-engineer-intern-camera-depth-cover-window-optics",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.metacareers.com/jobs/2271558583687956"
+   ],
+   "latest_posted": 1791988002,
+   "breakdown": {
+    "role": 30,
+    "tier": 20,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 66,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/274bb79f-19a9-4287-b5f6-ae4cd39636ec/logo.png",
+   "logo_slug": "Meta"
   },
   {
    "id": "palantir:fd952b52-7b9c-4056-a3dd-0bc41fcfe603",
@@ -1589,85 +1989,25 @@
    "logo_slug": "Amazon"
   },
   {
-   "id": "ea672c45-89c1-45e5-afb3-0a7061e3ea16",
+   "id": "8ab7bf69-b8df-429e-9efc-bf515ac65762",
    "source": "simplify",
-   "company": "DriveWealth",
-   "title": "AI Consulting Associate Program Product Owner Intern",
-   "url": "https://boards.greenhouse.io/drivewealth/jobs/8038087003",
+   "company": "FSH Technologies",
+   "title": "Engineer Intern",
+   "url": "https://jobs.ashbyhq.com/FSH/baa9ae85-a578-4017-a41a-fc4999a4e077/application?embed=true",
    "locations": [
-    "Chicago, IL",
+    "Philadelphia, PA",
     "NYC"
    ],
    "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1792536182,
-   "date_updated": 1792536336,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/DriveWealth",
-   "tier": 3,
-   "company_key": null,
-   "role": "pm",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai",
-    "product"
-   ],
-   "key": "drivewealth_ai-consulting-associate-program-product-owner-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://boards.greenhouse.io/drivewealth/jobs/8038087003"
-   ],
-   "latest_posted": 1792536182,
-   "breakdown": {
-    "role": 24,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 10,
-    "keywords": 6
-   },
-   "score": 60,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/6bb4c49f-aa7a-4451-b8da-a6dc1328fa6d/logo.png",
-   "logo_slug": "DriveWealth"
-  },
-  {
-   "id": "f130f45d-27ed-49f0-9a41-5aef69d45ac3",
-   "source": "vanshb03",
-   "company": "Palantir",
-   "title": "Software Engineer Intern, Query Engines",
-   "url": "https://jobs.lever.co/palantir/da774f81-c98c-4dcf-9b9c-949fd7d90a13",
-   "locations": [
-    "New York, NY"
-   ],
-   "terms": [
-    "Summer 2027"
+    "N/A"
    ],
    "degrees": [],
    "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1792479600,
-   "date_updated": 1792511186,
+   "category": "Software",
+   "date_posted": 1792535812,
+   "date_updated": 1792535977,
    "active": true,
-   "company_url": "",
+   "company_url": "https://simplify.jobs/c/FSH-Technologies",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -1680,15 +2020,15 @@
    "citizenship_blocked": false,
    "degree_class": "unknown",
    "keyword_hits": [],
-   "key": "palantir_software-engineer-intern-query-engines",
+   "term_unknown": true,
+   "key": "fsh-technologies_engineer-intern",
    "sources": [
-    "vanshb03",
-    "boards"
+    "simplify"
    ],
    "urls": [
-    "https://jobs.lever.co/palantir/da774f81-c98c-4dcf-9b9c-949fd7d90a13"
+    "https://jobs.ashbyhq.com/FSH/baa9ae85-a578-4017-a41a-fc4999a4e077"
    ],
-   "latest_posted": 1792479600,
+   "latest_posted": 1792535812,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -1700,9 +2040,9 @@
    },
    "score": 60,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/f920d424-2df9-4b5d-8ff1-fece831a8fc7/logo.png",
-   "logo_slug": "Palantir"
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/2bf217a3-1e52-45a6-9ea1-5567c1918171/logo.png",
+   "logo_slug": "FSH-Technologies"
   },
   {
    "id": "d632ae0b-b92d-4d91-9abf-86c84f12ef16",
@@ -1757,6 +2097,63 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/425d09cc-7fcb-4ad4-b82c-7a0d09af89b3/logo.png",
    "logo_slug": "Verizon-Communications"
+  },
+  {
+   "id": "c72ef85b-a00c-46b0-86b5-08d0b3e8e75d",
+   "source": "simplify",
+   "company": "Meta",
+   "title": "Production Systems Engineer Intern",
+   "url": "https://www.metacareers.com/jobs/4536253699919879",
+   "locations": [
+    "Menlo Park, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1792189400,
+   "date_updated": 1792190244,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Meta",
+   "tier": 1,
+   "company_key": "meta",
+   "role": "it",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [
+    "product"
+   ],
+   "term_unknown": true,
+   "key": "meta_production-systems-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.metacareers.com/jobs/4536253699919879"
+   ],
+   "latest_posted": 1792189400,
+   "breakdown": {
+    "role": 18,
+    "tier": 20,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 3
+   },
+   "score": 57,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/274bb79f-19a9-4287-b5f6-ae4cd39636ec/logo.png",
+   "logo_slug": "Meta"
   },
   {
    "id": "figma:6180005004",
@@ -1982,63 +2379,6 @@
    "logo_slug": "Verizon-Communications"
   },
   {
-   "id": "459ff52e-a09a-4b92-bd95-62d6a6c2b553",
-   "source": "vanshb03",
-   "company": "Patreon",
-   "title": "Software Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/patreon/71f644bc-0873-4d62-a599-bd64405d6587/application?embed=true",
-   "locations": [
-    "SF",
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1792449243,
-   "date_updated": 1792511227,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "patreon_software-engineer-intern",
-   "sources": [
-    "vanshb03",
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/patreon/71f644bc-0873-4d62-a599-bd64405d6587",
-    "https://jobs.ashbyhq.com/patreon/cefe07ab-ba4f-48cc-86b9-a88b1859a95c"
-   ],
-   "latest_posted": 1792449243,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/eaa72858-a3ac-43cc-8244-258cb4caed4e/logo.png",
-   "logo_slug": "Patreon"
-  },
-  {
    "id": "4841acd3-59a5-4e42-bb98-4d03de2ccd09",
    "source": "vanshb03",
    "company": "Amplify",
@@ -2089,7 +2429,7 @@
    },
    "score": 55,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/3861ccda-0e27-4dbd-8667-159a3282b2b8/logo.png",
    "logo_slug": "Amplify"
   },
@@ -2420,7 +2760,7 @@
    },
    "score": 55,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/4210f394-c43e-4ab9-8ef8-3c42fb6bc045/logo.png",
    "logo_slug": "Wikimedia-Foundation"
   },
@@ -2478,7 +2818,7 @@
    },
    "score": 55,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/912ec17f-dc1a-4af2-a9ab-19b4e8b0a796/logo.jpg",
    "logo_slug": "Tessera-Labs"
   },
@@ -2535,118 +2875,6 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/8a9a2737-c81f-4467-9efa-1ff3be59e7e0/logo.png",
    "logo_slug": "CACI"
-  },
-  {
-   "id": "09f4fd4b-1858-448f-bc4e-04da8b4e3e35",
-   "source": "vanshb03",
-   "company": "Point72",
-   "title": "Software Engineer Intern",
-   "url": "https://boards.greenhouse.io/point72/jobs/8885733002?gh_jid=8885733002",
-   "locations": [
-    "New York, NY"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1791961200,
-   "date_updated": 1792261427,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "point72_software-engineer-intern",
-   "sources": [
-    "vanshb03",
-    "simplify"
-   ],
-   "urls": [
-    "https://boards.greenhouse.io/point72/jobs/8885733002?gh_jid=8885733002",
-    "https://boards.greenhouse.io/point72/jobs/8885733002"
-   ],
-   "latest_posted": 1791987659,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/0bc3d2c1-74ec-4e94-b532-76d1f7880d1f/logo.png",
-   "logo_slug": "Point72"
-  },
-  {
-   "id": "a23a1cbd-fa56-455a-947c-9875fe1189c5",
-   "source": "vanshb03",
-   "company": "Illumio",
-   "title": "Engineering Intern, Product Security",
-   "url": "https://jobs.ashbyhq.com/illumio/8708e622-900e-458a-96b3-ae339329a56d",
-   "locations": [
-    "Sunnyvale, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1792531848,
-   "date_updated": 1792535448,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [
-    "product"
-   ],
-   "key": "illumio_engineering-intern-product-security",
-   "sources": [
-    "vanshb03"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/illumio/8708e622-900e-458a-96b3-ae339329a56d"
-   ],
-   "latest_posted": 1792531848,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 3
-   },
-   "score": 54,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/bbf0cafe-7d3b-4cb5-9348-d0c46b86d0d1/logo.png",
-   "logo_slug": "Illumio"
   },
   {
    "id": "c8fbadcf-7fba-4413-9234-13f641ff2de5",
@@ -2813,7 +3041,7 @@
    },
    "score": 54,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page could not be read",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/b9abb3b3-3119-4b5c-af43-80caa62c25a9/logo.png",
    "logo_slug": "OpenAI"
   },
@@ -2928,28 +3156,26 @@
    "logo_slug": "Pinterest"
   },
   {
-   "id": "cdf19c98-c74e-4082-9b37-51fcaaae298d",
+   "id": "125bd988-6772-4728-ae9c-d0c5bc2562d3",
    "source": "simplify",
-   "company": "Gecko Robotics",
-   "title": "AI/Machine Learning Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/gecko-robotics/c097505b-0a28-4a33-a917-268f463641e8/application?embed=true",
+   "company": "Assured Guaranty",
+   "title": "Product Software Developer - Back-End",
+   "url": "https://boards.greenhouse.io/assuredguaranty/jobs/8827458002",
    "locations": [
     "NYC"
    ],
    "terms": [
-    "Summer 2027"
+    "N/A"
    ],
    "degrees": [
-    "Bachelor's",
-    "Master's",
-    "PhD"
+    "Bachelor's"
    ],
    "sponsorship": "Other",
-   "category": "AI/ML/Data",
-   "date_posted": 1789568356,
-   "date_updated": 1789568602,
+   "category": "Software",
+   "date_posted": 1790030542,
+   "date_updated": 1790031061,
    "active": true,
-   "company_url": "https://simplify.jobs/c/Gecko-Robotics",
+   "company_url": "https://simplify.jobs/c/Assured-Guaranty",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -2962,16 +3188,17 @@
    "citizenship_blocked": false,
    "degree_class": "bachelors",
    "keyword_hits": [
-    "ai"
+    "product"
    ],
-   "key": "gecko-robotics_ai-machine-learning-engineer-intern",
+   "term_unknown": true,
+   "key": "assured-guaranty_product-software-developer-back-end",
    "sources": [
     "simplify"
    ],
    "urls": [
-    "https://jobs.ashbyhq.com/gecko-robotics/c097505b-0a28-4a33-a917-268f463641e8"
+    "https://boards.greenhouse.io/assuredguaranty/jobs/8827458002"
    ],
-   "latest_posted": 1789568356,
+   "latest_posted": 1790030542,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -2983,9 +3210,68 @@
    },
    "score": 53,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/b331fe6e-d1eb-409f-9c5e-470ff625a0cb/logo.png",
-   "logo_slug": "Gecko-Robotics"
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/daa8d93d-8ac1-40c7-aac8-2e3ed79be0f1/logo.png",
+   "logo_slug": "Assured-Guaranty"
+  },
+  {
+   "id": "8f493b99-aa1d-4b44-8cc1-dc9fc9e2d5d9",
+   "source": "simplify",
+   "company": "Assured Guaranty",
+   "title": "Product Software Developer - Front-End",
+   "url": "https://boards.greenhouse.io/assuredguaranty/jobs/8827460002",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1790030541,
+   "date_updated": 1790031061,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Assured-Guaranty",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "product"
+   ],
+   "term_unknown": true,
+   "key": "assured-guaranty_product-software-developer-front-end",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://boards.greenhouse.io/assuredguaranty/jobs/8827460002"
+   ],
+   "latest_posted": 1790030541,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 53,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/daa8d93d-8ac1-40c7-aac8-2e3ed79be0f1/logo.png",
+   "logo_slug": "Assured-Guaranty"
   },
   {
    "id": "40f1994b-331f-4836-b7e5-33e8197296d0",
@@ -3278,67 +3564,9 @@
    },
    "score": 52,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/3861ccda-0e27-4dbd-8667-159a3282b2b8/logo.png",
    "logo_slug": "Amplify"
-  },
-  {
-   "id": "babbf90a-f41f-4abc-9359-2b7c89fa1c36",
-   "source": "vanshb03",
-   "company": "Brain Co.",
-   "title": "AI Product Engineer Co-op",
-   "url": "https://jobs.ashbyhq.com/brainco/7ce0af56-d15e-4fc8-91a5-9e56cdb9cf42/application",
-   "locations": [
-    "San Francisco, CA"
-   ],
-   "terms": [
-    "Winter 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1791961200,
-   "date_updated": 1792261427,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [
-    "ai",
-    "product"
-   ],
-   "key": "brain-co_ai-product-engineer-co-op",
-   "sources": [
-    "vanshb03",
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/brainco/7ce0af56-d15e-4fc8-91a5-9e56cdb9cf42"
-   ],
-   "latest_posted": 1791961200,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 6
-   },
-   "score": 52,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/34f0ddf9-4dc5-4eb7-9d9e-f474940e946d/logo.png",
-   "logo_slug": "Brain-Corp"
   },
   {
    "id": "a75a8632-28d8-4ce0-827f-c75ecb99f4c9",
@@ -3495,7 +3723,9 @@
    "urls": [
     "https://jobs.keysight.com/jobs/55110?icims=1",
     "https://jobs.keysight.com/jobs/54673?icims=1",
-    "https://jobs.keysight.com/jobs/54848?icims=1"
+    "https://jobs.keysight.com/jobs/54848?icims=1",
+    "https://jobs.keysight.com/jobs/54640?icims=1",
+    "https://jobs.keysight.com/jobs/54724?icims=1"
    ],
    "latest_posted": 1792535436,
    "breakdown": {
@@ -3565,7 +3795,7 @@
    },
    "score": 51,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/c258251c-16fb-4f00-8a9f-198847f411a2/logo.png",
    "logo_slug": "Metamorphic"
   },
@@ -3621,7 +3851,7 @@
    },
    "score": 51,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/577ddf8b-5b11-408a-8ceb-c204d6c79e68/logo.png",
    "logo_slug": "Skydio"
   },
@@ -3658,12 +3888,14 @@
    "keyword_hits": [],
    "key": "humble-robotics_embedded-software-engineer-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
-    "https://jobs.lever.co/humble-robotics/8d1fb5d7-9b07-4fac-8c39-e395dca7f2b3"
+    "https://jobs.lever.co/humble-robotics/8d1fb5d7-9b07-4fac-8c39-e395dca7f2b3",
+    "https://jobs.lever.co/humble-robotics/8d1fb5d7-9b07-4fac-8c39-e395dca7f2b3/apply"
    ],
-   "latest_posted": 1792524329,
+   "latest_posted": 1792536157,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -3675,61 +3907,9 @@
    },
    "score": 51,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/65472bb6-e7fe-40e8-96d5-d3fafcb9094a/logo.png",
    "logo_slug": "Humble-Robotics"
-  },
-  {
-   "id": "9047f5f8-60ac-4518-9160-a93ae0db177b",
-   "source": "vanshb03",
-   "company": "Integrate",
-   "title": "Software Engineering Intern",
-   "url": "https://jobs.ashbyhq.com/integrate/d619e978-446a-4147-a788-9e53918a1736",
-   "locations": [
-    "Seattle, WA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1792522551,
-   "date_updated": 1792536445,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "integrate_software-engineering-intern",
-   "sources": [
-    "vanshb03"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/integrate/d619e978-446a-4147-a788-9e53918a1736"
-   ],
-   "latest_posted": 1792522551,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
   },
   {
    "id": "3b199ce3-17c3-41c3-b597-3191ff039e74",
@@ -3764,7 +3944,8 @@
    "keyword_hits": [],
    "key": "texas-instruments_software-engineer-intern-compiler",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://edbz.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/25019103"
@@ -3932,6 +4113,7 @@
    ],
    "urls": [
     "https://careers-gdms.icims.com/jobs/75637/software-engineer-intern/job",
+    "https://careers-gdms.icims.com/jobs/75159/job?mobile=true&needsRedirect=false",
     "https://careers-gdms.icims.com/jobs/74687/job?mobile=true&needsRedirect=false"
    ],
    "latest_posted": 1792479600,
@@ -4059,7 +4241,7 @@
    },
    "score": 51,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/577ddf8b-5b11-408a-8ceb-c204d6c79e68/logo.png",
    "logo_slug": "Skydio"
   },
@@ -4102,6 +4284,8 @@
    "urls": [
     "https://globalhr.wd5.myworkdayjobs.com/en-US/REC_RTX_Ext_Gateway/job/US-CO-AURORA-S75--16800-E-Centretech-Pkwy--BLDG-S75/Part-time-Software-Engineer-Co-op--Remote-_01883452",
     "https://globalhr.wd5.myworkdayjobs.com/en-US/REC_RTX_Ext_Gateway/job/US-TX-RICHARDSON-C17--1717-Cityline-Dr--CITYLINE-C17/Software-Engineer-Co-op--Remote-_01883545",
+    "https://globalhr.wd5.myworkdayjobs.com/rec_rtx_ext_gateway/job/US-TX-RICHARDSON-C17--1717-Cityline-Dr--CITYLINE-C17/Software-Engineer-Co-op--Remote-_01883545",
+    "https://globalhr.wd5.myworkdayjobs.com/rec_rtx_ext_gateway/job/US-CO-AURORA-S75--16800-E-Centretech-Pkwy--BLDG-S75/Part-time-Software-Engineer-Co-op--Remote-_01883452",
     "https://globalhr.wd5.myworkdayjobs.com/rec_rtx_ext_gateway/job/US-IA-CEDAR-RAPIDS-182--1100-Cimmie-Ave-Ne--BLDG-182/Software-Engineer-Co-op--Summer-Fall-2027----Onsite_01871347"
    ],
    "latest_posted": 1792479600,
@@ -4154,7 +4338,8 @@
    "keyword_hits": [],
    "key": "hcsc_finance-data-analytics-developer-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://hcsc.wd1.myworkdayjobs.com/en-US/HCSC_External/job/IL---Chicago/Early-Careers---Finance-Data---Analytics-Developer-Intern_R0059478"
@@ -4209,7 +4394,8 @@
    "keyword_hits": [],
    "key": "hcsc_finance-application-developer-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://hcsc.wd1.myworkdayjobs.com/en-US/HCSC_External/job/IL---Chicago/Early-Careers---Finance-Application-Developer-Intern_R0059477"
@@ -4397,6 +4583,124 @@
    "logo_slug": "Northrop-Grumman"
   },
   {
+   "id": "20f49355-06d2-4416-b7ab-ae0fe4f40e55",
+   "source": "simplify",
+   "company": "SageSure",
+   "title": "Data Operations Engineer Intern",
+   "url": "https://www.sagesure.com/careers/current-job-openings/?gh_jid=4719517006",
+   "locations": [
+    "Jersey City, NJ",
+    "Cheshire, CT"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "AI/ML/Data",
+   "date_posted": 1791584001,
+   "date_updated": 1791584563,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/SageSure-Insurance-Managers",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "sagesure_data-operations-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.sagesure.com/careers/current-job-openings?gh_jid=4719517006"
+   ],
+   "latest_posted": 1791584001,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/19910f2a-4749-4d29-ace5-49f9d634644c/logo.png",
+   "logo_slug": "SageSure-Insurance-Managers"
+  },
+  {
+   "id": "7c5bf4c8-4460-4368-ae88-3abf181dd598",
+   "source": "simplify",
+   "company": "SageSure",
+   "title": "Software Engineer Intern",
+   "url": "https://www.sagesure.com/careers/current-job-openings/?gh_jid=4719536006",
+   "locations": [
+    "Chicago, IL",
+    "Jersey City, NJ",
+    "Mountain View, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791583997,
+   "date_updated": 1791585195,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/SageSure-Insurance-Managers",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "sagesure_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.sagesure.com/careers/current-job-openings?gh_jid=4719536006"
+   ],
+   "latest_posted": 1791583997,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/19910f2a-4749-4d29-ace5-49f9d634644c/logo.png",
+   "logo_slug": "SageSure-Insurance-Managers"
+  },
+  {
    "id": "4dacd1f1-1a63-461f-9329-95162f1c14bd",
    "source": "simplify",
    "company": "Coinbase",
@@ -4448,31 +4752,31 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/717694f5-7321-4c6f-91a5-5a46b250f459/logo.png",
    "logo_slug": "Coinbase"
   },
   {
-   "id": "c81df585-c144-4df1-8111-2a31dee7970f",
+   "id": "92b36766-febe-474d-941e-0bf16bc2ecc0",
    "source": "simplify",
-   "company": "IMC Trading",
-   "title": "Machine Learning Engineer Intern",
-   "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4962456101",
+   "company": "Leidos",
+   "title": "Systems Integration and Software Engineer Intern",
+   "url": "https://leidos.wd5.myworkdayjobs.com/External/job/Atlantic-City-NJ/Systems--Integration-and-Software-Engineer-Intern_R-00194152",
    "locations": [
-    "NYC"
+    "Atlantic City, NJ"
    ],
    "terms": [
-    "Summer 2027"
+    "N/A"
    ],
    "degrees": [
     "Bachelor's"
    ],
    "sponsorship": "Other",
-   "category": "AI/ML/Data",
-   "date_posted": 1791497959,
-   "date_updated": 1791498062,
+   "category": "Software",
+   "date_posted": 1791417600,
+   "date_updated": 1791474381,
    "active": true,
-   "company_url": "https://simplify.jobs/c/IMC-Trading",
+   "company_url": "https://simplify.jobs/c/Leidos",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -4485,14 +4789,15 @@
    "citizenship_blocked": false,
    "degree_class": "bachelors",
    "keyword_hits": [],
-   "key": "imc-trading_machine-learning-engineer-intern",
+   "term_unknown": true,
+   "key": "leidos_systems-integration-and-software-engineer-intern",
    "sources": [
     "simplify"
    ],
    "urls": [
-    "https://job-boards.eu.greenhouse.io/imc/jobs/4962456101"
+    "https://leidos.wd5.myworkdayjobs.com/External/job/Atlantic-City-NJ/Systems--Integration-and-Software-Engineer-Intern_R-00194152"
    ],
-   "latest_posted": 1791497959,
+   "latest_posted": 1791417600,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -4505,8 +4810,8 @@
    "score": 50,
    "eligibility": "unknown",
    "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/23f1ed61-7f05-4385-b456-77f9228937e8/logo.png",
-   "logo_slug": "IMC-Trading"
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/1bff8f57-d728-496a-a5e9-57125b334283/logo.png",
+   "logo_slug": "Leidos"
   },
   {
    "id": "b29f7462-630f-4a75-8dca-924bcd83bd11",
@@ -4561,8 +4866,8 @@
     "keywords": 0
    },
    "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility": "ok",
+   "eligibility_note": "page names graduation 2027 or later",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/d80496fd-3f2e-4b06-a602-e1d6d41fe100/logo.png",
    "logo_slug": "Sigma-Computing"
   },
@@ -4618,8 +4923,8 @@
     "keywords": 0
    },
    "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility": "ok",
+   "eligibility_note": "page names graduation 2027 or later",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/d80496fd-3f2e-4b06-a602-e1d6d41fe100/logo.png",
    "logo_slug": "Sigma-Computing"
   },
@@ -4680,26 +4985,26 @@
    "logo_slug": "Dow-Jones"
   },
   {
-   "id": "341ad57c-d6c1-47e3-97ae-3056b177f31e",
+   "id": "7c58c548-fe96-40a5-ad9c-226e9751449f",
    "source": "simplify",
-   "company": "Courier Health",
+   "company": "IEX",
    "title": "Software Engineer Intern",
-   "url": "https://job-boards.greenhouse.io/courierhealth/jobs/5258913007",
+   "url": "https://job-boards.greenhouse.io/iex-interns/jobs/8171239",
    "locations": [
     "NYC"
    ],
    "terms": [
-    "Summer 2027"
+    "N/A"
    ],
    "degrees": [
     "Bachelor's"
    ],
    "sponsorship": "Other",
    "category": "Software",
-   "date_posted": 1791327365,
-   "date_updated": 1791327764,
+   "date_posted": 1791267255,
+   "date_updated": 1791267301,
    "active": true,
-   "company_url": "https://simplify.jobs/c/Courier-Health",
+   "company_url": "https://simplify.jobs/c/IEX",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -4712,14 +5017,15 @@
    "citizenship_blocked": false,
    "degree_class": "bachelors",
    "keyword_hits": [],
-   "key": "courier-health_software-engineer-intern",
+   "term_unknown": true,
+   "key": "iex_software-engineer-intern",
    "sources": [
     "simplify"
    ],
    "urls": [
-    "https://job-boards.greenhouse.io/courierhealth/jobs/5258913007"
+    "https://job-boards.greenhouse.io/iex-interns/jobs/8171239"
    ],
-   "latest_posted": 1791327365,
+   "latest_posted": 1791267255,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -4731,66 +5037,9 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/a5c6577e-1845-414f-9626-e9c2945125a5/logo.png",
-   "logo_slug": "Courier-Health"
-  },
-  {
-   "id": "9c73b8be-e8be-4a91-9db0-df9eb032917a",
-   "source": "simplify",
-   "company": "Cadence Solutions",
-   "title": "Software Engineer Intern",
-   "url": "https://job-boards.greenhouse.io/solutions/jobs/4711210006",
-   "locations": [
-    "Remote in USA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1791268852,
-   "date_updated": 1791268943,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Cadence-Solutions",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "cadence-solutions_software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/solutions/jobs/4711210006"
-   ],
-   "latest_posted": 1791268852,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/90931e0e-a383-47e9-a0e5-9d563f528766/logo.png",
-   "logo_slug": "Cadence-Solutions"
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ddf8a515-03da-4fa0-982f-ff6e731aea95/logo.jpg",
+   "logo_slug": "IEX"
   },
   {
    "id": "b884d6ac-a1a0-4677-80ed-ce53c57be6e9",
@@ -4844,8 +5093,8 @@
     "keywords": 0
    },
    "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility": "ok",
+   "eligibility_note": "page names graduation 2027 or later",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/8533b3fb-3bbe-4f9e-bd3b-d3283d8dafa7/logo.png",
    "logo_slug": "Harvey"
   },
@@ -4906,63 +5155,6 @@
    "logo_slug": "Mindex"
   },
   {
-   "id": "7e635a7d-4a28-41ba-a06c-d0b08875dfae",
-   "source": "simplify",
-   "company": "Walleye Capital",
-   "title": "Special Projects Developer Intern",
-   "url": "https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4716166006",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790903947,
-   "date_updated": 1790904157,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Walleye-Capital",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "walleye-capital_special-projects-developer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4716166006"
-   ],
-   "latest_posted": 1790903947,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/cb06eb3c-cc3b-4aa6-9482-2ab6cf378cd4/logo.jpg",
-   "logo_slug": "Walleye-Capital"
-  },
-  {
    "id": "5db8bd0a-d6b5-46ef-b430-298959f57fe5",
    "source": "simplify",
    "company": "CACI",
@@ -5019,6 +5211,66 @@
    "logo_slug": "CACI"
   },
   {
+   "id": "7b0b49ae-7a2d-4ad2-9957-e53861b27064",
+   "source": "simplify",
+   "company": "L3Harris Technologies",
+   "title": "Software Engineer Intern",
+   "url": "https://jobs.l3harris.com/job/Clifton-Software-Engineering-Intern-NJ-07014/1413358200/?ats=successfactors",
+   "locations": [
+    "Clinton, MD",
+    "Clifton, NJ"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1790633316,
+   "date_updated": 1792486489,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/L3Harris-Technologies",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "l3harris-technologies_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://jobs.l3harris.com/job/Clifton-Software-Engineering-Intern-NJ-07014/1413358200?ats=successfactors"
+   ],
+   "latest_posted": 1790633316,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/62245141-364d-4543-bdbd-0e1d372e1052/logo.png",
+   "logo_slug": "L3Harris-Technologies"
+  },
+  {
    "id": "56a971f3-b99a-4529-adf4-d9c950b25ef5",
    "source": "simplify",
    "company": "Corning",
@@ -5073,63 +5325,6 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/e6d77888-35a7-4c8d-8345-f79ef34a327d/logo.png",
    "logo_slug": "Corning"
-  },
-  {
-   "id": "5eb5b284-a13e-460f-8868-b285bb6e1821",
-   "source": "simplify",
-   "company": "Grow Therapy",
-   "title": "Software Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/grow-therapy/92bfe88a-4c23-48c8-8f7b-4959ab6cd8d8/application?embed=true",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790115871,
-   "date_updated": 1790117590,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Grow-Therapy",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "grow-therapy_software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/grow-therapy/92bfe88a-4c23-48c8-8f7b-4959ab6cd8d8"
-   ],
-   "latest_posted": 1790115871,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/bda24387-8635-4894-8daa-da8ef5120fdf/logo.png",
-   "logo_slug": "Grow-Therapy"
   },
   {
    "id": "0315cabd-eed9-4fb0-bf72-2770478f6bb9",
@@ -5303,7 +5498,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/55d1ed6b-23d9-4cd2-8ea6-8bdb5e9aa55a/logo.png",
    "logo_slug": "Gemini"
   },
@@ -5533,127 +5728,9 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/4ecca586-67ac-41fe-995e-769798e09b0f/logo.jpg",
    "logo_slug": "Bedrock-Robotics"
-  },
-  {
-   "id": "8360c3f7-a472-4bfa-9c03-ec28915f1cef",
-   "source": "simplify",
-   "company": "Gecko Robotics",
-   "title": "Full Stack Software Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/gecko-robotics/01138338-ff3c-4982-8ba3-5401386bf082/application?embed=true",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1789568356,
-   "date_updated": 1789568583,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Gecko-Robotics",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "gecko-robotics_full-stack-software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/gecko-robotics/01138338-ff3c-4982-8ba3-5401386bf082"
-   ],
-   "latest_posted": 1789568356,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/b331fe6e-d1eb-409f-9c5e-470ff625a0cb/logo.png",
-   "logo_slug": "Gecko-Robotics"
-  },
-  {
-   "id": "d3c0c779-480d-4810-9393-88d215aa5e7e",
-   "source": "simplify",
-   "company": "DoorDash",
-   "title": "Software Engineer Intern - Summer 2027",
-   "url": "https://job-boards.greenhouse.io/doordashusa/jobs/8171041",
-   "locations": [
-    "Seattle, WA",
-    "SF",
-    "LA",
-    "NYC",
-    "Sunnyvale, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1789435263,
-   "date_updated": 1789435671,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/DoorDash",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "doordash_software-engineer-intern-summer-2027",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/doordashusa/jobs/8171041"
-   ],
-   "latest_posted": 1789435263,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/808a1b71-aecb-49df-9587-39bc158d2035/logo.png",
-   "logo_slug": "DoorDash"
   },
   {
    "id": "4dba7615-3e73-45f2-92bf-bc0d45120619",
@@ -5705,7 +5782,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/39e63670-a8d9-4b33-8754-cb0535eed26a/logo.png",
    "logo_slug": "With-Pace"
   },
@@ -5929,66 +6006,9 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/cdae20d3-9ca7-494c-8b0d-3753bd0e2adf/logo.png",
    "logo_slug": "MegazoneCloud"
-  },
-  {
-   "id": "b1d0db5d-2ecc-4ad8-8fdd-ad33cabd3059",
-   "source": "simplify",
-   "company": "DV Trading",
-   "title": "Software Developer Intern",
-   "url": "https://job-boards.greenhouse.io/dvtrading/jobs/4733138005",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1789165753,
-   "date_updated": 1789165801,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/DV-Trading",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "dv-trading_software-developer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/dvtrading/jobs/4733138005"
-   ],
-   "latest_posted": 1789165753,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/6c9538ed-96a9-442a-bc05-e8cb9ef373c9/logo.png",
-   "logo_slug": "DV-Trading"
   },
   {
    "id": "8262d1b0-a155-42eb-b4f5-a14a377ffb1b",
@@ -6385,7 +6405,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/87196b1d-3778-4cbb-96ce-b3d179020ee3/logo.png",
    "logo_slug": "Domino-Data-Lab"
   },
@@ -6439,7 +6459,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/87196b1d-3778-4cbb-96ce-b3d179020ee3/logo.png",
    "logo_slug": "Domino-Data-Lab"
   },
@@ -6720,7 +6740,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/74c4b931-dd3e-43de-b707-311dfb0e18bc/logo.png",
    "logo_slug": "Viam"
   },
@@ -6783,118 +6803,6 @@
    "logo_slug": "Two-Sigma"
   },
   {
-   "id": "59e5e5be-d33c-4a69-8687-6d8c9aa4a4e2",
-   "source": "simplify",
-   "company": "Talos",
-   "title": "Software Engineer Intern - RFQ",
-   "url": "https://jobs.ashbyhq.com/Talos-Trading/2c833180-484f-4657-80e3-f822cf1a0285/application?embed=true",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1788906497,
-   "date_updated": 1788907167,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Talos",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "talos_software-engineer-intern-rfq",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/Talos-Trading/2c833180-484f-4657-80e3-f822cf1a0285"
-   ],
-   "latest_posted": 1788906497,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/93458ea4-ab9b-440c-ab33-1d012d86f5f0/logo.png",
-   "logo_slug": "Talos"
-  },
-  {
-   "id": "ce1351e2-a67e-44f2-8744-faae77603b53",
-   "source": "simplify",
-   "company": "Talos",
-   "title": "Software Engineer Intern - Dealer",
-   "url": "https://jobs.ashbyhq.com/Talos-Trading/91fd5274-3b6b-43cf-b366-9f6dc2ae5977/application?embed=true",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1788906494,
-   "date_updated": 1788907167,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Talos",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "talos_software-engineer-intern-dealer",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/Talos-Trading/91fd5274-3b6b-43cf-b366-9f6dc2ae5977"
-   ],
-   "latest_posted": 1788906494,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/93458ea4-ab9b-440c-ab33-1d012d86f5f0/logo.png",
-   "logo_slug": "Talos"
-  },
-  {
    "id": "4d30f64b-9b67-4679-a968-1b62bf57c98e",
    "source": "simplify",
    "company": "Datadog",
@@ -6947,7 +6855,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/badf5319-ccd0-4a62-886a-dc9cbb400ba1/logo.png",
    "logo_slug": "Datadog"
   },
@@ -7118,9 +7026,66 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/3f05a9bb-9add-4175-8938-b3e7d3ccc580/logo.png",
    "logo_slug": "Eulerity"
+  },
+  {
+   "id": "d6145bb9-e227-4e58-93d0-88787216d111",
+   "source": "simplify",
+   "company": "L3Harris Technologies",
+   "title": "Associate Multimedia Web Developer/Programmer Intern - Technical Training",
+   "url": "https://jobs.l3harris.com/job/Rochester-Associate,-Multimedia-Web-DeveloperProgrammer-(Technical-Training)-NY-14609/1425480300/?ats=successfactors",
+   "locations": [
+    "Rochester, NY"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1788289303,
+   "date_updated": 1791115208,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/L3Harris-Technologies",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "l3harris-technologies_associate-multimedia-web-developer-programmer-intern-technic-ee76a9",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://jobs.l3harris.com/job/Rochester-Associate,-Multimedia-Web-DeveloperProgrammer-(Technical-Training)-NY-14609/1425480300?ats=successfactors"
+   ],
+   "latest_posted": 1788289303,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/62245141-364d-4543-bdbd-0e1d372e1052/logo.png",
+   "logo_slug": "L3Harris-Technologies"
   },
   {
    "id": "e9f9050a-780c-47dd-b98a-17dda2af0453",
@@ -7241,7 +7206,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/bde55618-d289-4ffe-ad8f-21cdf7908c74/logo.png",
    "logo_slug": "Stripe"
   },
@@ -7300,67 +7265,9 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page could not be read",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/50008ee0-811b-4908-93d9-ebfdbc190e93/logo.png",
    "logo_slug": "WhatNot"
-  },
-  {
-   "id": "aad0cae7-225e-41d2-b416-7d42885da521",
-   "source": "simplify",
-   "company": "Sierra",
-   "title": "Software Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/Sierra/34b31b67-268c-4270-b48f-72e59064c96e/application?embed=true",
-   "locations": [
-    "SF",
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1788238456,
-   "date_updated": 1788239716,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Sierra",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "sierra_software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/Sierra/34b31b67-268c-4270-b48f-72e59064c96e"
-   ],
-   "latest_posted": 1788238456,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/09aca2a9-2474-40bb-960a-e0b7f4c76de8/logo.png",
-   "logo_slug": "Sierra"
   },
   {
    "id": "1795d6df-fcca-45dc-836d-41a82dc36894",
@@ -7543,63 +7450,6 @@
    "logo_slug": "DTCC"
   },
   {
-   "id": "a767329d-41e2-4902-a15c-d28cb21ad5e1",
-   "source": "simplify",
-   "company": "The Voleon Group",
-   "title": "Software Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/voleon/57f1b666-2f4b-4bad-aac0-fa42a1c8fdf6/application?embed=true",
-   "locations": [
-    "Berkeley, CA",
-    "NYC"
-   ],
-   "terms": [
-    "Summer 2027",
-    "Fall 2027",
-    "Winter 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1787692907,
-   "date_updated": 1787693041,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/The-Voleon-Group",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "the-voleon-group_software-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/voleon/57f1b666-2f4b-4bad-aac0-fa42a1c8fdf6"
-   ],
-   "latest_posted": 1787692907,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/24399a3e-2695-4226-9dcf-1d55b789ffd4/logo.png",
-   "logo_slug": "The-Voleon-Group"
-  },
-  {
    "id": "cb063395-698b-47f5-9fe1-4b86a1b0dee5",
    "source": "simplify",
    "company": "Springs Window Fashions",
@@ -7707,7 +7557,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/4da095d8-1602-42e5-a25b-0b6f777f0971/logo.png",
    "logo_slug": "Sage"
   },
@@ -7761,7 +7611,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/4da095d8-1602-42e5-a25b-0b6f777f0971/logo.png",
    "logo_slug": "Sage"
   },
@@ -7928,62 +7778,9 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/badf5319-ccd0-4a62-886a-dc9cbb400ba1/logo.png",
    "logo_slug": "Datadog"
-  },
-  {
-   "id": "7b2a02cc-3617-4263-b478-bbfbe59374be",
-   "source": "vanshb03",
-   "company": "DV Group",
-   "title": "Software Engineer Intern, Commodities",
-   "url": "https://job-boards.greenhouse.io/dvtrading/jobs/4719119005",
-   "locations": [
-    "New York, NY"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1787327113,
-   "date_updated": 1787327113,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "dv-group_software-engineer-intern-commodities",
-   "sources": [
-    "vanshb03",
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/dvtrading/jobs/4719119005"
-   ],
-   "latest_posted": 1787327113,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
   },
   {
    "id": "835cac0f-ad17-450e-984c-ac7973199416",
@@ -8035,7 +7832,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/4f2bc26c-e73e-49cf-a37d-42e08c852cda/logo.png",
    "logo_slug": "VeritionFund"
   },
@@ -8144,7 +7941,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/acbad425-1c4a-4ad6-a19c-f2f5c6766215/logo.png",
    "logo_slug": "Phoebe"
   },
@@ -8201,9 +7998,64 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/a6384de3-88d2-416b-8fdb-4345633acaef/logo.png",
    "logo_slug": "Garda-Capital-Partners"
+  },
+  {
+   "id": "51a49e4a-6863-481c-807d-570b0a1db7fa",
+   "source": "simplify",
+   "company": "Five Rings Capital",
+   "title": "Software Development Intensive Program - LINK",
+   "url": "https://job-boards.greenhouse.io/fiveringsllc/jobs/5394515008",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1787091974,
+   "date_updated": 1787092317,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Five-Rings",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "five-rings-capital_software-development-intensive-program-link",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/fiveringsllc/jobs/5394515008"
+   ],
+   "latest_posted": 1787091974,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "ok",
+   "eligibility_note": "page mentions freshman/sophomore/underclassmen",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/6915600c-1997-45c3-9e55-d680ca59f1b2/logo.png",
+   "logo_slug": "Five-Rings"
   },
   {
    "id": "f34b1f76-8c04-44e3-af69-ab94a7694d4b",
@@ -8314,70 +8166,9 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/3932c316-b90f-4cec-adc0-e92c14b4ec52/logo.png",
    "logo_slug": "Quantbot-Technologies"
-  },
-  {
-   "id": "5379a4df-fa7a-4799-8978-00d1844415b9",
-   "source": "simplify",
-   "company": "Atoms",
-   "title": "Software Engineer Intern - Winter 2027",
-   "url": "https://job-boards.greenhouse.io/cssmerge/jobs/8687915002",
-   "locations": [
-    "Seattle, WA",
-    "SF",
-    "LA",
-    "NYC",
-    "Mountain View, CA"
-   ],
-   "terms": [
-    "Winter 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1786054236,
-   "date_updated": 1786054501,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Atoms",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "atoms_software-engineer-intern-winter-2027",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/cssmerge/jobs/8687915002"
-   ],
-   "latest_posted": 1786054236,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/cc715c3b-de2d-4412-ab97-bdb8bff79e10/logo.jpg",
-   "logo_slug": "Atoms"
   },
   {
    "id": "12011286-0eca-4688-8c69-aa283024575d",
@@ -8482,8 +8273,8 @@
     "keywords": 0
    },
    "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility": "ok",
+   "eligibility_note": "page mentions freshman/sophomore/underclassmen",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/d0732151-1ff8-4fdd-8dc6-83cabf9097b8/logo.png",
    "logo_slug": "SpaceX"
   },
@@ -8537,7 +8328,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/15d6f629-b7de-455b-9d0b-9d8f1257331e/logo.png",
    "logo_slug": "Yotta-Labs"
   },
@@ -8592,7 +8383,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/b15d5763-3eb7-4175-8cb2-c2d3537830b4/logo.png",
    "logo_slug": "b15d5763-3eb7-4175-8cb2-c2d3537830b4"
   },
@@ -8655,62 +8446,6 @@
    "logo_slug": "Medtronic"
   },
   {
-   "id": "96cc5998-c8cc-40eb-a815-7ae9739af769",
-   "source": "vanshb03",
-   "company": "Virtu Financial",
-   "title": "Software Engineer Intern",
-   "url": "https://job-boards.greenhouse.io/virtu/jobs/8624410002",
-   "locations": [
-    "Austin, TX",
-    "New York"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1785124708,
-   "date_updated": 1785124708,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "virtu-financial_software-engineer-intern",
-   "sources": [
-    "vanshb03",
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/virtu/jobs/8624410002"
-   ],
-   "latest_posted": 1785124708,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/4a4c2220-ea88-4e45-8ac0-a10088ac5b02/logo.png",
-   "logo_slug": "Virtu-Financial"
-  },
-  {
    "id": "bed160fc-23f7-474e-8720-7a84be2521a9",
    "source": "vanshb03",
    "company": "Quadrillion Labs",
@@ -8761,7 +8496,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "page says nothing about graduation year"
   },
   {
    "id": "a2f1a704-2ce0-4f89-abbb-6a783383b1fa",
@@ -8813,67 +8548,10 @@
     "keywords": 0
    },
    "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility": "ok",
+   "eligibility_note": "page names graduation 2027 or later",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/ff79088f-f716-4868-a720-14265a45761f/logo.png",
    "logo_slug": "PDT-Partners"
-  },
-  {
-   "id": "627e89a9-d3c2-49e9-8c6e-5757d9dc5fb9",
-   "source": "vanshb03",
-   "company": "Palantir Technologies",
-   "title": "Software Engineer Intern, Defense Tech",
-   "url": "https://jobs.lever.co/palantir/8bcf4f33-0a79-4248-bbfd-49ac4be9dd8e",
-   "locations": [
-    "New York, NY"
-   ],
-   "terms": [
-    "Fall 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Offers Sponsorship",
-   "category": null,
-   "date_posted": 1784882336,
-   "date_updated": 1784882336,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "palantir-technologies_software-engineer-intern-defense-tech",
-   "sources": [
-    "vanshb03",
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.lever.co/palantir/8bcf4f33-0a79-4248-bbfd-49ac4be9dd8e",
-    "https://jobs.lever.co/palantir/a483f41b-0da9-42ea-8ed6-cbf6eb93cc6d",
-    "https://jobs.lever.co/palantir/f17e98d0-046a-4e6e-9d65-ed0b12dd0ff7"
-   ],
-   "latest_posted": 1784882336,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/f920d424-2df9-4b5d-8ff1-fece831a8fc7/logo.png",
-   "logo_slug": "Palantir"
   },
   {
    "id": "b7e5ac4c-0473-4457-9fbd-1acfbf14b579",
@@ -9143,7 +8821,7 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/457f1ae4-4c7d-4963-8c34-abf5c01f9490/logo.png",
    "logo_slug": "457f1ae4-4c7d-4963-8c34-abf5c01f9490"
   },
@@ -9254,7 +8932,66 @@
    },
    "score": 50,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)"
+   "eligibility_note": "page says nothing about graduation year"
+  },
+  {
+   "id": "6fe65c46-3262-4ee8-9f5b-27fd77cfecf3",
+   "source": "simplify",
+   "company": "Micron Technology",
+   "title": "AI Engineer Intern",
+   "url": "https://micron.wd1.myworkdayjobs.com/External/job/Boise-ID---Main-Site/Intern---SMAI-Probe-AI-Engineer_JR114094",
+   "locations": [
+    "Boise, ID"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1792454400,
+   "date_updated": 1792535821,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Micron-Technology",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "micron-technology_ai-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://micron.wd1.myworkdayjobs.com/External/job/Boise-ID---Main-Site/Intern---SMAI-Probe-AI-Engineer_JR114094"
+   ],
+   "latest_posted": 1792454400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 3
+   },
+   "score": 49,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/5ca639cf-f42c-443e-b29d-cc6f5a8ff942/logo.png",
+   "logo_slug": "Micron-Technology"
   },
   {
    "id": "eb3a5bc3-2fb4-4151-93b2-ebee300ad678",
@@ -9367,7 +9104,7 @@
    },
    "score": 49,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/63601445-9d29-42dd-bc7b-30ffdb82158e/logo.png",
    "logo_slug": "InversionSpace"
   },
@@ -9462,12 +9199,13 @@
    ],
    "key": "navy-federal_ai-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://fa-etbx-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/nfcu/job/32645"
    ],
-   "latest_posted": 1792393200,
+   "latest_posted": 1792449039,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -9824,6 +9562,65 @@
    "logo_slug": "General-Motors"
   },
   {
+   "id": "99625c56-8f56-42c3-a5d9-6eb33cfa33fa",
+   "source": "simplify",
+   "company": "Hewlett Packard Enterprise",
+   "title": "AI & HPC Performance Engineering Intern",
+   "url": "https://hpe.wd5.myworkdayjobs.com/jobsathpe/job/Spring-Texas-United-States-of-America/AI---HPC-Performance-Engineering-Intern_1213397",
+   "locations": [
+    "Spring, TX"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "AI/ML/Data",
+   "date_posted": 1792022400,
+   "date_updated": 1792131494,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Hewlett-Packard-Enterprise",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "hewlett-packard-enterprise_ai-hpc-performance-engineering-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://hpe.wd5.myworkdayjobs.com/jobsathpe/job/Spring-Texas-United-States-of-America/AI---HPC-Performance-Engineering-Intern_1213397"
+   ],
+   "latest_posted": 1792022400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 3
+   },
+   "score": 49,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/9e570dc5-6b0c-46ea-b8e5-bd70f2f078e6/logo.png",
+   "logo_slug": "Hewlett-Packard-Enterprise"
+  },
+  {
    "id": "0370480f-46d5-4f51-b09f-e74b7c9f6e39",
    "source": "vanshb03",
    "company": "Astreya",
@@ -9943,24 +9740,28 @@
    "logo_slug": "ICF-International"
   },
   {
-   "id": "14f6b661-0292-4a30-a070-ecc16fadb9b3",
-   "source": "vanshb03",
-   "company": "Brain Co.",
-   "title": "Machine Learning Engineer, Applied AI Co-op",
-   "url": "https://jobs.ashbyhq.com/brainco/b6adda4c-490c-4e9e-8354-e55c05d3c6ac/application",
+   "id": "058f10b5-7e10-4926-bb72-004c74c2a665",
+   "source": "simplify",
+   "company": "Rakuten International",
+   "title": "AI Engineer Intern",
+   "url": "https://rakuten.wd1.myworkdayjobs.com/en-US/RakutenAmericas/job/Bellevue-Washington/Intern---Software-Engineering--AI-User-Experience_1031437",
    "locations": [
-    "San Francisco, CA"
+    "Bellevue, WA"
    ],
    "terms": [
-    "Winter 2027"
+    "N/A"
    ],
-   "degrees": [],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
    "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1791961200,
-   "date_updated": 1792261427,
+   "category": "Software",
+   "date_posted": 1791958818,
+   "date_updated": 1792545858,
    "active": true,
-   "company_url": "",
+   "company_url": "https://simplify.jobs/c/Rakuten-International",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -9971,19 +9772,19 @@
    "graduate_title": false,
    "citizens_only": false,
    "citizenship_blocked": false,
-   "degree_class": "unknown",
+   "degree_class": "bachelors",
    "keyword_hits": [
     "ai"
    ],
-   "key": "brain-co_machine-learning-engineer-applied-ai-co-op",
+   "term_unknown": true,
+   "key": "rakuten-international_ai-engineer-intern",
    "sources": [
-    "vanshb03",
     "simplify"
    ],
    "urls": [
-    "https://jobs.ashbyhq.com/brainco/b6adda4c-490c-4e9e-8354-e55c05d3c6ac"
+    "https://rakuten.wd1.myworkdayjobs.com/en-US/RakutenAmericas/job/Bellevue-Washington/Intern---Software-Engineering--AI-User-Experience_1031437"
    ],
-   "latest_posted": 1791961200,
+   "latest_posted": 1791958818,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -9996,64 +9797,8 @@
    "score": 49,
    "eligibility": "unknown",
    "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/34f0ddf9-4dc5-4eb7-9d9e-f474940e946d/logo.png",
-   "logo_slug": "Brain-Corp"
-  },
-  {
-   "id": "c2a2443f-38da-45a3-bc2e-ba71436eb8f9",
-   "source": "vanshb03",
-   "company": "Brain Co.",
-   "title": "AI Platform Engineer Co-op",
-   "url": "https://jobs.ashbyhq.com/brainco/aadc490a-0d72-4be0-891b-4c362d491c3a/application",
-   "locations": [
-    "San Francisco, CA"
-   ],
-   "terms": [
-    "Winter 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1791961200,
-   "date_updated": 1792261427,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "brain-co_ai-platform-engineer-co-op",
-   "sources": [
-    "vanshb03"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/brainco/aadc490a-0d72-4be0-891b-4c362d491c3a"
-   ],
-   "latest_posted": 1791961200,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 3
-   },
-   "score": 49,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/34f0ddf9-4dc5-4eb7-9d9e-f474940e946d/logo.png",
-   "logo_slug": "Brain-Corp"
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/8ad80518-8d5f-42bc-b3b6-56142de8fbac/logo.png",
+   "logo_slug": "Rakuten-International"
   },
   {
    "id": "f9cecf37-3d67-4284-acf1-bce7d8f9994e",
@@ -10116,27 +9861,26 @@
    "logo_slug": "Rockwell-Automation"
   },
   {
-   "id": "3e820b10-ba47-4208-bb88-525a7dc5290a",
+   "id": "6329e45c-ea0a-4d61-960c-0235ebded567",
    "source": "simplify",
-   "company": "Cadence Solutions",
+   "company": "Arcesium",
    "title": "Product Management Intern",
-   "url": "https://job-boards.greenhouse.io/solutions/jobs/4715294006",
+   "url": "https://job-boards.greenhouse.io/arcesiumllc/jobs/5257266007",
    "locations": [
-    "Remote in USA"
+    "NYC"
    ],
    "terms": [
-    "Summer 2027"
+    "N/A"
    ],
    "degrees": [
-    "Bachelor's",
-    "Master's"
+    "Bachelor's"
    ],
    "sponsorship": "Other",
    "category": "Product",
-   "date_posted": 1791268852,
-   "date_updated": 1791268921,
+   "date_posted": 1791843313,
+   "date_updated": 1791843481,
    "active": true,
-   "company_url": "https://simplify.jobs/c/Cadence-Solutions",
+   "company_url": "https://simplify.jobs/c/Arcesium",
    "tier": 3,
    "company_key": null,
    "role": "pm",
@@ -10151,14 +9895,15 @@
    "keyword_hits": [
     "product"
    ],
-   "key": "cadence-solutions_product-management-intern",
+   "term_unknown": true,
+   "key": "arcesium_product-management-intern",
    "sources": [
     "simplify"
    ],
    "urls": [
-    "https://job-boards.greenhouse.io/solutions/jobs/4715294006"
+    "https://job-boards.greenhouse.io/arcesiumllc/jobs/5257266007"
    ],
-   "latest_posted": 1791268852,
+   "latest_posted": 1791843313,
    "breakdown": {
     "role": 24,
     "tier": 0,
@@ -10170,9 +9915,70 @@
    },
    "score": 47,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/90931e0e-a383-47e9-a0e5-9d563f528766/logo.png",
-   "logo_slug": "Cadence-Solutions"
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/fdbfff27-008b-468c-a346-497c948aa403/logo.png",
+   "logo_slug": "Arcesium"
+  },
+  {
+   "id": "8581d540-5c15-4927-a31a-03e9b87aee0b",
+   "source": "simplify",
+   "company": "SageSure",
+   "title": "Software Product Management Intern",
+   "url": "https://www.sagesure.com/careers/current-job-openings/?gh_jid=4719520006",
+   "locations": [
+    "Chicago, IL",
+    "Jersey City, NJ",
+    "Mountain View, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Product",
+   "date_posted": 1791584013,
+   "date_updated": 1791584109,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/SageSure-Insurance-Managers",
+   "tier": 3,
+   "company_key": null,
+   "role": "pm",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "product"
+   ],
+   "term_unknown": true,
+   "key": "sagesure_software-product-management-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://www.sagesure.com/careers/current-job-openings?gh_jid=4719520006"
+   ],
+   "latest_posted": 1791584013,
+   "breakdown": {
+    "role": 24,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 47,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/19910f2a-4749-4d29-ace5-49f9d634644c/logo.png",
+   "logo_slug": "SageSure-Insurance-Managers"
   },
   {
    "id": "d3562842-a546-495a-bbe9-da2caa4618ac",
@@ -10406,68 +10212,9 @@
    },
    "score": 47,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/55d1ed6b-23d9-4cd2-8ea6-8bdb5e9aa55a/logo.png",
    "logo_slug": "Gemini"
-  },
-  {
-   "id": "6db7a199-b2fc-411a-bc8e-960bd3c02f28",
-   "source": "simplify",
-   "company": "Veeam Software",
-   "title": "AI & Automation Engineering Intern - Summer 2027",
-   "url": "https://job-boards.eu.greenhouse.io/veeamsoftware/jobs/4955296101",
-   "locations": [
-    "Georgia"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1789165503,
-   "date_updated": 1789165801,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Veeam-Software",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai",
-    "automation"
-   ],
-   "key": "veeam-software_ai-automation-engineering-intern-summer-2027",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.eu.greenhouse.io/veeamsoftware/jobs/4955296101"
-   ],
-   "latest_posted": 1789165503,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 6
-   },
-   "score": 47,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ba54febb-9f0d-4c43-9d01-6e78c023f39e/logo.png",
-   "logo_slug": "Veeam-Software"
   },
   {
    "id": "27460c05-e022-499c-bcc8-2783559d2639",
@@ -11111,7 +10858,7 @@
    },
    "score": 47,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/badf5319-ccd0-4a62-886a-dc9cbb400ba1/logo.png",
    "logo_slug": "Datadog"
   },
@@ -11462,6 +11209,65 @@
    "logo_slug": "Ryan"
   },
   {
+   "id": "7a73e6f4-b7ad-4f5e-990c-f6638569032e",
+   "source": "simplify",
+   "company": "Schweitzer Engineering Laboratories",
+   "title": "Software Engineer Intern",
+   "url": "https://selinc.wd1.myworkdayjobs.com/SEL/job/Washington---Pullman/Software-Engineer-Intern_2026-24190",
+   "locations": [
+    "Pullman, WA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1792454400,
+   "date_updated": 1792534327,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/SEL",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "schweitzer-engineering-laboratories_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://selinc.wd1.myworkdayjobs.com/SEL/job/Washington---Pullman/Software-Engineer-Intern_2026-24190",
+    "https://selinc.wd1.myworkdayjobs.com/SEL/job/Washington---Spokane-Valley/Software-Engineer-Intern_2026-21231",
+    "https://selinc.wd1.myworkdayjobs.com/SEL/job/Idaho---Boise/Software-Engineer-Intern_2026-22958"
+   ],
+   "latest_posted": 1792454400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ac8d4f55-0ad8-45d1-b67b-ad1ed5065d70/logo.png",
+   "logo_slug": "SEL"
+  },
+  {
    "id": "9333b87b-4d6d-4fe6-b888-297736c94e29",
    "source": "vanshb03",
    "company": "Ciena",
@@ -11717,7 +11523,8 @@
    "keyword_hits": [],
    "key": "l3harris-technologies_software-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://jobs.l3harris.com/job/Salt-Lake-City-Software-Engineering-Intern-UT-84116/1413790400?ats=successfactors"
@@ -11789,7 +11596,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/63601445-9d29-42dd-bc7b-30ffdb82158e/logo.png",
    "logo_slug": "InversionSpace"
   },
@@ -11826,7 +11633,8 @@
    "keyword_hits": [],
    "key": "keysight-technologies_software-engineer-intern-r-d",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://jobs.keysight.com/jobs/54805?icims=1"
@@ -11880,7 +11688,8 @@
    "keyword_hits": [],
    "key": "netapp_software-engineer-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://jobs.netapp.com/job/Wichita-Software-Engineer-Intern-KS-67208/1441378400?ats=successfactors"
@@ -11956,60 +11765,6 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/4fd21224-4e2a-493e-96d7-a039fc72f848/logo.jpg",
    "logo_slug": "Tyler-Technologies"
-  },
-  {
-   "id": "d98cf44d-c5c4-4b6c-89ae-a8b3a3d2ed09",
-   "source": "vanshb03",
-   "company": "American Fidelity",
-   "title": "Software Developer Innovation Intern",
-   "url": "https://americanfidelity.wd5.myworkdayjobs.com/External/job/Oklahoma-City-Oklahoma/Software-Developer-Innovation-Internship_JR1118",
-   "locations": [
-    "Oklahoma City, OK"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1792441414,
-   "date_updated": 1792442374,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "american-fidelity_software-developer-innovation-intern",
-   "sources": [
-    "vanshb03"
-   ],
-   "urls": [
-    "https://americanfidelity.wd5.myworkdayjobs.com/External/job/Oklahoma-City-Oklahoma/Software-Developer-Innovation-Internship_JR1118"
-   ],
-   "latest_posted": 1792441414,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 46,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/689dc679-fbc5-435b-83b9-1eafac074738/logo.png",
-   "logo_slug": "American-Fidelity"
   },
   {
    "id": "04fd72aa-b1c3-4ff1-8259-08b6ad402b2a",
@@ -12116,7 +11871,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/8872fc55-4ceb-4fef-8d1d-bd2fd3e21107/logo.png",
    "logo_slug": "National-Information-Solutions-Cooperative-NISC"
   },
@@ -12228,7 +11983,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/376773d2-d539-4950-906f-93ddfe13d143/logo.png",
    "logo_slug": "HeyGen"
   },
@@ -12343,6 +12098,62 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/92a3510a-9af0-4e48-8e88-eda41e273f85/logo.jpg",
    "logo_slug": "RTX"
+  },
+  {
+   "id": "dad793f0-93b4-42b3-b970-cbf577f07d52",
+   "source": "simplify",
+   "company": "American Fidelity",
+   "title": "Software Developer Intern",
+   "url": "https://americanfidelity.wd5.myworkdayjobs.com/External/job/Oklahoma-City-Oklahoma/Software-Developer-Innovation-Internship_JR1118",
+   "locations": [
+    "Oklahoma City, OK"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1792368000,
+   "date_updated": 1792447973,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/American-Fidelity",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "american-fidelity_software-developer-intern",
+   "sources": [
+    "simplify",
+    "vanshb03"
+   ],
+   "urls": [
+    "https://americanfidelity.wd5.myworkdayjobs.com/External/job/Oklahoma-City-Oklahoma/Software-Developer-Innovation-Internship_JR1118"
+   ],
+   "latest_posted": 1792441414,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/689dc679-fbc5-435b-83b9-1eafac074738/logo.png",
+   "logo_slug": "American-Fidelity"
   },
   {
    "id": "06611e55-cdb2-4043-bffc-52543ae4a7e8",
@@ -12620,7 +12431,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/cfe51424-0f64-4ae9-9e12-510a6b3f46be/logo.png",
    "logo_slug": "Assort-Health"
   },
@@ -12675,7 +12486,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/33da8230-3df3-48f6-9b23-338436097675/logo.png",
    "logo_slug": "AgZen"
   },
@@ -12712,7 +12523,8 @@
    "keyword_hits": [],
    "key": "john-deere_software-engineering-intern-technology",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
     "https://johndeere.eightfold.ai/careers/job/137483908089"
@@ -13216,7 +13028,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/63601445-9d29-42dd-bc7b-30ffdb82158e/logo.png",
    "logo_slug": "InversionSpace"
   },
@@ -13271,7 +13083,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/884f9da5-2061-4bb3-9d18-28260667b54b/logo.png",
    "logo_slug": "Abridge"
   },
@@ -13389,6 +13201,63 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/fe26e56f-545f-4b2f-92bb-da4c4fb36a9f/logo.png",
    "logo_slug": "GlobalFoundries"
+  },
+  {
+   "id": "e500e206-2c16-4d2e-ae52-93231ed58452",
+   "source": "simplify",
+   "company": "Booz Allen",
+   "title": "Software Engineer Intern",
+   "url": "https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Fayetteville-NC/University--Software-Engineer-Intern_R0251802",
+   "locations": [
+    "Fayetteville, NC"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1792108800,
+   "date_updated": 1792190364,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Booz-Allen",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "booz-allen_software-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Fayetteville-NC/University--Software-Engineer-Intern_R0251802"
+   ],
+   "latest_posted": 1792108800,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/45cb775d-2ca3-49ea-810f-65334ec70079/logo.jpg",
+   "logo_slug": "Booz-Allen"
   },
   {
    "id": "a34ec36a-bccc-4e43-93a8-36560196de44",
@@ -13622,6 +13491,61 @@
    "logo_slug": "Pennsylvania-State-University"
   },
   {
+   "id": "d025632f-3cb7-4ab5-9fd2-b99e9585016b",
+   "source": "simplify",
+   "company": "Research Innovations",
+   "title": "DoW Forward Deployed Engineer Intern",
+   "url": "https://jobs.lever.co/researchinnovations.com/a89efcb2-9e6c-44fe-8441-cf12dc3a1181/apply",
+   "locations": [
+    "McChord AFB, WA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1792103334,
+   "date_updated": 1792103446,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Research-Innovations",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "research-innovations_dow-forward-deployed-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://jobs.lever.co/researchinnovations.com/a89efcb2-9e6c-44fe-8441-cf12dc3a1181/apply"
+   ],
+   "latest_posted": 1792103334,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/58f7502d-0aad-4c30-8b9f-5880afb27050/logo.png",
+   "logo_slug": "Research-Innovations"
+  },
+  {
    "id": "f3fe5670-e9b7-400c-b35b-2d10dd196257",
    "source": "simplify",
    "company": "Muon Space",
@@ -13674,7 +13598,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/f59eb9af-4f24-44cb-991b-92126dc8f554/logo.png",
    "logo_slug": "MuonSpace"
   },
@@ -13892,7 +13816,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/9ed4be43-dd52-4785-863c-c288c04717fe/logo.png",
    "logo_slug": "Anduril"
   },
@@ -14062,6 +13986,64 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/c568e877-fe5d-4b3f-890a-d5492de73729/logo.png",
    "logo_slug": "T-Mobile"
+  },
+  {
+   "id": "8ac76c64-329b-4e0a-ae91-9cc1568008bb",
+   "source": "simplify",
+   "company": "National Laboratory of the Rockies",
+   "title": "Connected Vehicle Engineer Intern - V2X - Communications Modeling and Traffic Simulation",
+   "url": "https://nrel.wd5.myworkdayjobs.com/NLR/job/Golden-CO/Graduate-Intern---Connected-Vehicle--V2X--Communications-Modeling-and-Traffic-Simulation_R14564",
+   "locations": [
+    "Golden, CO"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "AI/ML/Data",
+   "date_posted": 1792022400,
+   "date_updated": 1792103103,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/National-Laboratory-Of-The-Rockies",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "national-laboratory-of-the-rockies_connected-vehicle-engineer-intern-v2x-communications-modelin-bff57f",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://nrel.wd5.myworkdayjobs.com/NLR/job/Golden-CO/Graduate-Intern---Connected-Vehicle--V2X--Communications-Modeling-and-Traffic-Simulation_R14564"
+   ],
+   "latest_posted": 1792022400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ee43bffc-f0e8-4519-8381-e2ebabca013e/logo.png",
+   "logo_slug": "National-Laboratory-Of-The-Rockies"
   },
   {
    "id": "74129f26-3f29-4069-9bd9-234810c4491a",
@@ -14457,27 +14439,26 @@
    "logo_slug": "TikTok"
   },
   {
-   "id": "f531f9e9-2165-4c86-a9ff-8efab2b0a393",
+   "id": "82b9b534-5821-4221-a411-921d4751ae32",
    "source": "simplify",
-   "company": "Atoms",
-   "title": "Software Engineer Intern",
-   "url": "https://job-boards.greenhouse.io/atoms/jobs/8356071002",
+   "company": "L3Harris Technologies",
+   "title": "Associate Software Engineer Intern",
+   "url": "https://jobs.l3harris.com/job/Mason-Associate,-Software-Engineer-OH-45040/1440282700/?ats=successfactors",
    "locations": [
-    "Seattle, WA"
+    "Mason, OH"
    ],
    "terms": [
-    "Winter 2027"
+    "N/A"
    ],
    "degrees": [
-    "Bachelor's",
-    "Master's"
+    "Bachelor's"
    ],
    "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1792016849,
-   "date_updated": 1792017030,
+   "category": "Hardware",
+   "date_posted": 1792017457,
+   "date_updated": 1792017608,
    "active": true,
-   "company_url": "https://simplify.jobs/c/Atoms",
+   "company_url": "https://simplify.jobs/c/L3Harris-Technologies",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -14490,14 +14471,15 @@
    "citizenship_blocked": false,
    "degree_class": "bachelors",
    "keyword_hits": [],
-   "key": "atoms_software-engineer-intern",
+   "term_unknown": true,
+   "key": "l3harris-technologies_associate-software-engineer-intern",
    "sources": [
     "simplify"
    ],
    "urls": [
-    "https://job-boards.greenhouse.io/atoms/jobs/8356071002"
+    "https://jobs.l3harris.com/job/Mason-Associate,-Software-Engineer-OH-45040/1440282700?ats=successfactors"
    ],
-   "latest_posted": 1792016849,
+   "latest_posted": 1792017457,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -14510,8 +14492,8 @@
    "score": 46,
    "eligibility": "unknown",
    "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/cc715c3b-de2d-4412-ab97-bdb8bff79e10/logo.jpg",
-   "logo_slug": "Atoms"
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/62245141-364d-4543-bdbd-0e1d372e1052/logo.png",
+   "logo_slug": "L3Harris-Technologies"
   },
   {
    "id": "92df1c73-b83b-4d1f-9366-ef07d2fa6bd7",
@@ -14569,6 +14551,122 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/06be201d-a0aa-4b4c-9c51-01d3fb8dfd7f/logo.png",
    "logo_slug": "AECOM"
+  },
+  {
+   "id": "1613b4a1-a36a-469b-b6e2-5cb8786d46af",
+   "source": "simplify",
+   "company": "Quantinuum",
+   "title": "Optics Engineer Intern",
+   "url": "https://jobs.eu.lever.co/quantinuum/ce636d34-9d93-46bf-b2d3-0060955f2a71/apply",
+   "locations": [
+    "Broomfield, CO"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1792016164,
+   "date_updated": 1792016337,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Quantinuum",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "quantinuum_optics-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://jobs.eu.lever.co/quantinuum/ce636d34-9d93-46bf-b2d3-0060955f2a71/apply"
+   ],
+   "latest_posted": 1792016164,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/214494bf-aa82-4ea4-9880-af43640783fe/logo.png",
+   "logo_slug": "Quantinuum"
+  },
+  {
+   "id": "136376b5-a37e-4a10-88ff-4d87f66b86ad",
+   "source": "simplify",
+   "company": "Texas Instruments",
+   "title": "Validation/Characterization Engineer Intern",
+   "url": "https://edbz.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/25013623",
+   "locations": [
+    "Santa Clara, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1792015545,
+   "date_updated": 1792015715,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Texas-Instruments",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "texas-instruments_validation-characterization-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://edbz.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/25013623"
+   ],
+   "latest_posted": 1792015545,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 5,
+    "keywords": 0
+   },
+   "score": 46,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/30f3d321-7290-4277-af27-9bbef74d8010/logo.png",
+   "logo_slug": "Texas-Instruments"
   },
   {
    "id": "acf27f9f-528e-464f-b056-c55c4943f5d9",
@@ -14676,64 +14774,9 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/577ddf8b-5b11-408a-8ceb-c204d6c79e68/logo.png",
    "logo_slug": "Skydio"
-  },
-  {
-   "id": "fd0a610d-af0e-4d87-ae0a-60f8896e3173",
-   "source": "vanshb03",
-   "company": "Atoms",
-   "title": "Software Engineering Intern",
-   "url": "https://job-boards.greenhouse.io/cssmerge/jobs/8888411002",
-   "locations": [
-    "Seattle, WA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1791961200,
-   "date_updated": 1792261427,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "atoms_software-engineering-intern",
-   "sources": [
-    "vanshb03",
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.greenhouse.io/cssmerge/jobs/8888411002"
-   ],
-   "latest_posted": 1792016893,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 46,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/cc715c3b-de2d-4412-ab97-bdb8bff79e10/logo.jpg",
-   "logo_slug": "Atoms"
   },
   {
    "id": "04e58250-082d-4967-9c28-49ac3721f51d",
@@ -15056,7 +15099,7 @@
    },
    "score": 46,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/577ddf8b-5b11-408a-8ceb-c204d6c79e68/logo.png",
    "logo_slug": "Skydio"
   },
@@ -15342,6 +15385,67 @@
    "logo_slug": "Workday"
   },
   {
+   "id": "048e3990-3499-4699-a3be-ba3a3f66aaa5",
+   "source": "simplify",
+   "company": "Astera Labs",
+   "title": "Design Verification Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4743360005",
+   "locations": [
+    "San Jose, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1791929269,
+   "date_updated": 1791929722,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/AsteraLabs",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "design"
+   ],
+   "term_unknown": true,
+   "key": "astera-labs_design-verification-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4743360005",
+    "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4722012005"
+   ],
+   "latest_posted": 1791929269,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ea4ed68d-de0d-4ddd-961e-218b007f1b66/logo.png",
+   "logo_slug": "AsteraLabs"
+  },
+  {
    "id": "d995f89a-7744-4f7b-af19-ede44657519c",
    "source": "vanshb03",
    "company": "KLA",
@@ -15376,10 +15480,13 @@
    ],
    "key": "kla_software-engineer-intern-ai",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "simplify"
    ],
    "urls": [
-    "https://kla.wd1.myworkdayjobs.com/en-US/Search/job/Ann-Arbor-MI/Software-Engineer-Intern---AI_2641817"
+    "https://kla.wd1.myworkdayjobs.com/en-US/Search/job/Ann-Arbor-MI/Software-Engineer-Intern---AI_2641817",
+    "https://kla.wd1.myworkdayjobs.com/search/job/Ann-Arbor-MI/Software-Engineer-Intern---AI_2641817",
+    "https://kla.wd1.myworkdayjobs.com/UR/job/Ann-Arbor-MI/Software-Engineer-Intern---AI_2641817-2"
    ],
    "latest_posted": 1791874800,
    "breakdown": {
@@ -15562,7 +15669,7 @@
    },
    "score": 44,
    "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
+   "eligibility_note": "page says nothing about graduation year",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/c8c92ea1-07fd-4ae0-8142-9ab65d9a98a3/logo.png",
    "logo_slug": "Zoox"
   },
@@ -15796,6 +15903,550 @@
    "logo_slug": "Johnson-Johnson"
   },
   {
+   "id": "4f556f66-a814-45e5-a344-52b0bab669c0",
+   "source": "simplify",
+   "company": "FNBO",
+   "title": "Banking Automation Engineer Intern",
+   "url": "https://firstnational.wd12.myworkdayjobs.com/fnbocareers/job/Omaha---FN-Tower/Banking-Automation-Engineer-Intern_R-20261800",
+   "locations": [
+    "Omaha, NE"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "Associate's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791504000,
+   "date_updated": 1791585195,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/FNBO",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "automation"
+   ],
+   "term_unknown": true,
+   "key": "fnbo_banking-automation-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://firstnational.wd12.myworkdayjobs.com/fnbocareers/job/Omaha---FN-Tower/Banking-Automation-Engineer-Intern_R-20261800"
+   ],
+   "latest_posted": 1791504000,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/6c125288-a645-40d8-9c54-eb61d91189fd/logo.png",
+   "logo_slug": "FNBO"
+  },
+  {
+   "id": "484795df-9f5d-4137-aada-8bc8059146a3",
+   "source": "simplify",
+   "company": "Tenstorrent",
+   "title": "AI Software Intern",
+   "url": "https://job-boards.greenhouse.io/tenstorrentuniversity/jobs/5258901007",
+   "locations": [
+    "Austin, TX",
+    "Santa Clara, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791364641,
+   "date_updated": 1791364681,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Tenstorrent",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "tenstorrent_ai-software-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/tenstorrentuniversity/jobs/5258901007"
+   ],
+   "latest_posted": 1791364641,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/c201d3c8-1e15-49eb-b659-f4a563bb7baf/logo.png",
+   "logo_slug": "Tenstorrent"
+  },
+  {
+   "id": "74c29392-8eab-44f0-a1ae-0bb1d66ec96f",
+   "source": "simplify",
+   "company": "Booz Allen",
+   "title": "Junior AI Software Developer Intern",
+   "url": "https://bah.wd1.myworkdayjobs.com/Confidential/job/San-Diego-CA/AI-Software-Developer--Junior_R0251196",
+   "locations": [
+    "San Diego, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791331200,
+   "date_updated": 1791384028,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Booz-Allen",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "booz-allen_junior-ai-software-developer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://bah.wd1.myworkdayjobs.com/Confidential/job/San-Diego-CA/AI-Software-Developer--Junior_R0251196"
+   ],
+   "latest_posted": 1791331200,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/45cb775d-2ca3-49ea-810f-65334ec70079/logo.jpg",
+   "logo_slug": "Booz-Allen"
+  },
+  {
+   "id": "7771e28f-19b8-42e9-8cfb-42c1b63e5f24",
+   "source": "simplify",
+   "company": "West Monroe",
+   "title": "Software Engineer Consulting Intern - AI Concentration",
+   "url": "https://westmonroe.com/careers/job-details-students?gh_jid=6173003004",
+   "locations": [
+    "Seattle, WA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791269207,
+   "date_updated": 1791269343,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/West-Monroe",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "west-monroe_software-engineer-consulting-intern-ai-concentration",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://westmonroe.com/careers/job-details-students?gh_jid=6173003004",
+    "https://westmonroe.com/careers/job-details-students?gh_jid=6170231004"
+   ],
+   "latest_posted": 1791269207,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/80d26ff5-879f-4b0f-a921-8da3095cf1e1/logo.png",
+   "logo_slug": "West-Monroe"
+  },
+  {
+   "id": "85f5fdbe-da5d-442d-be70-bf1fbe77e77b",
+   "source": "simplify",
+   "company": "West Monroe",
+   "title": "Software Engineering Consulting Intern - AI Concentration",
+   "url": "https://westmonroe.com/careers/job-details-students?gh_jid=6172998004",
+   "locations": [
+    "SF"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791269207,
+   "date_updated": 1791269338,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/West-Monroe",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "west-monroe_software-engineering-consulting-intern-ai-concentration",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://westmonroe.com/careers/job-details-students?gh_jid=6172998004"
+   ],
+   "latest_posted": 1791269207,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/80d26ff5-879f-4b0f-a921-8da3095cf1e1/logo.png",
+   "logo_slug": "West-Monroe"
+  },
+  {
+   "id": "f03758e3-efb5-4de3-adfe-a9160a034ace",
+   "source": "simplify",
+   "company": "Astera Labs",
+   "title": "Product Applications Engineer Intern - Signal and Connectivity",
+   "url": "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4721817005",
+   "locations": [
+    "San Jose, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1791267454,
+   "date_updated": 1791268050,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/AsteraLabs",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "product"
+   ],
+   "term_unknown": true,
+   "key": "astera-labs_product-applications-engineer-intern-signal-and-connectivity",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4721817005"
+   ],
+   "latest_posted": 1791267454,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ea4ed68d-de0d-4ddd-961e-218b007f1b66/logo.png",
+   "logo_slug": "AsteraLabs"
+  },
+  {
+   "id": "ff8cbc9e-3bcf-4cdb-a99e-b10aec41a916",
+   "source": "simplify",
+   "company": "Astera Labs",
+   "title": "Product Engineering Intern",
+   "url": "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4731410005",
+   "locations": [
+    "San Jose, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1791267448,
+   "date_updated": 1791268037,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/AsteraLabs",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "product"
+   ],
+   "term_unknown": true,
+   "key": "astera-labs_product-engineering-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4731410005"
+   ],
+   "latest_posted": 1791267448,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ea4ed68d-de0d-4ddd-961e-218b007f1b66/logo.png",
+   "logo_slug": "AsteraLabs"
+  },
+  {
+   "id": "7e8680d0-6421-49b3-b24c-f418b5cb0a37",
+   "source": "simplify",
+   "company": "Astera Labs",
+   "title": "Design Architecture Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4731413005",
+   "locations": [
+    "San Jose, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1791267440,
+   "date_updated": 1791268030,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/AsteraLabs",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "design"
+   ],
+   "term_unknown": true,
+   "key": "astera-labs_design-architecture-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4731413005"
+   ],
+   "latest_posted": 1791267440,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ea4ed68d-de0d-4ddd-961e-218b007f1b66/logo.png",
+   "logo_slug": "AsteraLabs"
+  },
+  {
+   "id": "a66cded3-985f-4133-907f-e54148fd0423",
+   "source": "simplify",
+   "company": "Astera Labs",
+   "title": "Advanced Design Verification Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4731412005",
+   "locations": [
+    "San Jose, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1791267435,
+   "date_updated": 1791268019,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/AsteraLabs",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "design"
+   ],
+   "term_unknown": true,
+   "key": "astera-labs_advanced-design-verification-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/asteraearlycareer2027/jobs/4731412005"
+   ],
+   "latest_posted": 1791267435,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ea4ed68d-de0d-4ddd-961e-218b007f1b66/logo.png",
+   "logo_slug": "AsteraLabs"
+  },
+  {
    "id": "f8e5913f-abf8-4eed-838d-d784c5b7907b",
    "source": "simplify",
    "company": "ABB",
@@ -15914,26 +16565,27 @@
    "logo_slug": "ABB"
   },
   {
-   "id": "28325b34-233e-4a6c-82ea-dc18075fc6ff",
+   "id": "601b1b74-d436-4fd4-bf1e-5c288d6706bc",
    "source": "simplify",
-   "company": "Cirrus Logic",
-   "title": "Mixed Signal Products Applications Engineer Intern",
-   "url": "https://jobs.eu.lever.co/cirrus/2ca7b254-5c91-4a4e-9ba8-d05c8604eca2/apply",
+   "company": "Hewlett Packard Enterprise",
+   "title": "Cloud Developer Intern",
+   "url": "https://hpe.wd5.myworkdayjobs.com/jobsathpe/job/San-Jose-California-United-States-of-America/Cloud-Developer-Intern_1214950",
    "locations": [
-    "Austin, TX"
+    "San Jose, CA"
    ],
    "terms": [
-    "Summer 2027"
+    "N/A"
    ],
    "degrees": [
-    "Bachelor's"
+    "Bachelor's",
+    "Master's"
    ],
    "sponsorship": "Other",
-   "category": "Hardware",
-   "date_posted": 1791238586,
-   "date_updated": 1791239524,
+   "category": "AI/ML/Data",
+   "date_posted": 1791158400,
+   "date_updated": 1791268024,
    "active": true,
-   "company_url": "https://simplify.jobs/c/Cirrus-Logic",
+   "company_url": "https://simplify.jobs/c/Hewlett-Packard-Enterprise",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -15946,16 +16598,17 @@
    "citizenship_blocked": false,
    "degree_class": "bachelors",
    "keyword_hits": [
-    "product"
+    "cloud"
    ],
-   "key": "cirrus-logic_mixed-signal-products-applications-engineer-intern",
+   "term_unknown": true,
+   "key": "hewlett-packard-enterprise_cloud-developer-intern",
    "sources": [
     "simplify"
    ],
    "urls": [
-    "https://jobs.eu.lever.co/cirrus/2ca7b254-5c91-4a4e-9ba8-d05c8604eca2/apply"
+    "https://hpe.wd5.myworkdayjobs.com/jobsathpe/job/San-Jose-California-United-States-of-America/Cloud-Developer-Intern_1214950"
    ],
-   "latest_posted": 1791238586,
+   "latest_posted": 1791158400,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -15968,8 +16621,8 @@
    "score": 44,
    "eligibility": "unknown",
    "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/5c0e49d2-c34d-44ce-aaa7-db712b103bbf/logo.png",
-   "logo_slug": "Cirrus-Logic"
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/9e570dc5-6b0c-46ea-b8e5-bd70f2f078e6/logo.png",
+   "logo_slug": "Hewlett-Packard-Enterprise"
   },
   {
    "id": "297cab20-afc1-4907-a0ac-266c5647d2c4",
@@ -16026,6 +16679,66 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/a67c47ca-628f-436d-aa0a-b4192c7feba7/logo.png",
    "logo_slug": "General-Motors"
+  },
+  {
+   "id": "75269b0a-c784-4fec-94a8-afe657a39877",
+   "source": "simplify",
+   "company": "Micron Technology",
+   "title": "AI Engineer Intern - SMAI TD AI Engineering Team",
+   "url": "https://micron.wd1.myworkdayjobs.com/External/job/Boise-ID---Main-Site/Intern---SMAI-TD-AI-Engineering-Team_JR112991",
+   "locations": [
+    "Boise, ID"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1791158400,
+   "date_updated": 1791239786,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Micron-Technology",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "micron-technology_ai-engineer-intern-smai-td-ai-engineering-team",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://micron.wd1.myworkdayjobs.com/External/job/Boise-ID---Main-Site/Intern---SMAI-TD-AI-Engineering-Team_JR112991"
+   ],
+   "latest_posted": 1791158400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 3
+   },
+   "score": 44,
+   "eligibility": "unknown",
+   "eligibility_note": "not checked (below top rows)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/5ca639cf-f42c-443e-b29d-cc6f5a8ff942/logo.png",
+   "logo_slug": "Micron-Technology"
   },
   {
    "id": "92c455d6-d3f6-4d95-b523-eeca0104e5a8",
@@ -16206,64 +16919,6 @@
    "logo_slug": "General-Motors"
   },
   {
-   "id": "d5599c90-9e9c-4cad-bf65-0e4ab06bf6f0",
-   "source": "simplify",
-   "company": "Veeam Software",
-   "title": "Competitive Intelligence AI Engineer Intern",
-   "url": "https://job-boards.eu.greenhouse.io/veeamsoftware/jobs/4955279101",
-   "locations": [
-    "Georgia"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790893812,
-   "date_updated": 1790894577,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Veeam-Software",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "veeam-software_competitive-intelligence-ai-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://job-boards.eu.greenhouse.io/veeamsoftware/jobs/4955279101"
-   ],
-   "latest_posted": 1790893812,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ba54febb-9f0d-4c43-9d01-6e78c023f39e/logo.png",
-   "logo_slug": "Veeam-Software"
-  },
-  {
    "id": "6afc68db-8174-4996-815c-024b34fd54b0",
    "source": "simplify",
    "company": "Rivian",
@@ -16381,600 +17036,6 @@
    "eligibility_note": "not checked (below top rows)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/a67c47ca-628f-436d-aa0a-b4192c7feba7/logo.png",
    "logo_slug": "General-Motors"
-  },
-  {
-   "id": "422500a8-0786-49f2-b8bc-d16971d96cd8",
-   "source": "simplify",
-   "company": "CACI",
-   "title": "AI Prompt Engineer Intern",
-   "url": "https://caci.wd1.myworkdayjobs.com/external/job/Ashburn-VA-US/AI-Prompt-Engineer-High-School-Intern---Summer-2027_332816-1",
-   "locations": [
-    "Ashburn, VA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790812800,
-   "date_updated": 1790894048,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/CACI",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "caci_ai-prompt-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://caci.wd1.myworkdayjobs.com/external/job/Ashburn-VA-US/AI-Prompt-Engineer-High-School-Intern---Summer-2027_332816-1"
-   ],
-   "latest_posted": 1790812800,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/8a9a2737-c81f-4467-9efa-1ff3be59e7e0/logo.png",
-   "logo_slug": "CACI"
-  },
-  {
-   "id": "5d100053-6d4b-4c33-8d82-3223fd0e3410",
-   "source": "simplify",
-   "company": "Rivian",
-   "title": "Engineering Intern/Co-op - Design Verification - Neural Engine",
-   "url": "https://careers.rivian.com/jobs/33833?icims=1",
-   "locations": [
-    "Palo Alto, CA"
-   ],
-   "terms": [
-    "Spring 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's",
-    "PhD"
-   ],
-   "sponsorship": "Other",
-   "category": "Hardware",
-   "date_posted": 1790806533,
-   "date_updated": 1790807386,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Rivian",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "design"
-   ],
-   "key": "rivian_engineering-intern-co-op-design-verification-neural-engine",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://careers.rivian.com/jobs/33833?icims=1"
-   ],
-   "latest_posted": 1790806533,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/57b52bab-fe88-4011-8564-957b83f4cda1/logo.png",
-   "logo_slug": "Rivian"
-  },
-  {
-   "id": "2a070d46-138e-485c-af41-0eaf2a7f105f",
-   "source": "simplify",
-   "company": "Tesla",
-   "title": "Software Integration Engineer Intern - AI Platforms",
-   "url": "https://www.tesla.com/careers/search/job/277009",
-   "locations": [
-    "Palo Alto, CA"
-   ],
-   "terms": [
-    "Spring 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Hardware",
-   "date_posted": 1790720835,
-   "date_updated": 1790722135,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Tesla",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "tesla_software-integration-engineer-intern-ai-platforms",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://www.tesla.com/careers/search/job/277009"
-   ],
-   "latest_posted": 1790720835,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/d7232671-3132-4928-a7ef-1a42535d440d/logo.png",
-   "logo_slug": "Tesla"
-  },
-  {
-   "id": "4bc949a8-4e60-4c6b-90c8-fb7077b8a2b2",
-   "source": "simplify",
-   "company": "Acuity",
-   "title": "Finance AI Engineering Intern",
-   "url": "https://careers.acuityinc.com/job/Atlanta-Finance-AI-Engineering-Intern-Onsite-GA-30309/1434878900/?ats=successfactors",
-   "locations": [
-    "Atlanta, GA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790720238,
-   "date_updated": 1790720282,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Acuity",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "acuity_finance-ai-engineering-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://careers.acuityinc.com/job/Atlanta-Finance-AI-Engineering-Intern-Onsite-GA-30309/1434878900?ats=successfactors"
-   ],
-   "latest_posted": 1790720238,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/969dcd6e-6568-48b6-b651-a2fe8a2467eb/logo.jpg",
-   "logo_slug": "Acuity"
-  },
-  {
-   "id": "6f576614-627b-4348-9a04-178f26b01381",
-   "source": "simplify",
-   "company": "Marvell",
-   "title": "AI-Native Development Platform Engineer Intern",
-   "url": "https://marvell.wd1.myworkdayjobs.com/MarvellCareers/job/Santa-Clara-CA/AI-Native-Development-Platform-Engineer-Intern--MS---Summer-2027_2603848-1",
-   "locations": [
-    "Santa Clara, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790640000,
-   "date_updated": 1790720278,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Marvell",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "marvell_ai-native-development-platform-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://marvell.wd1.myworkdayjobs.com/MarvellCareers/job/Santa-Clara-CA/AI-Native-Development-Platform-Engineer-Intern--MS---Summer-2027_2603848-1",
-    "https://marvell.wd1.myworkdayjobs.com/MarvellCareers2/job/Santa-Clara-CA/AI-Native-Development-Platform-Engineer-Intern--MS---Summer-2027_2603848"
-   ],
-   "latest_posted": 1790640000,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/80961b05-9ed3-462d-aef9-4b418c7fb796/logo.png",
-   "logo_slug": "Marvell"
-  },
-  {
-   "id": "ba129f03-7efb-479d-b7d3-24cd6f2bff90",
-   "source": "simplify",
-   "company": "Rockwell Automation",
-   "title": "AI Software Engineering Co-op - 6 months - 8 months",
-   "url": "https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation/job/Mayfield-Heights-Ohio-United-States/Co-op--AI-Software-Engineering--6-8-months-_R26-6982-1",
-   "locations": [
-    "Mayfield Heights, OH",
-    "Milwaukee, WI"
-   ],
-   "terms": [
-    "Winter 2027",
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790294400,
-   "date_updated": 1790375431,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Rockwell-Automation",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "rockwell-automation_ai-software-engineering-co-op-6-months-8-months",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation/job/Mayfield-Heights-Ohio-United-States/Co-op--AI-Software-Engineering--6-8-months-_R26-6982-1",
-    "https://rockwellautomation.wd1.myworkdayjobs.com/External-Rockwell-Automation-Early-Careers/job/Mayfield-Heights-Ohio-United-States/Co-op--AI-Software-Engineering--6-8-months-_R26-6982"
-   ],
-   "latest_posted": 1790294400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/f7876577-8f6e-4a33-aa2d-b15ebd07332e/logo.png",
-   "logo_slug": "Rockwell-Automation"
-  },
-  {
-   "id": "03a8913b-a007-4657-8f59-bc29a722beda",
-   "source": "simplify",
-   "company": "General Dynamics Information Technology",
-   "title": "Generative AI Software Development Intern",
-   "url": "https://gdit.wd5.myworkdayjobs.com/gdit_earlytalent/job/USA-LA-Bossier-City/GDIT-Summer-Internship-Program---Summer-2027-Generative-AI-Software-Development-Internship_RQ228933-1",
-   "locations": [
-    "Bossier City, LA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's",
-    "Associate's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790121600,
-   "date_updated": 1790202962,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/GDIT",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "general-dynamics-information-technology_generative-ai-software-development-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://gdit.wd5.myworkdayjobs.com/gdit_earlytalent/job/USA-LA-Bossier-City/GDIT-Summer-Internship-Program---Summer-2027-Generative-AI-Software-Development-Internship_RQ228933-1"
-   ],
-   "latest_posted": 1790121600,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/e5d9f8c8-cd9c-4097-a9cb-fed51fec6168/logo.png",
-   "logo_slug": "GDIT"
-  },
-  {
-   "id": "282eda76-ee60-4f60-abe4-e0db76ac4fdb",
-   "source": "simplify",
-   "company": "Rivian",
-   "title": "Software Engineer Co-op Intern - Product Development Portal",
-   "url": "https://careers.rivian.com/jobs/33745?icims=1",
-   "locations": [
-    "Palo Alto, CA"
-   ],
-   "terms": [
-    "Spring 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790039990,
-   "date_updated": 1790040185,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Rivian",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "product"
-   ],
-   "key": "rivian_software-engineer-co-op-intern-product-development-portal",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://careers.rivian.com/jobs/33745?icims=1"
-   ],
-   "latest_posted": 1790039990,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/57b52bab-fe88-4011-8564-957b83f4cda1/logo.png",
-   "logo_slug": "Rivian"
-  },
-  {
-   "id": "e031f965-19f0-4d28-88d1-410fbff55e45",
-   "source": "simplify",
-   "company": "Rivian",
-   "title": "Software Engineer Intern Co-op - Product Lifecycle Management",
-   "url": "https://careers.rivian.com/jobs/33746?icims=1",
-   "locations": [
-    "Palo Alto, CA"
-   ],
-   "terms": [
-    "Winter 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790039653,
-   "date_updated": 1790039802,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Rivian",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "product"
-   ],
-   "key": "rivian_software-engineer-intern-co-op-product-lifecycle-management",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://careers.rivian.com/jobs/33746?icims=1"
-   ],
-   "latest_posted": 1790039653,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/57b52bab-fe88-4011-8564-957b83f4cda1/logo.png",
-   "logo_slug": "Rivian"
-  },
-  {
-   "id": "839325fc-57c6-4d5b-9db5-a2273ec9dd48",
-   "source": "simplify",
-   "company": "Procter & Gamble",
-   "title": "R&D Intern - AI Research Engineer",
-   "url": "https://pg.wd5.myworkdayjobs.com/1000/job/MASON-BUS-AND-INNOVATION-CTR/R-D-PhD-Summer-Intern---AI-Research-Engineer_R000159371",
-   "locations": [
-    "Mason, OH"
-   ],
-   "terms": [
-    "Summer 2027",
-    "Summer 2026"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's",
-    "PhD"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1790035200,
-   "date_updated": 1790116385,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Procter-Gamble-Company",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "procter-gamble_r-d-intern-ai-research-engineer",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://pg.wd5.myworkdayjobs.com/1000/job/MASON-BUS-AND-INNOVATION-CTR/R-D-PhD-Summer-Intern---AI-Research-Engineer_R000159371"
-   ],
-   "latest_posted": 1790035200,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (below top rows)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/debde8e0-6326-4e89-9a95-a9ae32192e4b/logo.png",
-   "logo_slug": "Procter-Gamble-Company"
   }
  ]
 }
