@@ -8,7 +8,7 @@
  * Pages (all behind the password):   /  New   /programs   /review   /tracker   /settings
  * Review: prep kits uploaded from the Mac (scout.sync push --kits), to read, edit, copy, download, and mark
  * submitted. Kits hold the candidate's phone, email, and answers, so they live only here in KV, never in git.
- * JSON (cookie):                     POST /api/tracker  POST /api/queue  POST /api/pass  POST /api/kit-answer
+ * JSON (cookie):                     POST /api/tracker  POST /api/queue  POST /api/pass  POST /api/kit-answer  POST /api/remove
  * JSON (secret header):              POST /api/ingest   POST /api/ingest-tracker   POST /api/ingest-kits   POST /api/ingest-mascot   GET /api/export
  * Open:                              GET /login  POST /login  GET /logout  GET /api/health  GET /panda/<name>.png
  *
@@ -58,6 +58,7 @@ export default {
       if (path === "/api/queue") return setQueue(request, env);
       if (path === "/api/pass") return setPassed(request, env);
       if (path === "/api/kit-answer") return setKitAnswer(request, env);
+      if (path === "/api/remove") return removeCard(request, env);
       return json({ error: "not found" }, 404);
     }
     if (path === "/") return newPage(env);
@@ -322,11 +323,13 @@ function coHead(company, url, label) {
 const logoFor = (logos, company) => logos[normName(company)] || "";
 
 async function reviewList(env) {
-  const [index, tracker, logos] = await Promise.all([get(env, "kits", []), get(env, "tracker", {}), get(env, "logos", {})]);
+  const [allKits, tracker, logos, hidden] = await Promise.all([get(env, "kits", []), get(env, "tracker", {}), get(env, "logos", {}), get(env, "hidden_kits", [])]);
+  const index = allKits.filter((k) => !hidden.includes(k.slug));
   const state = (k) => tracker[k.key]?.state || "Prepped";
   const order = (k) => (state(k) === "Applied" ? 1 : 0);
   const cards = [...index].sort((a, b) => order(a) - order(b)).map((k) => `
-    <a class="card kitcard" href="/review/${esc(k.slug)}">
+    <a class="card kitcard" href="/review/${esc(k.slug)}" data-slug="${esc(k.slug)}">
+      <button class="xbtn" data-remove="kit" aria-label="remove this kit from Review" title="remove">×</button>
       <div class="tags"><span class="tag ${state(k) === "Applied" ? "green" : "ink"}">${esc(state(k))}</span></div>
       ${coHead(k.company || k.slug, logoFor(logos, k.company), k.company || k.slug)}
       <div class="title">${esc(k.title)}</div>
@@ -482,6 +485,30 @@ async function setTracker(request, env) {
   return json({ ok: true, row });
 }
 
+// The X on Tracker and Review cards. The Mac sends its tracker and kits back up later, so nothing is deleted:
+// a tracker row turns Passed with a full timestamp (it outranks any same-day copy from the Mac, which only
+// carries a date), and a kit goes on a hidden list that every later upload respects.
+async function removeCard(request, env) {
+  const { kind, key, slug } = await request.json().catch(() => ({}));
+  if (kind === "tracker" && key) {
+    const tracker = await get(env, "tracker", {});
+    if (!tracker[key]) return json({ error: "no such row" }, 404);
+    const now = new Date().toISOString();
+    tracker[key].state = "Passed";
+    tracker[key].updated = now;
+    (tracker[key].history ||= []).push({ date: nyDate(), state: "Passed", note: "removed on the dashboard" });
+    await put(env, "tracker", tracker);
+    return json({ ok: true });
+  }
+  if (kind === "kit" && /^[a-z0-9-]+$/.test(slug || "")) {
+    const hidden = await get(env, "hidden_kits", []);
+    if (!hidden.includes(slug)) hidden.push(slug);
+    await put(env, "hidden_kits", hidden);
+    return json({ ok: true });
+  }
+  return json({ error: "need kind tracker+key or kit+slug" }, 400);
+}
+
 async function setQueue(request, env) {
   const { key, action } = await request.json().catch(() => ({}));
   if (!key) return json({ error: "need key" }, 400);
@@ -614,6 +641,7 @@ async function trackerPage(env) {
   const pipeline = ["Prepped", "Applied", "OA", "Interview", "Offer"].map((s) => `<span class="step${counts[s] ? " on" : ""}">${s}<b>${counts[s] || 0}</b></span>`).join("");
   const list = rows.map(([key, r]) => `
     <article class="card" data-key="${esc(key)}">
+      <button class="xbtn" data-remove="tracker" aria-label="remove from the tracker" title="remove">×</button>
       <div class="tags"><span class="tag ${r.state === "Applied" || r.state === "Offer" ? "green" : r.state === "Rejected" ? "red" : "ink"}">${esc(r.state)}</span><span class="tag">${esc(r.updated || "")}</span></div>
       <div class="row">${coHead(r.company, logoFor(logos, r.company), r.company)}${r.score != null ? `<span class="score">${r.score}</span>` : ""}</div>
       <div class="title">${esc(r.title)}</div>
@@ -897,6 +925,10 @@ h2::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;bor
 .dock a{animation:pop .5s cubic-bezier(.3,1.8,.5,1) both} .dock a:nth-child(2){animation-delay:.06s} .dock a:nth-child(3){animation-delay:.12s} .dock a:nth-child(4){animation-delay:.18s}
 /* company logos: a white tile with the same outline as everything else; the letter badge sits under the image */
 .co{display:flex;align-items:center;gap:10px;min-width:0}
+/* the X that removes a card from Tracker or Review */
+.card{position:relative} .xbtn{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:2.5px solid var(--ink);background:var(--cream);color:var(--ink);font:700 20px/1 var(--font);display:grid;place-items:center;padding:0 0 2px;cursor:pointer;box-shadow:2px 2px 0 var(--ink);z-index:2}
+.xbtn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.card:has(.xbtn) .tags{padding-right:40px}
 .logo{position:relative;flex:none;width:40px;height:40px;border:2.5px solid var(--ink);border-radius:11px;background:var(--badge);box-shadow:2px 2px 0 var(--ink);overflow:hidden;display:grid;place-items:center}
 .logo b{font-family:var(--display);font-size:18px;color:var(--ink);line-height:1}
 .logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
@@ -925,6 +957,7 @@ const CLIENT_JS = `
 document.querySelectorAll('textarea[data-act="next"],textarea.ans').forEach(function(t){const fit=function(){t.style.height="auto";t.style.height=t.scrollHeight+t.offsetHeight-t.clientHeight+"px"};fit();t.addEventListener("input",fit);addEventListener("resize",fit);if(document.fonts)document.fonts.ready.then(fit)});
 // The hero numbers count up from zero on load. bump() moves the target too, so a pass mid-count still lands right.
 (function(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;document.querySelectorAll(".stat-big,.tile b").forEach(function(el,n){const end=parseInt(el.textContent,10);if(!(end>0))return;el.dataset.end=end;const t0=performance.now()+150+n*120,dur=end>20?1100:600;el.textContent="0";requestAnimationFrame(function tick(t){const k=Math.min(1,Math.max(0,(t-t0)/dur)),goal=+el.dataset.end;el.textContent=Math.round(goal*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(tick);else delete el.dataset.end})})})();
+document.addEventListener("click",async(e)=>{const x=e.target.closest("button[data-remove]");if(!x)return;e.preventDefault();e.stopPropagation();const card=x.closest(".card");if(!card)return;const kind=x.dataset.remove;const label=(card.querySelector("h3")||{}).textContent||"this";if(!confirm("remove "+label.trim()+"?"))return;x.disabled=true;await post("/api/remove",kind==="kit"?{kind,slug:card.dataset.slug}:{kind,key:card.dataset.key});card.style.transition="opacity .25s,transform .25s";card.style.opacity="0";card.style.transform="scale(.96)";setTimeout(()=>card.remove(),260)},true);
 async function post(url, body){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok){alert("that didn't save. try again.");throw new Error(r.status)}return r.json()}
 function bump(id,d){const el=document.getElementById(id);if(!el)return;if(el.dataset.end)el.dataset.end=Math.max(0,+el.dataset.end+d);el.textContent=Math.max(0,(parseInt(el.textContent,10)||0)+d)}
 function syncPassed(){const box=document.getElementById("passed");const n=parseInt((document.getElementById("passed-count")||{}).textContent,10)||0;if(box){box.hidden=n===0;if(n===0)box.open=false}}
