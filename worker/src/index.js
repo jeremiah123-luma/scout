@@ -692,10 +692,10 @@ ${nav ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS}</script></body>
 
 const FAVICON = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#ffc93c" stroke="#1a1333" stroke-width="7"/><circle cx="32" cy="32" r="12" fill="#f6f9dc" stroke="#1a1333" stroke-width="5"/><circle cx="32" cy="32" r="4.5" fill="#1a1333"/></svg>');
 
-// Rotates the headline decoration: zigzag, highlighter, circle, loops. Each draws in, holds, and hands off.
-const CYCLE_JS = `(function(){var h=document.querySelector("h1 .head");if(!h)return;var s=["u-zig","u-highlight","u-circle","u-loops"];var i=Math.floor(Math.random()*s.length);
-function show(){h.classList.remove("draw","u-zig","u-highlight","u-circle","u-loops");void h.offsetWidth;h.classList.add(s[i],"draw")}
-show();if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;setInterval(function(){i=(i+1)%s.length;show()},4500)})();`;
+// The headline decoration: one of zigzag, highlighter, circle, or loops, picked at random. It draws in once when
+// the page opens and stays.
+const CYCLE_JS = `(function(){var h=document.querySelector("h1 .head");if(!h)return;var s=["u-zig","u-highlight","u-circle","u-loops"];
+h.classList.add(s[Math.floor(Math.random()*s.length)],"draw")})();`;
 
 const PAGE_COLORS = { about: "#3fa9b5", new: "#cf6a2e", programs: "#9b84d8", review: "#cf6a2e", tracker: "#3fa9b5", settings: "#e7c98f", login: "#9b84d8" };
 
