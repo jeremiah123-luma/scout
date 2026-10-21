@@ -65,7 +65,7 @@ def is_readable_board(url: str) -> bool:
     if _WORKDAY.match(url):
         return True
     host = host_of(url)
-    if host in GREENHOUSE_HOSTS or host in EIGHTFOLD_HOSTS or _PLAIN_QUERY.search(url):
+    if host in GREENHOUSE_HOSTS or host in EIGHTFOLD_HOSTS or _PLAIN_QUERY.search(url) or _JOBRIGHT.match(url):
         return True
     return any(host == h or host.endswith("." + h) for h in PLAIN_HOSTS)
 
@@ -224,6 +224,37 @@ def read_eightfold(url: str) -> dict | None:
             "apply_url": info.get("canonicalPositionUrl") or f"https://{parts.netloc}/careers/job/{job_id}"}
 
 
+_JOBRIGHT = re.compile(r"^https://jobright\.ai/jobs/info/[0-9a-f]{24}\b")
+_NEXT_DATA = re.compile(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', re.S)
+
+
+def read_jobright(url: str) -> dict | None:
+    """A Jobright posting (scout/jobright.py's rows). The page is a Next.js app: the posting's summary and
+    qualifications sit in its __NEXT_DATA__ JSON, not in the HTML, so read_plain would see almost nothing."""
+    if not _JOBRIGHT.match(url):
+        return None
+    status, raw = _fetch(url)
+    if status == 404:
+        return dict(CLOSED, apply_url=url)
+    m = _NEXT_DATA.search(raw.decode("utf-8", errors="replace")) if raw else None
+    try:
+        job = json.loads(m.group(1))["props"]["pageProps"]["dataSource"]["jobResult"] if m else None
+    except (ValueError, KeyError, TypeError):
+        return None
+    if not isinstance(job, dict) or not job.get("jobTitle"):
+        return None
+    if job.get("isDeleted"):
+        return dict(CLOSED, apply_url=url)
+    quals = job.get("qualifications") or {}
+    lines = [job.get("jobSummary", ""), job.get("jdResponsibilitySummary", ""), job.get("internHireDate", "")]
+    lines += [str(q) for key in ("mustHave", "preferredHave") for q in (quals.get(key) or [])]
+    if job.get("isCitizenOnly"):
+        lines.append("U.S. citizenship is required.")
+    return {"kind": "jobright", "title": job["jobTitle"], "location": job.get("jobLocation", ""),
+            "posted": job.get("publishTime", ""), "closes": "",
+            "text": "\n".join(_clean(x) for x in lines if x).replace("**", ""), "apply_url": url}
+
+
 def read_plain(url: str) -> dict | None:
     status, raw = _fetch(url)
     if status == 404 and host_of(url).endswith("amazon.jobs"):
@@ -252,7 +283,7 @@ def read_posting(url: str) -> dict | None:
     # A Microsoft search link with no pid names no job: its page is the whole search result, not a posting.
     if host_of(url) == "apply.careers.microsoft.com" and "/job/" not in url and "pid=" not in url:
         return None
-    for reader in (read_workday, read_greenhouse, read_ashby, read_eightfold):
+    for reader in (read_workday, read_greenhouse, read_ashby, read_eightfold, read_jobright):
         post = reader(url)
         if post:
             return post

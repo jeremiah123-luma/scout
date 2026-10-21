@@ -77,6 +77,18 @@ def posting_id(url: str) -> str:
     return f"workday:{m.group(1).lower()}:{m.group(2).upper()}" if m else ""
 
 
+SOURCE_RANK = {"boards": 1, "jobright": 0}  # anything else is one of the lists: 2
+_LOOSE_NOISE = re.compile(r"^(20[2-3][0-9]|summer|fall|winter|spring|intern|interns|internship|internships|start|s)$")
+
+
+def loose_key(company: str, title: str) -> str:
+    """Company plus the title's words in any order, minus years, seasons, and "intern". Jobright reorders
+    titles: its "Software Engineer Intern (Media Engine) - 2027 Summer" is the lists' "Software Engineer
+    Intern - Media Engine". Used only to match Jobright rows, so the lists' own keys never change."""
+    words = {w for w in slugify(title).split("-") if w and not _LOOSE_NOISE.match(w)}
+    return f"{slugify(company)}_{'-'.join(sorted(words))}"
+
+
 def dedupe(listings: list[dict]) -> list[dict]:
     """Keep one listing per posting. Prefer the one updated most recently.
 
@@ -86,16 +98,21 @@ def dedupe(listings: list[dict]) -> list[dict]:
     by_url: dict[str, dict] = {}
     by_id: dict[str, dict] = {}
     by_key: dict[str, dict] = {}
+    by_loose: dict[str, dict] = {}
     survivors: list[dict] = []
 
     # The lists' row wins over a company board's copy of the same posting, so its title and key stay the
     # ones already in seen.json (a board title like "Software Engineer Intern (Summer 2027)" would re-alert).
-    for item in sorted(listings, key=lambda x: (x.get("source") != "boards", x.get("date_updated") or 0), reverse=True):
+    # A Jobright row loses to both: its link is Jobright's page, and the others link the company's own.
+    for item in sorted(listings, key=lambda x: (SOURCE_RANK.get(x.get("source"), 2), x.get("date_updated") or 0), reverse=True):
         url = normalize_url(item.get("url", ""))
         key = make_key(item.get("company", ""), item.get("title", ""))
         item["key"] = key
         pid = posting_id(item.get("url", ""))
+        loose = loose_key(item.get("company", ""), item.get("title", ""))
         existing = (by_url.get(url) if url else None) or (by_id.get(pid) if pid else None) or by_key.get(key)
+        if existing is None and item.get("source") == "jobright":
+            existing = by_loose.get(loose)
         if existing is not None:
             sources = existing.setdefault("sources", [existing.get("source")])
             if item.get("source") not in sources:
@@ -113,5 +130,6 @@ def dedupe(listings: list[dict]) -> list[dict]:
         if pid:
             by_id[pid] = item
         by_key[key] = item
+        by_loose.setdefault(loose, item)
         survivors.append(item)
     return survivors
