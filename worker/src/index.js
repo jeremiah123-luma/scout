@@ -698,7 +698,7 @@ async function newPage(env, viewId) {
     </article>`;
 
   const views = viewPicker(VIEWS.map((v) => ({ id: v.id, label: v.label.replace(" for you", ""), count: rows.filter(v.pick).length, on: v === view })),
-    `${view.note} updated ${esc(when(data.generated_at))}.`);
+    `${view.note}${total > data.matches.length ? ` showing the top ${data.matches.length} of ${total.toLocaleString("en-US")}.` : ""} updated ${esc(when(data.generated_at))}.`);
 
   const body = `
     ${hero}
