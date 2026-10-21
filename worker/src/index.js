@@ -19,6 +19,7 @@
 
 import tokens from "./tokens.css";
 import { ICONS } from "./icons.js";
+import { routeAccounts } from "./accounts.js";
 
 const STATES = ["Found", "Saved", "Prepped", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn", "Passed"];
 const COOKIE = "scout";
@@ -36,9 +37,7 @@ export default {
     if (pandaFile) return servePanda(env, pandaFile[1]);
     if (path === "/manifest.webmanifest") return manifest();
     if (path === "/api/health") return json({ ok: true, time: new Date().toISOString() });
-    if (path === "/login") return request.method === "POST" ? login(request, env) : loginForm("");
     if (path === "/about") return aboutPage(await validCookie(request, env));
-    if (path === "/logout") return redirect("/login", { "Set-Cookie": `${COOKIE}=; Path=/; Max-Age=0` });
 
     // Cron endpoints: a shared secret, no cookie.
     if (path === "/api/ingest" || path === "/api/ingest-tracker" || path === "/api/ingest-kits" || path === "/api/ingest-mascot" || path === "/api/export") {
@@ -48,6 +47,11 @@ export default {
       if (path === "/api/ingest-mascot") return ingestMascot(request, env);
       return path === "/api/ingest" ? ingest(request, env) : exportState(env);
     }
+
+    // Accounts for other people (accounts.js): the landing page, log in, sign up, the questions, and each user's
+    // own page. It answers null for the owner's pages, which carry on below.
+    const accountPage = await routeAccounts(request, env, url, accountUi(env));
+    if (accountPage) return accountPage;
 
     // Everything else needs the login cookie.
     if (!(await validCookie(request, env))) {
@@ -117,12 +121,66 @@ async function startRun(env, ageMin) {
 
 /* ---------------------------------------------------------------- auth */
 
-async function login(request, env) {
-  const form = await request.formData();
-  const given = String(form.get("password") || "");
-  if (!env.DASH_PASSWORD || !(await sameSecret(given, env.DASH_PASSWORD))) {
-    return loginForm("nope. try again.");
-  }
+// What accounts.js needs from this file, passed in so the two never import each other.
+function accountUi(env) {
+  return {
+    page, panda, esc, json, redirect, hmac, sameSecret, coHead,
+    isOwner: (request) => validCookie(request, env),
+    ownerLogin: (password, onFail) => ownerLogin(env, password, onFail),
+    landingData: () => landingData(env),
+    fits: (answers) => fitsFor(env, answers),
+  };
+}
+
+// What a new user's answers already match, from the shared list (multi-user plan U3 does the full per-user
+// scoring). For now it's simple: open postings whose role is in a field they picked, best score first.
+// The lists Scout reads are mostly tech, so fields outside tech match nothing yet, and the page says so.
+const FIELD_ROLES = {
+  "software engineering": ["swe"], "AI and machine learning": ["swe"], "product management": ["pm"],
+  "UX/UI and product design": ["design"], "IT and support": ["it"], "cybersecurity": ["it"],
+};
+// "AI Newsroom Developer Fellow - Hearst Journalism Fellowship Program" says Hearst twice on a Hearst card.
+function cleanTitle(title, company) {
+  const i = String(title).lastIndexOf(" - ");
+  return i > 0 && company && title.slice(i).toLowerCase().includes(String(company).toLowerCase()) ? title.slice(0, i) : title;
+}
+
+async function fitsFor(env, answers) {
+  const roles = new Set((answers.fields || []).flatMap((f) => FIELD_ROLES[f] || []));
+  const early = (answers.early || []).length > 0;
+  if (!roles.size && !early) return { count: 0, top: [], tech: false };
+  const data = await get(env, "matches", { matches: [] });
+  const open = data.matches.filter((m) => m.eligibility !== "ineligible" && m.eligibility !== "closed"
+    && (roles.has(m.role) || (early && (m.role === "program" || m.early_career === "strong"))));
+  // One card per company in the preview, so five fellowships from one lab don't fill it.
+  // Postings with no US location are left out unless they said yes to working outside the US.
+  const usWhere = (m) => (m.locations || []).find((l) => /\b[A-Z]{2}\b(?!.*\b(?:CAN|UK)\b)|united states|\busa?\b|remote/i.test(l) && !/\b(UK|CAN|Canada|India|Germany|London|Toronto)\b/i.test(l));
+  const placed = answers.abroad === "yes" ? open : open.filter((m) => !(m.locations || []).length || usWhere(m));
+  const seen = new Set();
+  const varied = placed.filter((m) => !seen.has(m.company) && seen.add(m.company));
+  return { count: placed.length, tech: true,
+    top: varied.slice(0, 4).map((m) => ({ company: m.company, title: cleanTitle(m.title, m.company), score: m.score, logo: m.logo, url: m.url,
+      where: (answers.abroad === "yes" ? (m.locations || [])[0] : usWhere(m)) || "location not listed" })) };
+}
+
+// The landing page's stats row and phone notifications, from the last cron run. Only open postings that the
+// owner's profile (a first-year) can apply to make the phone; the numbers are the run's own counts.
+async function landingData(env) {
+  const data = await get(env, "matches", { matches: [], counts: {}, generated_at: "" });
+  const c = data.counts || {};
+  const checked = c.rows || 0, open = Number.isInteger(data.open_total) ? data.open_total : c.kept || 0;
+  const skipped = (c.inactive || 0) + (c["dropped: inactive"] || 0) + (c.duplicate || 0) + (c["dropped: duplicate"] || 0);
+  const ruled = Math.max(0, checked - skipped - open);
+  const posts = data.matches
+    .filter((m) => m.eligibility !== "ineligible" && m.eligibility !== "closed" && m.score >= 60)
+    .sort((a, b) => (b.latest_posted || 0) - (a.latest_posted || 0))
+    .slice(0, 8)
+    .map((m) => ({ company: m.company, title: m.title, score: m.score, where: (m.locations || [])[0] || "remote" }));
+  return { posts, checked, open, ruled, updated: data.generated_at ? when(data.generated_at) : "" };
+}
+
+async function ownerLogin(env, given, onFail) {
+  if (!env.DASH_PASSWORD || !(await sameSecret(given, env.DASH_PASSWORD))) return onFail();
   const expires = Date.now() + COOKIE_DAYS * 86400e3;
   const token = `${expires}.${await hmac(env.SESSION_SECRET, String(expires))}`;
   return redirect("/", {
@@ -530,8 +588,9 @@ async function setPassed(request, env) {
 
 /* ---------------------------------------------------------------- pages */
 
-// Ways to slice the New page. Each one is a link (/?view=today), so the browser's back button and a shared
-// link both work, and the "shuffle" button just steps to the next one. Ruled-out postings only show in "ruled out".
+// Ways to slice the New page, picked from one dropdown above the list. The view lives in the URL (/?view=today),
+// so the back button, a refresh, and a shared link all keep it. It's a native <select>: keyboard, screen readers,
+// and the phone's own picker come free, which a custom menu would have to rebuild by hand. Ruled-out postings only show in "ruled out".
 const DAY = 86400000;
 const postedAt = (m) => (m.latest_posted || m.date_posted || 0) * 1000;
 const newestFirst = (a, b) => Math.max(postedAt(b), Date.parse(b.first_seen || 0) || 0) - Math.max(postedAt(a), Date.parse(a.first_seen || 0) || 0);
@@ -541,14 +600,14 @@ const newestFirst = (a, b) => Math.max(postedAt(b), Date.parse(b.first_seen || 0
 const within = (m, ms, sighted = false) => Date.now() - postedAt(m) < ms || (sighted && m.first_seen && Date.now() - Date.parse(m.first_seen) < ms);
 const ruledOut = (m) => m.eligibility === "ineligible" || m.eligibility === "closed";
 const VIEWS = [
-  { id: "best", label: "best fit for you", note: "everything still open, highest score first.", pick: (m) => !ruledOut(m) },
-  { id: "today", label: "new today", note: "posted or first spotted in the last 24 hours, newest first.", pick: (m) => !ruledOut(m) && within(m, DAY, true), sort: newestFirst },
-  { id: "week", label: "new this week", note: "posted in the last 7 days, newest first.", pick: (m) => !ruledOut(m) && within(m, 7 * DAY), sort: newestFirst },
-  { id: "freshman", label: "freshman friendly", note: "programs and roles that say they want first- and second-year students.", pick: (m) => !ruledOut(m) && (m.early_career === "strong" || m.role === "ambassador") },
-  { id: "near", label: "near you", note: "NJ, NYC, and remote.", pick: (m) => !ruledOut(m) && m.location_class === "priority" },
-  { id: "big", label: "big names", note: "tier 1 and tier 2 companies.", pick: (m) => !ruledOut(m) && m.tier <= 2 },
-  { id: "longshots", label: "long shots", note: "big names whose general intern pools mostly hire juniors and seniors. worth a try, don't count on it.", pick: (m) => !ruledOut(m) && m.tier <= 2 && m.early_career !== "strong" && m.role !== "program" },
-  { id: "out", label: "ruled out", note: "pages that ask for a different graduation year, grad students, or have closed. here so you can double check.", pick: ruledOut },
+  { id: "best", group: "for you", label: "best fit for you", note: "everything still open, highest score first.", pick: (m) => !ruledOut(m) },
+  { id: "today", group: "fresh", label: "new today", note: "posted or first spotted in the last 24 hours, newest first.", pick: (m) => !ruledOut(m) && within(m, DAY, true), sort: newestFirst },
+  { id: "week", group: "fresh", label: "new this week", note: "posted in the last 7 days, newest first.", pick: (m) => !ruledOut(m) && within(m, 7 * DAY), sort: newestFirst },
+  { id: "big", group: "for you", label: "big hitters", note: "big tech and the companies you're excited about. these ping your phone within the hour they post.", pick: (m) => !ruledOut(m) && m.tier <= 2 },
+  { id: "freshman", group: "for you", label: "freshman friendly", note: "programs and roles that say they want first- and second-year students.", pick: (m) => !ruledOut(m) && (m.early_career === "strong" || m.role === "ambassador") },
+  { id: "near", group: "for you", label: "near you", note: "NJ, NYC, and remote.", pick: (m) => !ruledOut(m) && m.location_class === "priority" },
+  { id: "longshots", group: "the rest", label: "long shots", note: "big hitters whose general intern pools mostly hire juniors and seniors. worth a try, don't count on it.", pick: (m) => !ruledOut(m) && m.tier <= 2 && m.early_career !== "strong" && m.role !== "program" },
+  { id: "out", group: "the rest", label: "ruled out", note: "pages that ask for a different graduation year, grad students, or have closed. here so you can double check.", pick: ruledOut },
 ];
 
 async function newPage(env, viewId) {
@@ -579,12 +638,11 @@ async function newPage(env, viewId) {
         ${m.early_career === "strong" ? '<span class="tag accent">freshman friendly</span>' : ""}
         ${m.eligibility === "ineligible" ? '<span class="tag red">not eligible</span>' : m.eligibility === "closed" ? '<span class="tag red">closed</span>' : ""}
         ${m.citizens_only ? '<span class="tag ink">US citizens only</span>' : ""}
-        ${m.term_unknown ? '<span class="tag">term not listed</span>' : ""}
         ${isNew ? '<span class="tag accent">new</span>' : ""}
       </div>
       <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
-      <div class="title">${esc(m.title)}</div>
-      <div class="meta">${esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.date_posted)}${m.eligibility_note && m.eligibility !== "unknown" ? " · " + esc(m.eligibility_note) : ""}</div>
+      <div class="title">${esc(cleanTitle(m.title, m.company))}</div>
+      <div class="meta">${esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.eligibility_note && m.eligibility !== "unknown" ? " · " + esc(m.eligibility_note) : ""}</div>
       <details class="why"><summary>why ${m.score}?</summary><div class="meta mono">${esc(breakdown(m))}</div></details>
       <div class="actions">
         ${m.eligibility === "ineligible" || m.eligibility === "closed" ? `<button class="btn" disabled>${m.eligibility === "closed" ? "closed" : "not eligible"}</button>` : `<button class="btn accent" data-act="queue" ${queued.has(m.key) ? "disabled" : ""}>${queued.has(m.key) ? "queued ✓" : "prep this"}</button>`}
@@ -598,9 +656,9 @@ async function newPage(env, viewId) {
       <div class="stat-main">
         ${panda(fresh.length ? "celebrate" : "nap", "stat-panda")}
         <div class="stat-label">you have</div>
-        <div class="stat-big" id="open-count">${openCount}</div>
+        <div class="stat-big" id="open-count">${openCount.toLocaleString("en-US")}</div>
         <div class="stat-sub">open matches</div>
-        ${total > data.matches.length ? `<div class="stat-note">the list below is ranked from the top ${data.matches.length} by score</div>` : ""}
+        ${total > data.matches.length ? `<div class="stat-note">showing the top ${data.matches.length}</div>` : ""}
       </div>
       <div class="stat-tiles">
         <div class="tile${fresh.length ? " hot" : ""}"><b>${fresh.length}</b><span>new since your last visit</span></div>
@@ -615,25 +673,32 @@ async function newPage(env, viewId) {
   const passedCard = (m) => `
     <article class="card passed" data-key="${esc(m.key)}">
       <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
-      <div class="title">${esc(m.title)}</div>
+      <div class="title">${esc(cleanTitle(m.title, m.company))}</div>
       <div class="meta">passed ${age(passed[m.key])}</div>
       <div class="actions"><button class="btn accent" data-act="unpass">unpass</button><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`;
 
-  const next = VIEWS[(VIEWS.indexOf(view) + 1) % VIEWS.length];
+  const groups = [...new Set(VIEWS.map((v) => v.group))];
   const views = `
-    <nav class="views" aria-label="ways to look at your matches">
-      ${VIEWS.map((v) => `<a class="view${v === view ? " on" : ""}" href="/?view=${v.id}#views"${v === view ? ' aria-current="page"' : ""}>${v.label}<b>${rows.filter(v.pick).length}</b></a>`).join("")}
-    </nav>
-    <div class="view-head"><p class="note">${view.note}</p><a class="btn shuffle" href="/?view=${next.id}#views" title="next: ${esc(next.label)}">shuffle ↻</a></div>`;
+    <form class="viewpick" method="get" action="/#list">
+      <label for="view">view</label>
+      <div class="select-wrap">
+        <select id="view" name="view" onchange="this.form.submit()">
+          ${groups.map((g) => `<optgroup label="${g}">${VIEWS.filter((v) => v.group === g).map((v) => `<option value="${v.id}"${v === view ? " selected" : ""}>${v.label} · ${rows.filter(v.pick).length.toLocaleString("en-US")}</option>`).join("")}</optgroup>`).join("")}
+        </select>
+        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <noscript><button class="btn" type="submit">show</button></noscript>
+      <p class="note view-note" aria-live="polite">${view.id === "best" ? "" : `<b>${inView.length.toLocaleString("en-US")} in this view.</b> `}${view.note}</p>
+    </form>`;
 
   const body = `
     ${hero}
-    <div id="views"></div>
+    <div id="list"></div>
     ${views}
     ${fresh.length ? `<h2>fresh off the lists</h2>${fresh.map((m) => card(m, true)).join("")}` : ""}
-    <h2>${fresh.length ? "the rest, best first" : esc(view.label)}</h2>
-    ${rest.slice(0, 60).map((m) => card(m, view.id === "today")).join("") || `<div class="empty">${panda("bamboo")}<p class="note">${view.id === "best" ? "nothing yet. scout checks the lists every hour." : "nothing here right now. try shuffling to another view."}</p></div>`}
+    ${fresh.length ? "<h2>the rest, best first</h2>" : ""}
+    ${rest.slice(0, 60).map((m) => card(m, view.id === "today")).join("") || `<div class="empty">${panda("bamboo")}<p class="note">${view.id === "best" ? "nothing yet. scout checks the lists every hour." : "nothing here right now. pick another view above."}</p></div>`}
     ${rest.length > 60 ? `<p class="note">showing the top 60 of ${rest.length}.</p>` : ""}
     <details class="passed-list" id="passed" ${passedRows.length ? "" : "hidden"}><summary><h2>passed (<span id="passed-count">${passedRows.length}</span>)</h2></summary><p class="note">changed your mind? unpass puts it back in the list.</p><div id="passed-cards">${passedRows.map(passedCard).join("")}</div></details>`;
   return page(body, { title: "New", page: "new", lead: "let's get", head: "you hired" });
@@ -656,7 +721,7 @@ async function programsPage(env) {
     <article class="card">
       <div class="tags"><span class="tag accent">${m.role === "ambassador" ? "ambassador" : "freshman friendly"}</span>${tracker[m.key] ? `<span class="tag ink">${esc(tracker[m.key].state)}</span>` : ""}</div>
       <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
-      <div class="title">${esc(m.title)}</div>
+      <div class="title">${esc(cleanTitle(m.title, m.company))}</div>
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", "))} · ${age(m.date_posted)}</div>
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`).join("");
@@ -741,17 +806,18 @@ function aboutPage(loggedIn) {
 /* ---------------------------------------------------------------- html */
 
 function page(body, opts, status = 200) {
-  const { title, page: name, lead, head, nav = true, mood = "" } = opts;
+  // links, dock, and css let the account pages (accounts.js) use this shell with their own header and nav.
+  const { title, page: name, lead, head, nav = true, mood = "", links = null, dock = null, css = "", script = "" } = opts;
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="${PAGE_COLORS[name] || "#cf6a2e"}">
-<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Scout · ${esc(title)}</title><style>${tokens}${BASE_CSS}</style></head><body data-page="${esc(name)}">
-<header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
+<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Scout · ${esc(title)}</title><style>${tokens}${BASE_CSS}${css}</style></head><body data-page="${esc(name)}">
+<header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${links !== null ? links : name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
 <main>
-  <h1><span class="lead">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>
+  ${lead || head ? `<h1><span class="lead">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>` : ""}
   ${body}
 </main>
-${nav ? NAV.replace(`href="/${name === "new" ? "" : name}"`, `href="/${name === "new" ? "" : name}" class="on"`) : ""}
-${nav ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS}</script></body></html>`;
+${dock !== null ? dock : nav ? NAV.replace(`href="/${name === "new" ? "" : name}"`, `href="/${name === "new" ? "" : name}" class="on"`) : ""}
+${nav && dock === null ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS}</script>${script ? `<script>${script}</script>` : ""}</body></html>`;
   return new Response(html, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
 }
 
@@ -766,15 +832,6 @@ const PAGE_COLORS = { about: "#3fa9b5", new: "#cf6a2e", programs: "#9b84d8", rev
 
 // Settings stays at /settings (linked from the about page) but leaves the dock to make room for Review.
 const NAV = `<nav class="dock"><a href="/">new</a><a href="/programs">programs</a><a href="/review">review</a><a href="/tracker">tracker</a></nav>`;
-
-function loginForm(message) {
-  return page(`${panda("wave", "login-panda")}<form method="post" action="/login" class="login">
-    <label for="password">password</label>
-    <input id="password" name="password" type="password" autocomplete="current-password" autofocus>
-    <button class="btn accent big" type="submit">let me in</button>
-    ${message ? `<p class="warn">${esc(message)}</p>` : '<p class="note">it stays unlocked for 30 days. <a href="/about">what is scout?</a></p>'}
-  </form>`, { title: "Log in", page: "login", lead: "who goes", head: "there?", nav: false }, message ? 401 : 200);
-}
 
 // Layout only. Colors, sizes, and fonts come from tokens.css.
 const BASE_CSS = `
@@ -807,18 +864,24 @@ h3{font-family:var(--display);font-size:20px;margin:0;text-transform:uppercase;l
 .stat{background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:var(--pad);margin-bottom:8px}
 .stat-label{font-family:var(--display);text-transform:uppercase;font-size:18px;letter-spacing:0}
 .stat-big{font-family:var(--display);font-size:var(--big);line-height:.9;text-transform:uppercase;margin:4px 0 6px}
-.stat{display:grid;gap:16px;position:relative}
+.stat{display:grid;gap:16px;position:relative;grid-template-columns:minmax(0,1fr)} .stat>*{min-width:0}
 .stat-sub{font-weight:700;font-size:18px}
 .stat-note{color:var(--muted);font-size:13px;font-weight:700;margin-top:4px}
 .stat-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 /* view chips on the New page: one row that scrolls sideways on a phone */
-.views,.view-head,#views{grid-column:1/-1} .views{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px;margin:18px -4px 0;scrollbar-width:none;scroll-snap-type:x proximity} .views::-webkit-scrollbar{display:none}
-.view{flex:none;scroll-snap-align:start;display:inline-flex;align-items:center;gap:8px;font:700 var(--small)/1 var(--font);color:var(--ink);background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius-pill);padding:8px 14px;text-decoration:none;box-shadow:var(--shadow-sm);white-space:nowrap;transition:transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .15s ease}
-.view b{font-size:12px;background:var(--ink);color:var(--cream);border-radius:999px;padding:3px 7px}
-.view.on{background:var(--accent)} .view:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
-@media (hover:hover){.view:hover{transform:translate(-1px,-1px) rotate(-1deg)}}
-.view-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px} .view-head .note{margin:0} .shuffle{flex:none}
-.tile{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+/* the view picker: a native select dressed as a Scout button, sitting right above the list it changes */
+.viewpick,#list{grid-column:1/-1}
+/* New page cards line their buttons up across a row, however long the title runs */
+body[data-page="new"] main{align-items:stretch} body[data-page="new"] article.card[data-key]{display:flex;flex-direction:column} body[data-page="new"] article.card[data-key] .why{margin-top:auto;padding-top:8px} body[data-page="new"] article.card[data-key] .actions{padding-top:10px} .viewpick{display:grid;gap:8px;margin:26px 0 4px}
+.viewpick label{font:700 var(--small)/1 var(--font);color:var(--on-page);text-transform:uppercase;letter-spacing:.6px}
+.select-wrap{position:relative;justify-self:start;width:min(100%,360px)}
+.viewpick select{appearance:none;-webkit-appearance:none;width:100%;min-height:52px;font:700 17px/1.2 var(--font);color:var(--ink);background:var(--cream);border:var(--line) solid var(--ink);border-radius:14px;padding:12px 48px 12px 16px;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .15s}
+.viewpick select:focus-visible{outline:none;box-shadow:var(--shadow-sm),0 0 0 4px var(--accent)}
+.viewpick select:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.select-wrap .chev{position:absolute;right:16px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--ink);pointer-events:none}
+.view-note{margin:2px 0 16px;max-width:60ch} .view-note b{color:var(--on-page)}
+@media (max-width:560px){.select-wrap{width:100%}}
+.tile{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0;box-shadow:var(--shadow-sm)}
 .tile b{font-family:var(--display);font-size:34px;line-height:1} .tile span{font-size:var(--small);font-weight:700;color:var(--muted);line-height:1.2}
 .tile.hot{background:var(--accent)} .tile.hot span{color:var(--ink)}
 .stat-foot{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
@@ -998,10 +1061,10 @@ const CLIENT_JS = `
 // The next-action box grows to fit its text instead of cutting it off.
 document.querySelectorAll('textarea[data-act="next"],textarea.ans').forEach(function(t){const fit=function(){t.style.height="auto";t.style.height=t.scrollHeight+t.offsetHeight-t.clientHeight+"px"};fit();t.addEventListener("input",fit);addEventListener("resize",fit);if(document.fonts)document.fonts.ready.then(fit)});
 // The hero numbers count up from zero on load. bump() moves the target too, so a pass mid-count still lands right.
-(function(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;document.querySelectorAll(".stat-big,.tile b").forEach(function(el,n){const end=parseInt(el.textContent,10);if(!(end>0))return;el.dataset.end=end;const t0=performance.now()+150+n*120,dur=end>20?1100:600;el.textContent="0";requestAnimationFrame(function tick(t){const k=Math.min(1,Math.max(0,(t-t0)/dur)),goal=+el.dataset.end;el.textContent=Math.round(goal*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(tick);else delete el.dataset.end})})})();
+(function(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;document.querySelectorAll(".stat-big,.tile b").forEach(function(el,n){const end=parseInt(el.textContent.replace(/,/g,""),10);if(!(end>0))return;el.dataset.end=end;const t0=performance.now()+150+n*120,dur=end>20?1100:600;el.textContent="0";requestAnimationFrame(function tick(t){const k=Math.min(1,Math.max(0,(t-t0)/dur)),goal=+el.dataset.end;el.textContent=Math.round(goal*(1-Math.pow(1-k,3))).toLocaleString("en-US");if(k<1)requestAnimationFrame(tick);else delete el.dataset.end})})})();
 document.addEventListener("click",async(e)=>{const x=e.target.closest("button[data-remove]");if(!x)return;e.preventDefault();e.stopPropagation();const card=x.closest(".card");if(!card)return;const kind=x.dataset.remove;const label=(card.querySelector("h3")||{}).textContent||"this";if(!confirm("remove "+label.trim()+"?"))return;x.disabled=true;await post("/api/remove",kind==="kit"?{kind,slug:card.dataset.slug}:{kind,key:card.dataset.key});card.style.transition="opacity .25s,transform .25s";card.style.opacity="0";card.style.transform="scale(.96)";setTimeout(()=>card.remove(),260)},true);
 async function post(url, body){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok){alert("that didn't save. try again.");throw new Error(r.status)}return r.json()}
-function bump(id,d){const el=document.getElementById(id);if(!el)return;if(el.dataset.end)el.dataset.end=Math.max(0,+el.dataset.end+d);el.textContent=Math.max(0,(parseInt(el.textContent,10)||0)+d)}
+function bump(id,d){const el=document.getElementById(id);if(!el)return;if(el.dataset.end)el.dataset.end=Math.max(0,+el.dataset.end+d);el.textContent=Math.max(0,(parseInt(el.textContent.replace(/,/g,""),10)||0)+d).toLocaleString("en-US")}
 function syncPassed(){const box=document.getElementById("passed");const n=parseInt((document.getElementById("passed-count")||{}).textContent,10)||0;if(box){box.hidden=n===0;if(n===0)box.open=false}}
 function passedClone(card,key){const a=document.createElement("article");a.className="card passed";a.dataset.key=key;a.dataset.origin="main";
  const row=document.createElement("div");row.className="row";const h=document.createElement("h3");h.textContent=(card.querySelector("h3")||{}).textContent||"";const sc=document.createElement("span");sc.className="score";sc.textContent=(card.querySelector(".score")||{}).textContent||"";row.append(h,sc);
@@ -1108,6 +1171,9 @@ function manifest() {
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
 }
+// headers: an object, or a list of [name, value] pairs when a name repeats (logging out clears two cookies).
 function redirect(to, headers = {}) {
-  return new Response(null, { status: 302, headers: { Location: to, ...headers } });
+  const h = new Headers(Array.isArray(headers) ? headers : Object.entries(headers));
+  h.set("Location", to);
+  return new Response(null, { status: 302, headers: h });
 }

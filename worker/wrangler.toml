@@ -15,6 +15,15 @@ compatibility_date = "2026-10-01"
 binding = "SCOUT"
 id = "ce5c08ee20004673a4cdb38fb5ea844c"
 
+# Accounts for other people (multi-user plan, U1 and U2): users, their answers to the sign-up questions, and
+# login attempts, in D1 (Cloudflare's free SQL database). LOCAL ONLY so far: `npx wrangler dev --local` keeps it
+# in .wrangler/. Before this branch can deploy, create the real one (`npx wrangler d1 create scout-users`) and put
+# its id here; until then the id below is a placeholder and `wrangler deploy` will refuse it.
+[[d1_databases]]
+binding = "DB"
+database_name = "scout-users"
+database_id = "00000000-0000-0000-0000-000000000000"
+
 # Lets `import tokens from "./tokens.css"` work: the file comes in as a plain string.
 [[rules]]
 type = "Text"

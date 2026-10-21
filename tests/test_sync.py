@@ -38,8 +38,8 @@ class Push(unittest.TestCase):
     def test_the_dashboard_counts_from_the_total(self):
         worker = (Path(__file__).parent.parent / "worker" / "src" / "index.js").read_text()
         self.assertIn("total_matches: Number.isInteger(body.total_matches)", worker, "ingest keeps the total")
-        self.assertIn('id="open-count">${openCount}', worker, "the big number is the real count")
-        self.assertIn("ranked from the top ${data.matches.length} by score", worker)
+        self.assertIn('id="open-count">${openCount.toLocaleString("en-US")}', worker, "the big number is the real count")
+        self.assertIn("showing the top ${data.matches.length}", worker)
 
 
 class Pull(unittest.TestCase):

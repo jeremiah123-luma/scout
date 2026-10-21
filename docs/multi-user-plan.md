@@ -1,6 +1,6 @@
 # Scout for other people: the plan
 
-Status: proposed, 2026-10-20. Nothing here is built yet.
+Status: U0 to U2 built locally on the multi-user branch, 2026-10-20. U3 onward not started.
 
 ## Decisions so far
 - **Sign up, then a long set of questions.** Right after someone makes an account, Scout asks everything it needs to find the right jobs for them: major, year, where they want to work, what roles, what companies. Their answers become their settings. Nobody edits YAML.
@@ -28,7 +28,7 @@ The user's own Claude Code (their subscription)
 The key change from today: page checks store facts about a posting ("asks for 2028 graduates", "PhD only"), not a verdict against one person's graduation year. Each user's verdict is computed from those facts and their answers.
 
 ## The questions (asked right after sign up)
-Each question says why it is asked. Every answer can be changed later on a Settings page. Questions marked **(required)** have to be answered before the first matches show.
+Each question says why it is asked. Every answer can be changed later on the "you" page. Questions marked **(required)** have to be answered before the first matches show.
 
 **About you**
 1. Name you go by (required)
@@ -49,13 +49,13 @@ Each question says why it is asked. Every answer can be changed later on a Setti
 **What you want**
 13. Internship, co-op, part-time during school, new grad full-time, fellowship, research (pick all) (required)
 14. Which seasons: summer, fall, winter, spring, year-round (required)
-15. Fields (pick all, then rank): software engineering, product management, data and analytics, AI/ML, design (UX/UI, product), IT and support, cybersecurity, hardware, quant and finance, consulting, marketing, business and operations, research, plus "other" (required)
-16. For each chosen field, roles that sound right (for example under software: front end, back end, mobile, full stack, infrastructure)
+15. Fields (pick all, then your top one): software engineering, product management, data and analytics, AI/ML, design (UX/UI, product), IT and support, cybersecurity, hardware, quant and finance, consulting, marketing, business and operations, research, plus "other" (required)
+16. Roles that sound right (for example front end, iOS, data analyst)
 17. Words that should never show up (for example "sales", "unpaid")
 18. Paid only?
 
 **Where**
-19. Cities or regions you'd most like (pick on a map or type) (required)
+19. Cities or regions you'd most like (type them) (required)
 20. Willing to relocate? Anywhere in the US, only some places, no
 21. Remote: prefer, fine, avoid
 22. Outside the US: no, yes (which countries)
@@ -69,7 +69,7 @@ Each question says why it is asked. Every answer can be changed later on a Setti
 
 **Early-career programs**
 28. Want freshman and sophomore programs, fellowships, ambassador programs, hackathons and competitions? (pick all)
-29. Programs you already know you want (for example Microsoft Explore, Google STEP, MLH Fellowship)
+29. Programs you already know you want (for example Microsoft Explore, MLH Fellowship)
 
 **Alerts**
 30. How fast: every strong match right away, a daily digest, or a weekly digest
@@ -86,12 +86,12 @@ Each question says why it is asked. Every answer can be changed later on a Setti
 
 **Applying**
 39. How many applications a week you're aiming for (sets a goal on the Tracker)
-40. Do you want help with cover letters, short answers, or both?
+40. What do you want help with: tailored resumes, cover letters, short answers?
 
 ## Milestones (one at a time, an OK between each)
 - **U0, posting facts.** Page checks save facts about each posting instead of a verdict for one person, and today's verdicts become a function of those facts plus a profile. Jeremiah's dashboard keeps working on top of it. *(M)*
 - **U1, accounts.** Sign up and log in with email and password, password reset, rate limits, per-user data in D1. Jeremiah's data moves into the first account. *(L)*
-- **U2, the questions.** The onboarding flow above, a Settings page, and answers stored as each user's settings. *(M)*
+- **U2, the questions.** The onboarding flow above, a "you" page to review and edit every answer, and answers stored as each user's settings. *(M)*
 - **U3, per-user scoring and pages.** The shared fetch runs once; every user gets their own New, Programs, Review, and Tracker. *(L)*
 - **U4, per-user alerts.** Each user's ntfy topic or email, digest time, quiet hours, unsubscribe. *(M)*
 - **U5, bring your own Claude Code.** A small public repo with `/setup` (links Claude Code to their Scout account with a token), `/interview` (builds their master profile locally), and `/prep`. Kits upload to their Review page. *(M)*
@@ -100,3 +100,10 @@ Each question says why it is asked. Every answer can be changed later on a Setti
 
 ## Before any of this
 The repo is public, and a few things in it are about Jeremiah specifically (see the readiness review, Oct 20). Those get cleaned up first, so a new user's first look at the code doesn't show his personal details.
+
+## What U0 to U2 built (local only, 2026-10-20)
+- **U0:** page checks save facts about each posting; each person's verdict is computed from those facts and their profile (`scout/eligibility.py`).
+- **U1:** sign up and log in with email and password, a signed cookie, and a lockout after 8 failed tries in 15 minutes (`worker/src/accounts.js`). Password reset needs an email sender and is not built. The owner still logs in with the dashboard password alone.
+- **U2:** the 9 steps of questions, a live count of fitting postings from step 4, and a "you" page that ends on a first look at real postings, with every answer editable and a delete-my-account button.
+- **Landing page** (`worker/src/landing.js`): public, explains why Scout exists, with numbers from the last run.
+- **Before deploying:** create the D1 database (`npx wrangler d1 create scout-users`) and put its id in `worker/wrangler.toml`; keep the landing page's alert and prep claims in step with U4 and U5.
