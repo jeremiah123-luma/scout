@@ -186,7 +186,7 @@ export async function studentHome(env, user, url, ui) {
         <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <noscript><button class="btn" type="submit">show</button></noscript>
-      <p class="note view-note" aria-live="polite">${view.id === "best" ? "" : `<b>${inView.length.toLocaleString("en-US")} in this view.</b> `}${view.note}</p>
+      <p class="note view-note" aria-live="polite">${view.note}</p>
     </form>`;
 
   const hero = `
@@ -206,7 +206,7 @@ export async function studentHome(env, user, url, ui) {
     </div>`;
 
   const empty = `<div class="empty">${ui.panda("bamboo")}<p class="note">${view.id === "best" ? "nothing open fits yet. scout checks the lists every hour, and you can widen your answers on the you page." : "nothing here right now. pick another view above."}</p></div>`;
-  const welcome = url.searchParams.get("welcome") ? `<div class="welcome" role="status">${ui.panda("celebrate", "welcome-panda")}<p><b>you're in.</b> tap <b>save</b> on anything good. it lands in your tracker with a prep prompt.</p><a class="welcome-x" href="/" aria-label="close">×</a></div>` : "";
+  const welcome = url.searchParams.get("welcome") ? `<div class="welcome" role="status">${ui.panda("celebrate", "welcome-panda")}<p><b>you're in.</b> save anything good and it lands in your tracker.</p><a class="welcome-x" href="/" aria-label="close">×</a></div>` : "";
   const body = `${welcome}${hero}<div id="list"></div>${picker}
     ${inView.slice(0, SHOWN).map(card).join("") || empty}
     ${inView.length > SHOWN ? `<p class="note">showing the top ${SHOWN} of ${inView.length.toLocaleString("en-US")}.</p>` : ""}`;
@@ -445,7 +445,8 @@ export const STUDENT_CSS = `
 .welcome{grid-column:1/-1;display:flex;gap:14px;align-items:center;background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 18px;margin:0 0 18px}
 .welcome p{margin:0;font-weight:600;flex:1} .welcome-panda{width:56px;height:56px;flex:none}
 .welcome-x{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;color:var(--ink);font:700 24px/1 var(--font);text-decoration:none}
-body:has(.welcome) .stat-panda{display:none}
+body:has(.welcome) .stat-panda,body:has(.welcome) .view-note{display:none}
+@media (max-width:600px){.welcome-panda{width:40px;height:40px} .welcome{padding:10px 12px}}
 .removed{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cream);border:var(--line) dashed var(--ink);border-radius:var(--radius);padding:10px 16px;margin:0 0 16px;font-weight:700}
 .track .xbtn{width:44px;height:44px;top:4px;right:4px;padding:6px;background-clip:content-box;box-shadow:none;border-width:0} .track .xbtn::before{content:"";position:absolute;inset:6px;border:2.5px solid var(--ink);border-radius:50%;box-shadow:2px 2px 0 var(--ink);z-index:-1}
 @media (max-width:560px){
@@ -456,7 +457,7 @@ body:has(.welcome) .stat-panda{display:none}
 .track{position:relative}
 .track-edit{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:10px}
 .track-edit select,.track-edit input{font:600 15px var(--font);color:var(--ink);background:#fff;border:var(--line) solid var(--ink);border-radius:12px;padding:10px 12px;width:100%;min-width:0;max-width:100%;box-shadow:none}
-@media (min-width:560px){.track-edit{grid-template-columns:160px minmax(0,1fr)}}
+@media (min-width:560px) and (max-width:899px){.track-edit{grid-template-columns:160px minmax(0,1fr)}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .prep{margin-top:12px;border-top:2px dashed var(--rule);padding-top:10px}
 .prep summary{cursor:pointer;font-weight:700}

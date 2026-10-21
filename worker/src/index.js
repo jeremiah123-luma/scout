@@ -727,7 +727,7 @@ async function newPage(env, viewId) {
         <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <noscript><button class="btn" type="submit">show</button></noscript>
-      <p class="note view-note" aria-live="polite">${view.id === "best" ? "" : `<b>${inView.length.toLocaleString("en-US")} in this view.</b> `}${view.note}</p>
+      <p class="note view-note" aria-live="polite">${view.note}</p>
     </form>`;
 
   const body = `

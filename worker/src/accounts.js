@@ -370,7 +370,8 @@ function loginPage(ui, message, email) {
     <div class="pw"><input id="password" name="password" type="password" autocomplete="current-password" required><button type="button" class="show" aria-pressed="false">show</button></div>
     <button class="btn accent big" type="submit">let me in</button>
     ${message ? `<p class="warn">${ui.esc(message)}</p>` : ""}
-    <p class="swap">new here? <a href="/signup">make an account</a> · <a href="/forgot">forgot your password?</a></p>
+    <p class="swap">new here? <a href="/signup">make an account</a></p>
+    <p class="swap"><a href="/forgot">forgot your password?</a></p>
   </form></div>`, { title: "Log in", page: "login", lead: "who goes", head: "there?", nav: false, links: '<a class="pill-link" href="/hello">what is scout?</a>', css: HEAD_CSS + AUTH_CSS, script: AUTH_JS }, message ? 401 : 200);
 }
 
@@ -451,9 +452,9 @@ function forgotPage(ui, message) {
     <label for="email">your email</label>
     <input id="email" name="email" type="email" autocomplete="username" required autofocus>
     <button class="btn accent big" type="submit">ping me a reset link</button>
-    ${message ? `<p class="note" role="status">${ui.esc(message)}</p>` : '<p class="note">the link goes to your phone through scout\'s alerts. no phone alerts set up? there\'s no other reset yet; <a href="https://github.com/jeremiah123-luma/scout/issues" target="_blank" rel="noopener">ask for help here</a>.</p>'}
+    ${message ? `<p class="note" role="status">${ui.esc(message)}</p>` : '<p class="note">the link goes to your phone through scout\'s alerts. no phone alerts set up? then there\'s no way to reset it yet.</p>'}
     <p class="swap"><a href="/login">back to log in</a></p>
-  </form></div>`, { title: "Forgot password", page: "login", lead: "it happens.", head: "let's fix it", nav: false, links: '<a class="pill-link" href="/hello">what is scout?</a>', css: HEAD_CSS + AUTH_CSS });
+  </form></div>`, { title: "Forgot password", page: "login", lead: "it happens.", head: "let's fix it.", nav: false, links: '<a class="pill-link" href="/hello">what is scout?</a>', css: HEAD_CSS + AUTH_CSS });
 }
 
 async function forgot(request, env, url, ui) {
@@ -748,13 +749,15 @@ body[data-page="you"]{--page:var(--teal)}
 .answers-wrap:not([open])>summary{background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:12px 18px;margin:0 0 26px}
 .answers-wrap:not([open])>summary h2{color:var(--ink);margin:0} .answers-wrap:not([open])>summary .count{color:var(--muted)}
 .answers-wrap:not([open])>summary::after{content:"show ▾";margin-left:auto;font-weight:700}
-.alerts{margin:0 0 26px;position:relative} .alerts-panda{position:absolute;right:12px;top:-30px;width:88px;height:88px} .alerts h3{padding-right:80px;font-family:var(--display);text-transform:uppercase;font-size:20px;margin:0 0 6px} .alerts p{margin:0 0 8px} .alerts a{color:var(--ink);font-weight:700}
+.alerts{margin:0 0 26px;position:relative} .alerts-panda{position:absolute;right:12px;top:-30px;width:88px;height:88px} .alerts h3+p{padding-right:84px}
+@media (max-width:600px){.alerts-panda{width:68px;height:68px;top:-38px} .alerts h3+p{padding-right:64px}}
+.alerts h3{padding-right:80px;font-family:var(--display);text-transform:uppercase;font-size:20px;margin:0 0 6px} .alerts p{margin:0 0 8px} .alerts a{color:var(--ink);font-weight:700}
 .setup{margin:10px 0;padding-left:22px;display:grid;gap:12px} .setup li::marker{font-weight:700}
 .topic{display:flex;gap:8px;margin-top:8px} .topic input{flex:1;min-width:0;font:600 14px var(--mono);color:var(--ink);background:#fff;border:var(--line) solid var(--ink);border-radius:12px;padding:10px 12px;box-shadow:none}
 .you-links{margin:22px 0 0;font-weight:700;color:var(--on-page)} .you-links a{color:var(--on-page)}
 .danger{margin-top:40px} .danger button{background:none;border:0;padding:12px 0;min-height:44px;color:var(--on-page);font:600 14px var(--font);text-decoration:underline;cursor:pointer}
-@media (min-width:900px){body[data-page="you"] .dock{max-width:860px}}
-@media (min-width:900px){body[data-page="you"] main,body[data-page="you"] header{max-width:860px} body[data-page="you"] main{display:block} .firstlook{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+@media (min-width:900px){body[data-page="you"] main{max-width:860px} body[data-page="you"] main{display:block} .firstlook{grid-template-columns:repeat(2,minmax(0,1fr))}
   .answers{display:block;columns:2;column-gap:16px} .answers .ans{break-inside:avoid;margin-bottom:16px}}
 `;
 
@@ -794,7 +797,7 @@ function youPage(user, ui, saved, meta, tracked) {
       : `<p>phone alerts are off, so new matches wait for you on the new page.</p><a class="btn accent" href="/start?step=7&from=you">turn them on</a>`}
     </section>`;
   const body = `
-    <p class="you-line">${all ? `that's everything scout needs, ${ui.esc(first)}.` : `everything you told scout, ${ui.esc(first)}.`} ${all ? "change any answer whenever you want." : "tap edit to change anything."}</p>
+    <p class="you-line">${all ? `that's everything scout needs, ${ui.esc(first.toLowerCase())}.` : `everything you told scout, ${ui.esc(first.toLowerCase())}.`} ${all ? "change any answer whenever you want." : "tap edit to change anything."}</p>
     ${alerts}
     <details class="answers-wrap"${saved && saved !== "all" ? " open" : ""}><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
       <div class="answers">${cards}</div>

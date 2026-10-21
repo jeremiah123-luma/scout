@@ -97,7 +97,7 @@ body[data-page="landing"] main{display:block}
 .phone::before{content:"";position:absolute;top:12px;left:50%;width:84px;height:24px;margin-left:-42px;background:var(--ink);border-radius:999px}
 .phone-screen{height:100%;border-radius:32px;background:var(--purple);border:var(--line) solid var(--ink);padding:52px 12px 12px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
 .lock-time{font-family:var(--display);font-size:54px;line-height:1;color:var(--cream)}
-.lock-date{font-weight:700;color:var(--cream);margin:4px 0 18px}
+.lock-date{font-weight:700;color:var(--cream);margin:4px 0 18px;white-space:nowrap;font-size:clamp(12px,3.4vw,16px)}
 .push-slot{width:100%;display:grid}
 .push{grid-area:1/1;background:var(--cream);border:var(--line) solid var(--ink);border-radius:18px;box-shadow:var(--shadow-sm);padding:10px 12px;display:grid;gap:3px;text-align:left}
 .push.in{animation:pushIn .55s cubic-bezier(.3,1.5,.5,1) both} .push.out{animation:pushOut .35s ease both}
