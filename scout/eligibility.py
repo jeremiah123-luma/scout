@@ -313,13 +313,24 @@ def _describe(low: int, high: int) -> str:
 FACTS_VERSION = 1
 
 
+def default_cycle_year(today: date | None = None) -> int:
+    """The summer the internships being posted are for: from August on, next summer; before that, this one."""
+    today = today or date.today()
+    return today.year + 1 if today.month >= 8 else today.year
+
+
 def standing_min_year(phrase: str) -> int:
     """The year in school a class-standing rule needs at application time (1 = first year ... 4 = senior).
-    "At least a sophomore" and "current sophomores" need year 2; "completed sophomore year", "two years of college",
-    and anything junior need year 3; senior or four years needs year 4."""
+    "At least a sophomore" and "current sophomores" need year 2; "completed sophomore year" and "two years of
+    college" need year 3, as does "junior or senior"; senior, four years, a completed junior year, or three years
+    done ("minimum of 3 years towards the degree") need year 4."""
     low = phrase.lower()
-    if re.search(r"\b(senior|four|4|three|3)\b", low) and not re.search(r"junior or senior|junior/senior|juniors and seniors|third[- ]year or fourth|third or fourth", low):
-        return 4 if re.search(r"\b(senior|four|4)\b", low) else 4 if "complet" in low else 3
+    if re.search(r"junior or senior|junior/senior|juniors and seniors|third[- ]year or fourth|third or fourth", low):
+        return 3
+    if re.search(r"\b(senior|four|4)\b", low):
+        return 4
+    if re.search(r"\b(junior|three|3)\b", low):
+        return 4 if re.search(r"complet|minimum|at least|years? (?:of|towards?|toward)", low) and not re.search(r"at least an? junior", low) else 3
     if re.search(r"\bat least an? sophomore|\bcurrent(?:ly)?\s+(?:an?\s+)?sophomore", low):
         return 2
     return 3
@@ -367,7 +378,7 @@ def verdict_from_facts(facts: dict, profile: dict) -> tuple[str, str]:
     grad = int(profile["graduation_year"])
     year = int(profile.get("year_in_school") or year_in_school(grad))
     degree = (profile.get("degree") or "bachelor's").lower()
-    cycle = int(profile.get("cycle_year") or date.today().year + 1)
+    cycle = int(profile.get("cycle_year") or default_cycle_year())
     if facts.get("gone"):
         return "closed", "the page says the job is no longer available"
     if facts.get("not_enrolled") and profile.get("enrolled", True):
@@ -440,7 +451,9 @@ def check(listing: dict, graduation_year: int | dict, cache: dict, allow_network
     profile = graduation_year if isinstance(graduation_year, dict) else {"graduation_year": graduation_year}
     url = listing.get("url", "")
     cached = cache.get(url)
-    if cached and cached.get("v") == CACHE_VERSION and time.time() - cached.get("checked_at", 0) < CACHE_DAYS * 24 * 3600:
+    fresh_for = cached.get("days", CACHE_DAYS) * 24 * 3600 if cached else 0
+    facts_ok = cached and (cached.get("taken_down") or cached.get("facts", {}).get("v") == FACTS_VERSION)
+    if cached and facts_ok and cached.get("v") == CACHE_VERSION and time.time() - cached.get("checked_at", 0) < fresh_for:
         _apply_facts(listing, cached, profile)
         _apply_deadline(listing, cached.get("deadline"), today)
         return listing
@@ -455,6 +468,9 @@ def check(listing: dict, graduation_year: int | dict, cache: dict, allow_network
     entry = {"checked_at": int(time.time()), "v": CACHE_VERSION}
     if text == CLOSED:
         entry["taken_down"] = True
+        # A closed answer is re-checked the next day, not in two weeks: if a board ever answered a whole runner that
+        # way (Workday's S22 is a 403), one bad hour would otherwise close every posting on it for 14 days.
+        entry["days"] = 1
     else:
         entry["facts"] = facts_from_text(text)
         due = deadline(text, today)

@@ -33,7 +33,7 @@ export function landingBody(ui, signedIn, data) {
   <section class="hero">
     <div class="hero-copy">
       <h1 class="hero-h1"><span class="lead">the good internships close in days.</span><span class="hl">scout finds them <mark>first.</mark></span></h1>
-      <p class="hero-sub">for students: scout checks the big internship lists every hour, skips the ones you can't apply to, and pings your phone when a good one drops.</p>
+      <p class="hero-sub">for college students in tech, freshman year and up: scout checks the big internship lists every hour, skips the ones you can't apply to, and pings your phone when a good one drops.</p>
       <div class="hero-cta">${cta}</div>
     </div>
     <div class="hero-art">
@@ -64,10 +64,9 @@ export function landingBody(ui, signedIn, data) {
     <ol class="how-list">
       <li><h3>it watches</h3><p>every hour, scout pulls the big public internship lists and the career pages of the companies you care about.</p></li>
       <li><h3>it reads the fine print</h3><p>it opens each posting and rules out what isn't for you, like "graduating in 2028" when you graduate in 2030, or "PhD students only".</p></li>
-      <li><h3>it ranks and pings</h3><p>the rest get a score from your answers. a great one pings your phone right away, and the others wait for your daily digest.</p></li>
-      <li><h3>it helps you prep</h3><p>a tailored resume, a cover letter, and short answers in your own voice, built with Claude Code on your own computer.</p></li>
+      <li><h3>it ranks and pings</h3><p>the rest get a score from your answers. a great one pings your phone within the hour, or they all wait for one digest. your call.</p></li>
+      <li><h3>it helps you prep</h3><p>save a posting and scout writes a prompt for your own Claude Code (or Claude) to tailor your resume and answers. your resume never leaves your computer.</p></li>
     </ol>
-    <p class="soon-note">alerts and prep kits for new accounts are being built now.</p>
   </section>
 
   <section class="promise card">
@@ -79,7 +78,7 @@ export function landingBody(ui, signedIn, data) {
     <h2 class="end-h">beat the october friend.</h2>
     <p>13 questions you have to answer, the rest you can skip.</p>
     ${cta}
-    <p class="made">made by jeremiah sleman · <a href="https://github.com/jeremiah123-luma/scout" target="_blank" rel="noopener">see the code ↗</a></p>
+    <p class="made">made by jeremiah sleman · <a href="/privacy">privacy</a> · <a href="https://github.com/jeremiah123-luma/scout" target="_blank" rel="noopener">see the code ↗</a></p>
   </section>`;
 }
 

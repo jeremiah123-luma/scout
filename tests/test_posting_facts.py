@@ -60,6 +60,19 @@ class SamePageDifferentPeople(unittest.TestCase):
         self.assertNotEqual(verdict(text, {**JUNIOR, "past_internship": True}), "ineligible")
 
 
+class StandingPhrases(unittest.TestCase):
+    def test_years_each_phrase_needs(self):
+        for phrase, year in [("At least a sophomore at time of application", 2), ("current sophomores", 2),
+                             ("Completed sophomore year of college", 3), ("Completion of two years of college", 3),
+                             ("junior or senior standing", 3), ("Completion of junior year", 4),
+                             ("Minimum of 3 years towards the degree", 4), ("senior standing", 4)]:
+            self.assertEqual(e.standing_min_year(phrase), year, phrase)
+
+    def test_cycle_year_turns_over_in_august(self):
+        self.assertEqual(e.default_cycle_year(date(2027, 3, 1)), 2027)
+        self.assertEqual(e.default_cycle_year(date(2026, 10, 21)), 2027)
+
+
 class YearInSchool(unittest.TestCase):
     def test_from_graduation_year(self):
         october = date(2026, 10, 20)

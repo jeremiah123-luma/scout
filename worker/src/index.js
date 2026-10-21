@@ -20,67 +20,88 @@
 import tokens from "./tokens.css";
 import { ICONS } from "./icons.js";
 import { routeAccounts } from "./accounts.js";
+import { runStudentAlerts } from "./student.js";
+import { rank, isOpen, FIELD_ROLES, usLocation } from "./match.js";
 
 const STATES = ["Found", "Saved", "Prepped", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn", "Passed"];
 const COOKIE = "scout";
 const COOKIE_DAYS = 30;
 
+// Headers every page and API answer carries: no framing (clickjacking), no MIME sniffing, no referrer leaking
+// the path to other sites, and no camera, mic, or location.
+const SECURITY_HEADERS = {
+  "X-Frame-Options": "DENY", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()", "Strict-Transport-Security": "max-age=31536000",
+};
+
 export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-    const path = url.pathname;
-
-    // Home-screen icons and the web app manifest are public: iOS fetches them without the login cookie.
-    if (ICONS[path]) return png(ICONS[path]);
-    // The borrowed panda is public like the icons: the login page shows it before anyone has a cookie.
-    const pandaFile = path.match(/^\/panda\/([a-z-]+)\.png$/);
-    if (pandaFile) return servePanda(env, pandaFile[1]);
-    if (path === "/manifest.webmanifest") return manifest();
-    if (path === "/api/health") return json({ ok: true, time: new Date().toISOString() });
-    if (path === "/about") return aboutPage(await validCookie(request, env));
-
-    // Cron endpoints: a shared secret, no cookie.
-    if (path === "/api/ingest" || path === "/api/ingest-tracker" || path === "/api/ingest-kits" || path === "/api/ingest-mascot" || path === "/api/export") {
-      if (!env.INGEST_SECRET || !(await sameSecret(request.headers.get("x-scout-secret") || "", env.INGEST_SECRET))) return json({ error: "unauthorized" }, 401);
-      if (path === "/api/ingest-tracker") return ingestTracker(request, env);
-      if (path === "/api/ingest-kits") return ingestKits(request, env);
-      if (path === "/api/ingest-mascot") return ingestMascot(request, env);
-      return path === "/api/ingest" ? ingest(request, env) : exportState(env);
-    }
-
-    // Accounts for other people (accounts.js): the landing page, log in, sign up, the questions, and each user's
-    // own page. It answers null for the owner's pages, which carry on below.
-    const accountPage = await routeAccounts(request, env, url, accountUi(env));
-    if (accountPage) return accountPage;
-
-    // Everything else needs the login cookie.
-    if (!(await validCookie(request, env))) {
-      return path.startsWith("/api/") ? json({ error: "unauthorized" }, 401) : redirect("/login");
-    }
-    if (request.method === "POST") {
-      if (path === "/api/tracker") return setTracker(request, env);
-      if (path === "/api/queue") return setQueue(request, env);
-      if (path === "/api/pass") return setPassed(request, env);
-      if (path === "/api/kit-answer") return setKitAnswer(request, env);
-      if (path === "/api/remove") return removeCard(request, env);
-      return json({ error: "not found" }, 404);
-    }
-    if (path === "/") return newPage(env, url.searchParams.get("view"));
-    if (path === "/programs") return programsPage(env);
-    if (path === "/tracker") return trackerPage(env);
-    if (path === "/settings") return settingsPage(env);
-    if (path === "/review") return reviewList(env);
-    const kitFile = path.match(/^\/review\/([a-z0-9-]+)\/(resume|letter)\.pdf$/);
-    if (kitFile) return kitPdf(env, kitFile[1], kitFile[2]);
-    const kitPage = path.match(/^\/review\/([a-z0-9-]+)$/);
-    if (kitPage) return reviewKit(env, kitPage[1]);
-    return new Response("not found", { status: 404 });
+  async fetch(request, env, ctx) {
+    const response = await route(request, env, ctx);
+    const out = new Response(response.body, response);
+    for (const [k, v] of Object.entries(SECURITY_HEADERS)) if (!out.headers.has(k)) out.headers.set(k, v);
+    return out;
   },
-
   async scheduled(event, env, ctx) {
     ctx.waitUntil(heartbeat(env, Date.now()));
+    ctx.waitUntil(runStudentAlerts(env, (key, fallback) => get(env, key, fallback)).catch((err) => console.log("student alerts failed:", err && err.message)));
   },
 };
+
+// Every request: public files, the cron's endpoints, accounts (accounts.js), then the owner's pages.
+async function route(request, env, ctx) {
+  const url = new URL(request.url);
+  const path = url.pathname;
+  // A POST from a browser must come from this site. SameSite cookies already block most cross-site posts; this
+  // closes the rest (and the cron, which sends no Origin, is unaffected).
+  const origin = request.headers.get("Origin");
+  if (request.method === "POST" && origin && origin !== url.origin) return new Response("forbidden", { status: 403 });
+
+  // Home-screen icons and the web app manifest are public: iOS fetches them without the login cookie.
+  if (ICONS[path]) return png(ICONS[path]);
+  // The borrowed panda is public like the icons: the login page shows it before anyone has a cookie.
+  const pandaFile = path.match(/^\/panda\/([a-z-]+)\.png$/);
+  if (pandaFile) return servePanda(env, pandaFile[1]);
+  if (path === "/manifest.webmanifest") return manifest();
+  if (path === "/api/health") return json({ ok: true, time: new Date().toISOString() });
+  if (path === "/about") return aboutPage(await validCookie(request, env));
+
+  // Cron endpoints: a shared secret, no cookie.
+  if (path === "/api/ingest" || path === "/api/ingest-tracker" || path === "/api/ingest-kits" || path === "/api/ingest-mascot" || path === "/api/export") {
+    if (!env.INGEST_SECRET || !(await sameSecret(request.headers.get("x-scout-secret") || "", env.INGEST_SECRET))) return json({ error: "unauthorized" }, 401);
+    if (path === "/api/ingest-tracker") return ingestTracker(request, env);
+    if (path === "/api/ingest-kits") return ingestKits(request, env);
+    if (path === "/api/ingest-mascot") return ingestMascot(request, env);
+    return path === "/api/ingest" ? ingest(request, env) : exportState(env);
+  }
+
+  // Accounts for other people (accounts.js): the landing page, log in, sign up, the questions, and each user's
+  // own page. It answers null for the owner's pages, which carry on below.
+  const accountPage = await routeAccounts(request, env, url, accountUi(env));
+  if (accountPage) return accountPage;
+
+  // Everything else needs the login cookie.
+  if (!(await validCookie(request, env))) {
+    return path.startsWith("/api/") ? json({ error: "unauthorized" }, 401) : redirect("/login");
+  }
+  if (request.method === "POST") {
+    if (path === "/api/tracker") return setTracker(request, env);
+    if (path === "/api/queue") return setQueue(request, env);
+    if (path === "/api/pass") return setPassed(request, env);
+    if (path === "/api/kit-answer") return setKitAnswer(request, env);
+    if (path === "/api/remove") return removeCard(request, env);
+    return json({ error: "not found" }, 404);
+  }
+  if (path === "/") return newPage(env, url.searchParams.get("view"));
+  if (path === "/programs") return programsPage(env);
+  if (path === "/tracker") return trackerPage(env);
+  if (path === "/settings") return settingsPage(env);
+  if (path === "/review") return reviewList(env);
+  const kitFile = path.match(/^\/review\/([a-z0-9-]+)\/(resume|letter)\.pdf$/);
+  if (kitFile) return kitPdf(env, kitFile[1], kitFile[2]);
+  const kitPage = path.match(/^\/review\/([a-z0-9-]+)$/);
+  if (kitPage) return reviewKit(env, kitPage[1]);
+  return new Response("not found", { status: 404 });
+}
 
 /* ---------------------------------------------------------------- cron: keep Scout running */
 
@@ -124,7 +145,8 @@ async function startRun(env, ageMin) {
 // What accounts.js needs from this file, passed in so the two never import each other.
 function accountUi(env) {
   return {
-    page, panda, esc, json, redirect, hmac, sameSecret, coHead,
+    page, panda, esc, json, redirect, hmac, sameSecret, coHead, safeUrl, when, cleanTitle, logoFor,
+    getKV: (key, fallback) => get(env, key, fallback),
     isOwner: (request) => validCookie(request, env),
     ownerLogin: (password, onFail) => ownerLogin(env, password, onFail),
     landingData: () => landingData(env),
@@ -132,35 +154,25 @@ function accountUi(env) {
   };
 }
 
-// What a new user's answers already match, from the shared list (multi-user plan U3 does the full per-user
-// scoring). For now it's simple: open postings whose role is in a field they picked, best score first.
-// The lists Scout reads are mostly tech, so fields outside tech match nothing yet, and the page says so.
-const FIELD_ROLES = {
-  "software engineering": ["swe"], "AI and machine learning": ["swe"], "product management": ["pm"],
-  "UX/UI and product design": ["design"], "IT and support": ["it"], "cybersecurity": ["it"],
-};
 // "AI Newsroom Developer Fellow - Hearst Journalism Fellowship Program" says Hearst twice on a Hearst card.
 function cleanTitle(title, company) {
   const i = String(title).lastIndexOf(" - ");
   return i > 0 && company && title.slice(i).toLowerCase().includes(String(company).toLowerCase()) ? title.slice(0, i) : title;
 }
 
+// What a student's answers already match: the shared list judged and scored for them (match.js), open postings
+// in a field they picked (or programs, if they asked for those), best first, one card per company.
 async function fitsFor(env, answers) {
   const roles = new Set((answers.fields || []).flatMap((f) => FIELD_ROLES[f] || []));
   const early = (answers.early || []).length > 0;
-  if (!roles.size && !early) return { count: 0, top: [], tech: false };
   const data = await get(env, "matches", { matches: [] });
-  const open = data.matches.filter((m) => m.eligibility !== "ineligible" && m.eligibility !== "closed"
-    && (roles.has(m.role) || (early && (m.role === "program" || m.early_career === "strong"))));
-  // One card per company in the preview, so five fellowships from one lab don't fill it.
-  // Postings with no US location are left out unless they said yes to working outside the US.
-  const usWhere = (m) => (m.locations || []).find((l) => /\b[A-Z]{2}\b(?!.*\b(?:CAN|UK)\b)|united states|\busa?\b|remote/i.test(l) && !/\b(UK|CAN|Canada|India|Germany|London|Toronto)\b/i.test(l));
-  const placed = answers.abroad === "yes" ? open : open.filter((m) => !(m.locations || []).length || usWhere(m));
+  const open = rank(data.matches || [], answers).filter((m) => isOpen(m)
+    && (!roles.size || roles.has(m.role) || (early && (m.role === "program" || m.early_career === "strong"))));
   const seen = new Set();
-  const varied = placed.filter((m) => !seen.has(m.company) && seen.add(m.company));
-  return { count: placed.length, tech: true,
-    top: varied.slice(0, 4).map((m) => ({ company: m.company, title: cleanTitle(m.title, m.company), score: m.score, logo: m.logo, url: m.url,
-      where: (answers.abroad === "yes" ? (m.locations || [])[0] : usWhere(m)) || "location not listed" })) };
+  const varied = open.filter((m) => !seen.has(m.company) && seen.add(m.company));
+  return { count: open.length, tech: true,
+    top: varied.slice(0, 4).map((m) => ({ company: m.company, title: cleanTitle(m.title, m.company), score: m.my.score, logo: m.logo, url: safeUrl(m.url),
+      where: (m.locations || []).find((l) => answers.abroad === "yes" || usLocation(l)) || "location not listed" })) };
 }
 
 // The landing page's stats row and phone notifications, from the last cron run. Only open postings that the
@@ -175,7 +187,7 @@ async function landingData(env) {
     .filter((m) => m.eligibility !== "ineligible" && m.eligibility !== "closed" && m.score >= 60)
     .sort((a, b) => (b.latest_posted || 0) - (a.latest_posted || 0))
     .slice(0, 8)
-    .map((m) => ({ company: m.company, title: m.title, score: m.score, where: (m.locations || [])[0] || "remote" }));
+    .map((m) => ({ company: m.company, title: cleanTitle(m.title, m.company), score: m.score, where: (m.locations || [])[0] || "location not listed" }));
   return { posts, checked, open, ruled, updated: data.generated_at ? when(data.generated_at) : "" };
 }
 
@@ -249,10 +261,20 @@ async function ingestTracker(request, env) {
 }
 
 // Newer wins per posting: a phone edit and a Mac edit each keep the row with the later "updated".
+// Newer wins, the same rule as scout/sync.py merge_tracker: compare the day first; on the same day the row with the
+// longer history wins (every change appends to it), then the fuller timestamp. Ties keep what the dashboard has,
+// so a same-day push from the Mac can't wipe a change made on the phone.
+function newerRow(a, b) {
+  const key = (r) => [String(r.updated || "").slice(0, 10), (r.history || []).length, String(r.updated || "")];
+  const [x, y] = [key(a), key(b)];
+  for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i];
+  return false;
+}
+
 async function mergeTracker(env, incoming) {
   const mine = await get(env, "tracker", {});
   for (const [key, row] of Object.entries(incoming)) {
-    if (row && typeof row === "object" && (!mine[key] || (row.updated || "") >= (mine[key].updated || ""))) mine[key] = row;
+    if (row && typeof row === "object" && (!mine[key] || newerRow(row, mine[key]))) mine[key] = row;
   }
   await put(env, "tracker", mine);
   return mine;
@@ -606,7 +628,6 @@ const VIEWS = [
   { id: "big", group: "for you", label: "big hitters", note: "big tech and the companies you're excited about. these ping your phone within the hour they post.", pick: (m) => !ruledOut(m) && m.tier <= 2 },
   { id: "freshman", group: "for you", label: "freshman friendly", note: "programs and roles that say they want first- and second-year students.", pick: (m) => !ruledOut(m) && (m.early_career === "strong" || m.role === "ambassador") },
   { id: "near", group: "for you", label: "near you", note: "NJ, NYC, and remote.", pick: (m) => !ruledOut(m) && m.location_class === "priority" },
-  { id: "longshots", group: "the rest", label: "long shots", note: "big hitters whose general intern pools mostly hire juniors and seniors. worth a try, don't count on it.", pick: (m) => !ruledOut(m) && m.tier <= 2 && m.early_career !== "strong" && m.role !== "program" },
   { id: "out", group: "the rest", label: "ruled out", note: "pages that ask for a different graduation year, grad students, or have closed. here so you can double check.", pick: ruledOut },
 ];
 

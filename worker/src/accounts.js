@@ -15,10 +15,14 @@
  */
 
 import { LANDING_CSS, LANDING_JS, landingBody } from "./landing.js";
+import { STUDENT_TABLES, STUDENT_CSS, studentHome, studentTracker, studentApi, studentExport, privacyPage, metaFor, deleteStudentData, studentDock } from "./student.js";
 
 const USER_COOKIE = "scout_u";
 const COOKIE_DAYS = 30;
-const PBKDF2_ROUNDS = 100000; // the most Workers' Web Crypto allows
+// 60,000 rounds keeps a login under the free plan's 10 ms of CPU per request (100,000 measured about 10 ms on its
+// own). The lockout below is what stops guessing; the rounds slow down a stolen database. Each hash stores its own
+// round count, so this can change without breaking existing passwords.
+const PBKDF2_ROUNDS = 60000;
 const LOCK_WINDOW = 15 * 60 * 1000;
 const LOCK_AFTER = 8;
 
@@ -29,8 +33,46 @@ const YEARS = Array.from({ length: 10 }, (_, i) => String(2026 + i));
 const HOURS = ["6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "12:00 PM", "3:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"];
 const QUIET = ["no quiet hours", "10:00 PM to 7:00 AM", "11:00 PM to 8:00 AM", "midnight to 9:00 AM", "during class (9:00 AM to 3:00 PM)"];
 const ZONES = ["Eastern (New York)", "Central (Chicago)", "Mountain (Denver)", "Pacific (Los Angeles)", "Alaska", "Hawaii", "outside the US"];
+// Companies students pick from, with logos from each company's public Simplify page (the same source as the
+// dashboard's logos). Picked names are saved as plain names, so the list can change without touching answers.
+const COMPANIES = [
+  ["Google", "https://storage.googleapis.com/simplify-imgs/companies/b60541c7-697d-49d9-889e-9e23ae58c480/logo.png"],
+  ["Apple", "https://storage.googleapis.com/simplify-imgs/companies/e75c9eb7-40e1-4539-abf9-6433a9946636/logo.png"],
+  ["Meta", "https://storage.googleapis.com/simplify-imgs/companies/274bb79f-19a9-4287-b5f6-ae4cd39636ec/logo.png"],
+  ["Amazon", "https://storage.googleapis.com/simplify-imgs/companies/6d9aadb2-0270-47c0-9e33-e0814f021086/logo.png"],
+  ["Microsoft", "https://storage.googleapis.com/simplify-imgs/companies/527fc2d9-67a9-4418-a8fa-662bdb033151/logo.png"],
+  ["NVIDIA", "https://storage.googleapis.com/simplify-imgs/companies/3cd4b225-8559-433f-8b19-7f0bd97cae5a/logo.png"],
+  ["Netflix", "https://storage.googleapis.com/simplify-imgs/companies/a9e95af8-fcce-4aab-8efa-a1f0c54a47ea/logo.png"],
+  ["OpenAI", "https://storage.googleapis.com/simplify-imgs/companies/b9abb3b3-3119-4b5c-af43-80caa62c25a9/logo.png"],
+  ["Anthropic", "https://storage.googleapis.com/simplify-imgs/companies/dd90aecf-23a9-478d-a952-262aa2b20ab2/logo.png"],
+  ["Spotify", "https://storage.googleapis.com/simplify-imgs/companies/098b9478-9768-4ce4-bcef-f3b5c087112a/logo.png"],
+  ["Figma", "https://storage.googleapis.com/simplify-imgs/companies/626fbafa-3868-42ac-8473-95841e851a35/logo.png"],
+  ["Adobe", "https://storage.googleapis.com/simplify-imgs/companies/2eaf773c-8884-44f1-a06f-0be1cd1975ef/logo.png"],
+  ["Stripe", "https://storage.googleapis.com/simplify-imgs/companies/bde55618-d289-4ffe-ad8f-21cdf7908c74/logo.png"],
+  ["Notion", "https://storage.googleapis.com/simplify-imgs/companies/b5ce16d4-556e-447e-aa11-09240edd3031/logo.png"],
+  ["Duolingo", "https://storage.googleapis.com/simplify-imgs/companies/e37657c0-dfec-49bf-8a99-6f29085f7afe/logo.png"],
+  ["Pinterest", "https://storage.googleapis.com/simplify-imgs/companies/93c13b86-3fc7-4bab-b5f2-f35e5c6bc637/logo.png"],
+  ["Airbnb", "https://storage.googleapis.com/simplify-imgs/companies/13cb2ceb-fab2-40ec-9bb3-8ccc1ddb2992/logo.png"],
+  ["Uber", "https://storage.googleapis.com/simplify-imgs/companies/88c7a242-03a9-4e70-a9d0-72029f41339a/logo.png"],
+  ["Salesforce", "https://storage.googleapis.com/simplify-imgs/companies/cac781d4-f8b7-40b8-a019-f39a9d475c93/logo.png"],
+  ["LinkedIn", "https://storage.googleapis.com/simplify-imgs/companies/139a269c-3ba1-4757-a561-242393abc8e1/logo.png"],
+  ["Snap", "https://storage.googleapis.com/simplify-imgs/companies/58aee0e3-e073-4178-b6a9-ff500c783b25/logo.png"],
+  ["Discord", "https://storage.googleapis.com/simplify-imgs/companies/6c1c79fe-1b10-4c34-acee-5223e0cf1575/logo.png"],
+  ["Roblox", "https://storage.googleapis.com/simplify-imgs/companies/97bd292f-5763-4685-b4c0-8c6163f4095c/logo.png"],
+  ["Tesla", "https://storage.googleapis.com/simplify-imgs/companies/d7232671-3132-4928-a7ef-1a42535d440d/logo.png"],
+  ["Datadog", "https://storage.googleapis.com/simplify-imgs/companies/badf5319-ccd0-4a62-886a-dc9cbb400ba1/logo.png"],
+  ["Cloudflare", "https://storage.googleapis.com/simplify-imgs/companies/b6bcb093-a0cb-4098-894c-a69c439d36ec/logo.png"],
+  ["Coinbase", "https://storage.googleapis.com/simplify-imgs/companies/717694f5-7321-4c6f-91a5-5a46b250f459/logo.png"],
+  ["Robinhood", "https://storage.googleapis.com/simplify-imgs/companies/3b1dc521-93dd-4da7-90e5-3cb2db2bdbff/logo.jpg"],
+  ["Canva", "https://storage.googleapis.com/simplify-imgs/companies/481f7584-cd1c-4822-b012-23e2513cadc2/logo.png"],
+  ["Bloomberg", "https://storage.googleapis.com/simplify-imgs/companies/5d93f136-9bf2-4c84-9bd4-a5fc4da19d2b/logo.png"],
+  ["IBM", "https://storage.googleapis.com/simplify-imgs/companies/bf3b0cf7-1238-4104-902d-dbb6f0d57449/logo.png"],
+  ["Oracle", "https://storage.googleapis.com/simplify-imgs/companies/78f74e67-f9af-4cea-bd6a-ccb9d92747f9/logo.png"],
+  ["Jane Street", "https://storage.googleapis.com/simplify-imgs/companies/89a554fe-af5f-44db-9c57-2cbceacc878f/logo.png"],
+];
+
 const FIELDS = ["software engineering", "product management", "data and analytics", "AI and machine learning", "UX/UI and product design",
-  "IT and support", "cybersecurity", "hardware", "quant and finance", "consulting", "marketing", "business and operations", "research", "something else"];
+  "IT and support", "cybersecurity", "hardware", "quant", "research"];
 
 // Each step is one screen. `why` is the line under the step title: people answer more when they know what it's for.
 // Field types: text, url, select, radio (pick one), chips (pick any), tags (comma list), textarea.
@@ -40,14 +82,14 @@ const STEPS = [
     why: "your school year and graduation date decide most of what you can apply to, so these come first.",
     fields: [
       { name: "name", label: "what should we call you?", type: "text", required: true, placeholder: "first name is fine" },
-      { name: "school", label: "school", type: "text", required: true, placeholder: "NJIT, Rutgers, Stanford... or \"not in school\"" },
-      { name: "degree", label: "what degree are you working on?", type: "radio", required: true, options: ["associate", "bachelor's", "master's", "PhD", "bootcamp", "none right now"] },
+      { name: "school", label: "school", type: "text", required: true, placeholder: "NJIT, Rutgers, Georgia Tech..." },
+      { name: "degree", label: "what degree are you working on?", type: "radio", required: true, options: ["bachelor's", "master's", "PhD", "associate"] },
       { name: "major", label: "major", type: "text", required: true, placeholder: "computer science" },
       { name: "minor", label: "second major or minor", type: "text", placeholder: "optional" },
       { name: "year", label: "year in school", type: "radio", required: true, options: ["first", "second", "third", "fourth", "fifth or more", "recent grad"] },
       { name: "grad", label: "when do you graduate?", type: "monthyear", required: true, why: "postings say \"graduating in 2028\" all the time. this is how scout skips the ones that aren't you." },
       { name: "gpa", label: "GPA", type: "text", placeholder: "optional, never shown to anyone", why: "only used when a posting has a cutoff." },
-      { name: "cross_major", label: "open to roles meant for other majors?", type: "radio", options: ["yes", "maybe", "no"] },
+      { name: "cross_major", label: "open to roles outside your major?", type: "radio", options: ["yes", "maybe", "no"] },
     ],
   },
   {
@@ -88,8 +130,8 @@ const STEPS = [
     id: "companies", short: "companies", lead: "who's on", head: "your list?", pose: "proud", color: "orange",
     why: "dream companies ping your phone within the hour they post. the rest wait for your digest.",
     fields: [
-      { name: "dream", label: "dream companies", type: "tags", placeholder: "Apple, Figma, Spotify" },
-      { name: "excited", label: "companies you'd be excited about", type: "tags", placeholder: "Duolingo, Notion, Pinterest" },
+      { name: "dream", label: "dream companies", type: "companies" },
+      { name: "excited", label: "companies you'd be excited about", type: "companies" },
       { name: "size", label: "company size", type: "chips", options: ["startup", "mid-size", "big tech", "no preference"] },
       { name: "industries", label: "industries you care about", type: "chips", options: ["health", "climate", "gaming", "finance", "government", "education", "media", "retail", "sports", "space"] },
       { name: "never_companies", label: "companies to never show", type: "tags", placeholder: "optional" },
@@ -112,7 +154,7 @@ const STEPS = [
       { name: "digest_time", label: "daily digest time", type: "select", options: HOURS, default: "7:00 PM" },
       { name: "timezone", label: "time zone", type: "select", options: ZONES },
       { name: "quiet", label: "quiet hours", type: "select", options: QUIET },
-      { name: "channel", label: "where should alerts go?", type: "chips", options: ["phone (the free ntfy app)", "email"] },
+      { name: "channel", label: "phone alerts?", type: "radio", options: ["phone (the free ntfy app)", "no alerts for now"], why: "free, through the ntfy app. setup takes a minute, on the you page." },
     ],
   },
   {
@@ -149,6 +191,7 @@ async function ensureSchema(env) {
       created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`),
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS login_fails (key TEXT NOT NULL, at INTEGER NOT NULL)`),
     env.DB.prepare(`CREATE INDEX IF NOT EXISTS login_fails_key ON login_fails (key, at)`),
+    ...STUDENT_TABLES.map((sql) => env.DB.prepare(sql)),
   ]);
   schemaReady = true;
 }
@@ -164,15 +207,20 @@ const enc = new TextEncoder();
 const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 const unhex = (s) => Uint8Array.from(s.match(/../g).map((h) => parseInt(h, 16)));
 
-async function hashPassword(password, saltHex = hex(crypto.getRandomValues(new Uint8Array(16)))) {
+async function hashPassword(password, saltHex = hex(crypto.getRandomValues(new Uint8Array(16))), rounds = PBKDF2_ROUNDS) {
   const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: unhex(saltHex), iterations: PBKDF2_ROUNDS }, key, 256);
-  return `pbkdf2$${PBKDF2_ROUNDS}$${saltHex}$${hex(bits)}`;
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: unhex(saltHex), iterations: rounds }, key, 256);
+  return `pbkdf2$${rounds}$${saltHex}$${hex(bits)}`;
 }
 
+// An unknown email still costs one hash (against a throwaway salt), so the response time doesn't say which emails
+// have accounts.
+const DUMMY_HASH = "pbkdf2$60000$00000000000000000000000000000000$0";
 async function checkPassword(password, stored, ui) {
-  const [, , salt] = String(stored).split("$");
-  return salt ? ui.sameSecret(await hashPassword(password, salt), stored) : false;
+  const [, rounds, salt] = String(stored || DUMMY_HASH).split("$");
+  if (!salt || !/^\d+$/.test(rounds)) return false;
+  const ok = await ui.sameSecret(await hashPassword(password, salt, Number(rounds)), String(stored || DUMMY_HASH));
+  return !!stored && ok;
 }
 
 async function userCookie(env, id, ui) {
@@ -191,11 +239,13 @@ async function currentUser(request, env, ui) {
   return userById(env, Number(id));
 }
 
+// keys: [name, limit] pairs. A guesser is stopped by the per-IP and per-email-and-IP keys at 8; the email on its
+// own takes 40 from anywhere, so a stranger can't lock someone out of their own account with a handful of tries.
 async function lockedOut(env, keys) {
   const since = Date.now() - LOCK_WINDOW;
-  for (const key of keys) {
+  for (const [key, limit] of keys) {
     const row = await env.DB.prepare("SELECT COUNT(*) AS n FROM login_fails WHERE key = ? AND at > ?").bind(key, since).first();
-    if (row && row.n >= LOCK_AFTER) return true;
+    if (row && row.n >= limit) return true;
   }
   return false;
 }
@@ -203,7 +253,7 @@ async function lockedOut(env, keys) {
 async function noteFail(env, keys) {
   const now = Date.now();
   await env.DB.batch([
-    ...keys.map((k) => env.DB.prepare("INSERT INTO login_fails (key, at) VALUES (?, ?)").bind(k, now)),
+    ...keys.map(([k]) => env.DB.prepare("INSERT INTO login_fails (key, at) VALUES (?, ?)").bind(k, now)),
     env.DB.prepare("DELETE FROM login_fails WHERE at < ?").bind(now - LOCK_WINDOW),
   ]);
 }
@@ -219,7 +269,16 @@ export async function routeAccounts(request, env, url, ui) {
   if (path === "/logout") {
     return ui.redirect("/", [["Set-Cookie", "scout=; Path=/; Max-Age=0"], ["Set-Cookie", `${USER_COOKIE}=; Path=/; Max-Age=0`]]);
   }
-  if (path === "/" && !isOwner) return user ? ui.redirect(user.done ? "/you" : `/start?step=${Math.min(user.step + 1, STEPS.length)}`) : landing(ui);
+  if (path === "/privacy") return privacyPage(ui, !!user);
+  if (path === "/" && !isOwner) {
+    if (!user) return landing(ui);
+    return user.done ? studentHome(env, user, url, ui) : ui.redirect(`/start?step=${resumeStep(user)}`);
+  }
+  if (user && !isOwner) {
+    if (path === "/tracker") return user.done ? studentTracker(env, user, ui) : ui.redirect(`/start?step=${resumeStep(user)}`);
+    if (path.startsWith("/api/u/")) return studentApi(request, env, user, path, ui);
+    if (path === "/you/export") return studentExport(env, user);
+  }
   if (path === "/hello") return landing(ui, isOwner || !!user);
   if (path === "/login") {
     if (request.method !== "POST") return loginPage(ui, "", "");
@@ -233,11 +292,12 @@ export async function routeAccounts(request, env, url, ui) {
   if (path === "/start" || path === "/you" || path === "/you/delete") {
     if (!user) return ui.redirect(isOwner ? "/" : "/login");
     if (path === "/you/delete") return request.method === "POST" ? deleteAccount(env, user, ui) : ui.redirect("/you");
-    if (path === "/you") return youPage(user, ui, url.searchParams.get("saved"), await ui.fits(user.answers));
-    return request.method === "POST" ? saveStep(request, env, user, url, ui) : stepPage(user, ui, url);
+    if (path === "/you") return youPage(user, ui, url.searchParams.get("saved"), await ui.fits(user.answers), await metaFor(env, user.id));
+    if (request.method === "POST") return saveStep(request, env, user, url, ui);
+    return stepPage(user, ui, url, url.searchParams.get("missing") ? missing(STEPS[stepIndex(url) - 1], user.answers) : []);
   }
-  // A signed-in user on any of the owner's pages goes to their own page; the owner's data is not theirs to see.
-  if (user && !isOwner) return path.startsWith("/api/") ? ui.json({ error: "unauthorized" }, 401) : ui.redirect("/you");
+  // A signed-in student on any of the owner's pages goes to their own; the owner's data is not theirs to see.
+  if (user && !isOwner) return path.startsWith("/api/") ? ui.json({ error: "unauthorized" }, 401) : ui.redirect("/");
   return null;
 }
 
@@ -314,19 +374,27 @@ async function login(request, env, ui) {
   const form = await request.formData();
   const email = String(form.get("email") || "").trim().toLowerCase();
   const password = String(form.get("password") || "");
-  // The owner's dashboard password still works on its own, with the email left blank.
-  if (!email) return ui.ownerLogin(password, () => loginPage(ui, "nope. try again.", ""));
+  const ip = request.headers.get("CF-Connecting-IP") || "local";
+  // The owner's dashboard password still works on its own, with the email left blank, under the same lockout:
+  // 8 misses from one IP, or 40 from everywhere, in 15 minutes.
+  if (!email) {
+    if (!env.DB) return ui.ownerLogin(password, () => loginPage(ui, "nope. try again.", ""));
+    await ensureSchema(env);
+    const keys = [[`owner-ip:${ip}`, LOCK_AFTER], ["owner", 40]];
+    if (await lockedOut(env, keys)) return loginPage(ui, "too many tries. give it 15 minutes.", "");
+    return ui.ownerLogin(password, async () => { await noteFail(env, keys); return loginPage(ui, "nope. try again.", ""); });
+  }
   if (!env.DB) return loginPage(ui, "accounts aren't open yet.", email);
   await ensureSchema(env);
-  const ip = request.headers.get("CF-Connecting-IP") || "local";
-  const keys = [`e:${email}`, `ip:${ip}`];
+  const keys = [[`ip:${ip}`, 20], [`e+ip:${email}|${ip}`, LOCK_AFTER], [`e:${email}`, 40]];
   if (await lockedOut(env, keys)) return loginPage(ui, "too many tries. give it 15 minutes.", email);
-  const row = await env.DB.prepare("SELECT id, pw, done, step FROM users WHERE email = ?").bind(email).first();
-  if (!row || !(await checkPassword(password, row.pw, ui))) {
+  const row = await env.DB.prepare("SELECT id, pw, done, step, answers FROM users WHERE email = ?").bind(email).first();
+  if (!(await checkPassword(password, row ? row.pw : null, ui)) || !row) {
     await noteFail(env, keys);
     return loginPage(ui, "that email and password don't match.", email);
   }
-  return ui.redirect(row.done ? "/you" : `/start?step=${Math.min(row.step + 1, STEPS.length)}`, [["Set-Cookie", await userCookie(env, row.id, ui)]]);
+  const next = row.done ? "/" : `/start?step=${resumeStep({ answers: safeParse(row.answers), step: row.step })}`;
+  return ui.redirect(next, [["Set-Cookie", await userCookie(env, row.id, ui)]]);
 }
 
 async function signup(request, env, ui) {
@@ -337,17 +405,20 @@ async function signup(request, env, ui) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 200) return signupPage(ui, "that email doesn't look right.", email);
   if (password.length < 10) return signupPage(ui, "the password needs 10 characters or more.", email);
   const ip = request.headers.get("CF-Connecting-IP") || "local";
-  if (await lockedOut(env, [`signup:${ip}`])) return signupPage(ui, "too many sign ups from here. try again in 15 minutes.", email);
+  if (await lockedOut(env, [[`signup:${ip}`, LOCK_AFTER]])) return signupPage(ui, "too many sign ups from here. try again in 15 minutes.", email);
   const taken = await env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(email).first();
   if (taken) return signupPage(ui, "there's already an account with that email. try logging in.", email);
   const now = new Date().toISOString();
+  // Two sign ups with one email at the same moment: the second hits the UNIQUE constraint, not a 500.
   const result = await env.DB.prepare("INSERT INTO users (email, pw, created_at, updated_at) VALUES (?, ?, ?, ?)")
-    .bind(email, await hashPassword(password), now, now).run();
-  await noteFail(env, [`signup:${ip}`]); // counts sign ups per IP with the same window as failed logins
+    .bind(email, await hashPassword(password), now, now).run().catch(() => null);
+  if (!result) return signupPage(ui, "there's already an account with that email. try logging in.", email);
+  await noteFail(env, [[`signup:${ip}`, LOCK_AFTER]]); // counts sign ups per IP with the same window as failed logins
   return ui.redirect("/start?step=1", [["Set-Cookie", await userCookie(env, result.meta.last_row_id, ui)]]);
 }
 
 async function deleteAccount(env, user, ui) {
+  await deleteStudentData(env, user.id);
   await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(user.id).run();
   return ui.redirect("/hello?bye=1", [["Set-Cookie", `${USER_COOKIE}=; Path=/; Max-Age=0`]]);
 }
@@ -381,6 +452,10 @@ body[data-page="start"] h1{padding-right:190px;text-wrap:balance} body[data-page
 .opt input{position:absolute;opacity:0;top:0;left:0;width:100%;height:100%;min-width:0;border:0;box-shadow:none;margin:0;padding:0;cursor:pointer;appearance:none;-webkit-appearance:none}
 .opt span{display:inline-block;font-weight:700;font-size:14px;background:#fff;border:var(--line) solid var(--ink);border-radius:999px;padding:8px 14px;box-shadow:3px 3px 0 var(--ink);transition:transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .15s,background-color .15s;user-select:none}
 .opt input:checked+span{background:var(--ink);color:var(--cream)}
+.co-opt span{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 5px}
+.co-opt img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--ink);flex:none}
+.opt input:checked+span img{border-color:var(--cream)} .co-opt input:checked+span::before{content:none}
+.q .sub{font-weight:700;font-size:var(--small);color:var(--muted);margin-top:12px}
 .opt input:checked+span::before{content:"✓ "}
 .opt input:focus-visible+span{outline:3px solid var(--ink);outline-offset:3px}
 @media (hover:hover){.opt span:hover{transform:translate(-1px,-1px) rotate(-1.5deg)}}
@@ -421,6 +496,18 @@ function fieldHtml(f, answers, bad, ui) {
     return `<fieldset class="${cls}"><legend>${ui.esc(f.label)}${need}</legend>${why}<div class="opts">${(many ? f.options.slice(0, 6) : f.options).map(chip).join("")}</div>${many
       ? `<details class="more"${rest.some((o) => picked.includes(o)) ? " open" : ""}><summary>more ${f.name === "fields" ? "fields" : "options"}</summary><div class="opts">${rest.map(chip).join("")}</div></details>` : ""}</fieldset>`;
   }
+  if (f.type === "companies") {
+    // Logo chips for the companies most students ask about, the rest folded, and a box for anyone else.
+    const picked = Array.isArray(v) ? v : [];
+    const known = new Set(COMPANIES.map(([n]) => n));
+    const chip = ([n, logo]) => `<label class="opt co-opt"><input type="checkbox" name="${f.name}" value="${ui.esc(n)}"${picked.includes(n) ? " checked" : ""}><span><img src="${ui.esc(logo)}" alt="" loading="lazy" onerror="this.remove()">${ui.esc(n)}</span></label>`;
+    const rest = COMPANIES.slice(12);
+    const others = picked.filter((n) => !known.has(n));
+    return `<fieldset class="${cls}"><legend>${ui.esc(f.label)}${need}</legend>${why}<div class="opts">${COMPANIES.slice(0, 12).map(chip).join("")}</div>
+      <details class="more"${rest.some(([n]) => picked.includes(n)) ? " open" : ""}><summary>more companies</summary><div class="opts">${rest.map(chip).join("")}</div></details>
+      <label class="sub" for="${id}-other">anyone else? separate with commas</label>
+      <input id="${id}-other" name="${f.name}_other" type="text" value="${ui.esc(others.join(", "))}" placeholder="a startup you love" autocomplete="off"></fieldset>`;
+  }
   if (f.type === "select") {
     const cur = v ?? f.default ?? "";
     return `<div class="${cls}"><label for="${id}">${ui.esc(f.label)}${need}</label>${why}<select id="${id}" name="${f.name}">${f.options.map((o) =>
@@ -451,7 +538,7 @@ async function stepPage(user, ui, url, bad = [], answers = user.answers, status 
   const fit = n >= 4 && !fromYou ? await ui.fits(answers) : null;
   const payoff = fit ? (fit.count
     ? `<p class="payoff"><b>${fit.count}</b> ${fit.count === 1 ? "posting fits" : "postings fit"} so far</p>`
-    : `<p class="payoff none">nothing fits yet. the lists scout reads are mostly tech today, and more fields are on the way.</p>`) : "";
+    : `<p class="payoff none">nothing open fits yet. scout checks the lists every hour.</p>`) : "";
   const dots = STEPS.map((_, i) => `<i class="${i + 1 < n ? "done" : i + 1 === n ? "now" : ""}"></i>`).join("");
   const body = `
     <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="${STEPS.length}" aria-valuenow="${n}" aria-label="step ${n} of ${STEPS.length}">${dots}</div>
@@ -480,6 +567,11 @@ function readStep(form, step) {
   const out = {};
   for (const f of step.fields) {
     if (f.type === "chips") out[f.name] = form.getAll(f.name).map(String).filter((o) => f.options.includes(o));
+    else if (f.type === "companies") {
+      const known = new Set(COMPANIES.map(([n]) => n));
+      const extra = String(form.get(`${f.name}_other`) || "").split(",").map((t) => t.trim().slice(0, 80)).filter(Boolean);
+      out[f.name] = [...new Set([...form.getAll(f.name).map(String).filter((n) => known.has(n)), ...extra])].slice(0, 40);
+    }
     else if (f.type === "radio" || f.type === "select") {
       const v = String(form.get(f.name) || "");
       out[f.name] = f.options.includes(v) ? v : "";
@@ -508,14 +600,39 @@ async function saveStep(request, env, user, url, ui) {
   const bad = missing(step, values);
   if (bad.length) return stepPage(user, ui, url, bad, answers, 400);
   const furthest = Math.max(user.step, n);
-  const done = user.done || (n === STEPS.length ? 1 : 0);
+  // Sign-up only finishes when every step's required answers are in. Jumping to the last step's URL used to mark
+  // an account done with no graduation year or fields, which breaks matching.
+  const gap = firstIncomplete({ answers });
+  const done = gap > STEPS.length ? 1 : 0;
+  if (n === STEPS.length && !done && url.searchParams.get("from") !== "you") {
+    await env.DB.prepare("UPDATE users SET answers = ?, step = ?, updated_at = ? WHERE id = ?").bind(JSON.stringify(answers), furthest, new Date().toISOString(), user.id).run();
+    return ui.redirect(`/start?step=${gap}&missing=1`);
+  }
   await env.DB.prepare("UPDATE users SET answers = ?, step = ?, done = ?, updated_at = ? WHERE id = ?")
     .bind(JSON.stringify(answers), furthest, done, new Date().toISOString(), user.id).run();
   if (url.searchParams.get("from") === "you") return ui.redirect(`/you?saved=${step.id}`);
   return ui.redirect(n === STEPS.length ? "/you?saved=all" : `/start?step=${n + 1}`);
 }
 
+const safeParse = (s) => { try { return JSON.parse(s || "{}"); } catch { return {}; } };
+
+// The first step with a required answer still missing, or STEPS.length + 1 when every required answer is in.
+function firstIncomplete(user) {
+  const i = STEPS.findIndex((s) => missing(s, user.answers || {}).length);
+  return i === -1 ? STEPS.length + 1 : i + 1;
+}
+
+// Where an unfinished sign-up picks up: the first gap, or the step after the furthest one they saved.
+function resumeStep(user) {
+  return Math.min(firstIncomplete(user), (user.step || 0) + 1, STEPS.length);
+}
+
 /* ---------------------------------------------------------------- the "you" page */
+
+// The you page's buttons: copy the topic, send a test ping. Same-origin JSON with a custom header, like student.js.
+const STUDENT_YOU_JS = `document.addEventListener("click",function(e){var b=e.target.closest("[data-u]");if(!b||b.disabled)return;
+if(b.dataset.u==="copy"){var t=document.getElementById(b.dataset.src);(navigator.clipboard?navigator.clipboard.writeText(t.value):Promise.reject()).then(function(){b.textContent="copied ✓";setTimeout(function(){b.textContent="copy"},1600)},function(){t.select()});return}
+if(b.dataset.u==="test"){b.disabled=true;b.textContent="sending...";fetch("/api/u/test",{method:"POST",headers:{"Content-Type":"application/json","x-scout":"1"},body:"{}"}).then(function(r){return r.json()}).then(function(r){b.textContent=r.ok?"sent. check your phone":"that didn't send. try again";b.disabled=false},function(){b.textContent="that didn't send. try again";b.disabled=false})}});`;
 
 const YOU_CSS = `
 body[data-page="you"]{--page:var(--teal)}
@@ -540,7 +657,11 @@ body[data-page="you"]{--page:var(--teal)}
 .answers-wrap:not([open])>summary{background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:12px 18px;margin:0 0 26px}
 .answers-wrap:not([open])>summary h2{color:var(--ink);margin:0} .answers-wrap:not([open])>summary .count{color:var(--muted)}
 .answers-wrap:not([open])>summary::after{content:"show ▾";margin-left:auto;font-weight:700}
-.danger{margin-top:80px} .danger button{background:none;border:0;padding:0;color:var(--on-page);opacity:.7;font:500 12px var(--font);text-decoration:underline;cursor:pointer}
+.alerts{margin:30px 0 0} .alerts h3{font-family:var(--display);text-transform:uppercase;font-size:20px;margin:0 0 6px} .alerts p{margin:0 0 8px} .alerts a{color:var(--ink);font-weight:700}
+.setup{margin:10px 0;padding-left:22px;display:grid;gap:12px} .setup li::marker{font-weight:700}
+.topic{display:flex;gap:8px;margin-top:8px} .topic input{flex:1;min-width:0;font:600 14px var(--mono);color:var(--ink);background:#fff;border:var(--line) solid var(--ink);border-radius:12px;padding:10px 12px;box-shadow:none}
+.you-links{margin:22px 0 0;font-weight:700;color:var(--on-page)} .you-links a{color:var(--on-page)}
+.danger{margin-top:40px} .danger button{background:none;border:0;padding:0;color:var(--on-page);opacity:.7;font:500 12px var(--font);text-decoration:underline;cursor:pointer}
 @media (min-width:900px){body[data-page="you"] main,body[data-page="you"] header{max-width:860px} body[data-page="you"] main{display:block} .firstlook{grid-template-columns:repeat(2,minmax(0,1fr))}
   .answers{display:block;columns:2;column-gap:16px} .answers .ans{break-inside:avoid;margin-bottom:16px}}
 `;
@@ -550,7 +671,7 @@ function shown(f, v) {
   return v || "";
 }
 
-function youPage(user, ui, saved, fit) {
+function youPage(user, ui, saved, fit, meta) {
   const a = user.answers;
   const first = (a.name || "").split(" ")[0] || "you";
   const all = saved === "all";
@@ -573,15 +694,32 @@ function youPage(user, ui, saved, fit) {
         <div class="title">${ui.esc(m.title)}</div>
         <div class="meta">${ui.esc(m.where)} · posting ↗</div>
       </a>`).join("")}</div>`
-    : `<h2>a first look</h2><p class="note">${fit.tech ? "nothing open fits your fields this hour. scout checks again every hour." : "the lists scout reads are mostly tech today, so nothing fits your fields yet. more fields are on the way."}</p>`;
+    : `<h2>a first look</h2><p class="note">${fit.tech ? "nothing open fits your fields this hour. scout checks again every hour." : "nothing open fits your fields yet. scout checks the lists every hour."}</p>`;
+  const phone = [].concat(a.channel || []).some((c) => String(c).startsWith("phone"));
+  const topicUrl = `https://ntfy.sh/${meta.topic}`;
+  const alerts = `
+    <section class="card alerts" id="alerts">
+      <h3>phone alerts</h3>
+      ${phone ? `<p>${a.speed === "tell me right away" ? "strong matches ping you within the hour they post" : a.speed === "once a week" ? "a digest every Monday" : "one digest a day"}${a.speed !== "tell me right away" && a.digest_time ? ` at ${ui.esc(a.digest_time)}` : ""}${a.quiet && a.quiet !== "no quiet hours" ? `, never ${ui.esc(a.quiet.replace(/^during class /, "during class, "))}` : ""}.</p>
+      <ol class="setup">
+        <li>get the free <b>ntfy</b> app (<a href="https://apps.apple.com/app/ntfy/id1625396347" target="_blank" rel="noopener">iPhone</a> or <a href="https://play.google.com/store/apps/details?id=io.heckel.ntfy" target="_blank" rel="noopener">Android</a>).</li>
+        <li>tap <b>+</b> and subscribe to this topic. it's yours alone, so keep it to yourself:
+          <div class="topic"><input id="topic" readonly value="${ui.esc(meta.topic)}" aria-label="your alert topic"><button class="btn" type="button" data-u="copy" data-src="topic" data-label="copy">copy</button></div></li>
+        <li><button class="btn accent" type="button" data-u="test">send a test ping</button></li>
+      </ol>
+      <p class="note">on a computer instead? open <a href="${ui.esc(topicUrl)}" target="_blank" rel="noopener">your topic in the browser</a>.</p>`
+      : `<p>alerts are off. turn them on under <a href="/start?step=7&from=you">alerts</a> by picking "phone".</p>`}
+    </section>`;
   const body = `
     <p class="you-line">${all ? `that's everything scout needs, ${ui.esc(first)}.` : `everything you told scout, ${ui.esc(first)}.`} ${all ? "change any answer whenever you want." : "tap edit to change anything."}</p>
     <details class="answers-wrap"${all ? "" : " open"}><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
       <div class="answers">${cards}</div>
     </details>
     ${matches}
+    ${alerts}
+    <p class="you-links"><a href="/you/export">download my data</a> · <a href="/privacy">privacy</a></p>
     <form class="danger" method="post" action="/you/delete" onsubmit="return confirm('delete your account and every answer? this can\\'t be undone.')"><button type="submit">delete my account</button></form>`;
-  return ui.page(body, { title: "You", page: "you", lead: all ? "nice," : "your", head: all ? "you're set" : "scout", mood: all ? "celebrate" : "proud", nav: false, links: `<a class="pill-link" href="/logout">log out</a>`, css: HEAD_CSS + YOU_CSS });
+  return ui.page(body, { title: "You", page: "you", lead: all ? "nice," : "your", head: all ? "you're set" : "scout", mood: all ? "celebrate" : "proud", nav: false, links: `<a class="pill-link" href="/logout">log out</a>`, dock: user.done ? studentDock("you") : "", css: HEAD_CSS + YOU_CSS + STUDENT_CSS, script: STUDENT_YOU_JS });
 }
 
 /* ---------------------------------------------------------------- the landing page */
