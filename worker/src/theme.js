@@ -2,7 +2,7 @@
  *
  * light  an orange-to-sky gradient, the sun rising out of the top-right corner
  * sky    dusty blue to pink, soft clouds drifting up as you scroll
- * dark   navy to deep teal, a lighthouse at the bottom of the page sweeping its beam
+ * dark   navy to deep teal, a lighthouse at the bottom of the page sweeping its beam (on a phone: no tower, just its stars, beam, glow, and rocks)
  *
  * The theme follows the clock where the student is (light from 7:00 AM to 6:59 PM, dark after), unless they pick one
  * with the button in the header; the pick is a per-browser convenience in localStorage. The choice is made by a
@@ -50,7 +50,8 @@ const CLOUDS = [[-14, 300, 340, 0.14, 1], [64, 40, 280, 0.24, 0.6], [72, 520, 38
 const cloud = ([x, y, w, speed, op]) => `<div class="cl" data-speed="${speed}" style="left:${x}%;top:${y}px;width:${w}px;height:${Math.round(w * 0.45)}px;opacity:${op}"><b class="belly"></b>${PUFFS.map(([px, py, r]) => `<i style="left:${px}%;top:${py}%;width:${Math.round(r * w / 100)}px;height:${Math.round(r * w / 100)}px"></i>`).join("")}</div>`;
 export const SCENE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="wisp" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="4" seed="9"/><feDisplacementMap in="SourceGraphic" scale="28"/><feGaussianBlur stdDeviation="3"/></filter></svg>
 <div class="sky-layer" aria-hidden="true">${CLOUDS.map(cloud).join("")}</div>
-<div class="scene" aria-hidden="true"><div class="sun"></div><div class="lh"><div class="beam"></div></div></div>`;
+<div class="scene" aria-hidden="true"><div class="sun"></div><div class="lh"><div class="beam"></div></div></div>
+<div class="night" aria-hidden="true"><i class="stars"></i><i class="glow"></i><i class="sweep"></i><svg class="rocks" viewBox="0 0 390 70" preserveAspectRatio="none"><path d="M0 70V54l18-9 14 4 22-14 20 10 12-3 18 12 30-6 16 8 40-4 24-16 18 6 14-10 26 12 22-4 16 9 28-8 20 10 22-6 10 3V70z"/><path class="sea" d="M0 62q24-6 48 0t48 0 48 0 48 0 48 0 48 0 48 0 48 0V70H0z"/></svg></div>`;
 
 /* ---------------------------------------------------------------- the views */
 
@@ -348,4 +349,25 @@ html:has(body.themed),body.themed{overflow-x:hidden;max-width:100%;overscroll-be
 .scene,.sky-layer{contain:paint}
 body.themed main>*{min-width:0;max-width:100%}
 @media (max-width:600px){.tape{right:-6px;top:-12px}}
+/* ---- phones: no lighthouse, just what was around it ----
+   The tower ate a third of an iPhone screen behind the cards. On a phone the dark theme keeps its night instead:
+   faint stars, the lamp's warm glow from past the bottom-right corner, its beam sweeping slowly up the sky, and
+   the rocks and sea it stood on. The layer is fixed to the screen like the clouds, and clips itself. */
+.night{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;contain:paint;display:none}
+.night i{position:absolute;display:block}
+.night .stars{inset:0 0 30% 0;opacity:.95;background-image:radial-gradient(1.5px 1.5px at 12% 8%,#f6f9dc,#0000),radial-gradient(1px 1px at 28% 18%,#f6f9dc,#0000),radial-gradient(1.5px 1.5px at 46% 5%,#f6f9dc,#0000),
+  radial-gradient(1px 1px at 63% 14%,#f6f9dc,#0000),radial-gradient(2px 2px at 82% 9%,#ffe7a8,#0000),radial-gradient(1px 1px at 8% 34%,#f6f9dc,#0000),radial-gradient(1.5px 1.5px at 37% 41%,#f6f9dc,#0000),
+  radial-gradient(1px 1px at 71% 30%,#f6f9dc,#0000),radial-gradient(1.5px 1.5px at 90% 44%,#f6f9dc,#0000),radial-gradient(1px 1px at 19% 58%,#f6f9dc,#0000),radial-gradient(1px 1px at 55% 62%,#f6f9dc,#0000),
+  radial-gradient(1.5px 1.5px at 77% 70%,#f6f9dc,#0000),radial-gradient(1px 1px at 33% 80%,#f6f9dc,#0000),radial-gradient(1px 1px at 4% 88%,#f6f9dc,#0000)}
+.night .glow{right:-120px;bottom:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,130,.55),rgba(255,190,90,.18) 40%,rgba(255,190,90,0) 70%)}
+.night .sweep{right:22px;bottom:40px;width:0;height:0}
+.night .sweep::before{content:"";position:absolute;left:0;top:0;width:150vh;height:200px;margin-top:-100px;transform-origin:0 50%;background:linear-gradient(90deg,rgba(255,226,150,.4),rgba(255,226,150,.12) 35%,rgba(255,226,150,0) 75%);clip-path:polygon(0 48%,100% 0,100% 100%,0 52%);filter:blur(6px);transform:rotate(215deg)}
+.night .rocks{position:absolute;left:0;right:0;bottom:0;width:100%;height:56px;fill:#0b0820;opacity:.85}
+.night .rocks .sea{fill:#0e3a44;opacity:.9}
+@keyframes sweep3{0%,100%{transform:rotate(200deg)}50%{transform:rotate(250deg)}}
+@keyframes twinkle{50%{opacity:.45}}
+@media (prefers-reduced-motion:no-preference){.night .sweep::before{animation:sweep3 14s ease-in-out infinite}.night .stars{animation:twinkle 6s ease-in-out infinite}}
+@media (max-width:600px){html[data-theme="dark"] .lh{display:none}html[data-theme="dark"] .night{display:block}}
+/* the landing page on a phone shows the lighthouse's beam and glow whatever the theme; stars only at night */
+@media (max-width:700px){body[data-page="landing"] .night{display:block}html:not([data-theme="dark"]) body[data-page="landing"] .night .stars{display:none}html:not([data-theme="dark"]) body[data-page="landing"] .night .rocks{opacity:.25}}
 `;
