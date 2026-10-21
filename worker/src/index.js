@@ -323,9 +323,9 @@ async function reviewList(env) {
       <div class="meta">kit saved ${esc(when(k.updated))}</div>
     </a>`).join("");
   const ready = index.filter((k) => state(k) !== "Applied").length;
-  const body = `<div class="intro">${panda(ready ? "thumbs" : "nap")}<p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from Scout.</p></div>
+  const body = `<div class="intro"><p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from Scout.</p></div>
     ${cards ? `<div class="kitgrid">${cards}</div>` : '<p class="note">no kits yet. run /prep on the Mac; it uploads each kit here.</p>'}`;
-  return page(body, { title: "Review", page: "review", lead: "read it,", head: "send it" });
+  return page(body, { title: "Review", page: "review", lead: "read it,", head: "send it", mood: ready ? "thumbs" : "nap" });
 }
 
 // The length a question asks for, read from its wording: "(about 120 words)", "max 150 words", "(3-4 sentences)",
@@ -587,10 +587,10 @@ async function programsPage(env) {
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`).join("");
   const body = `
-    <div class="intro">${panda(recent ? "judging" : "sunglasses")}<p class="note">${recent ? "a watched page changed today. go look. " : ""}these pages are where freshman programs show up first. scout reads them every hour and pings you when the words change.</p></div>
+    <div class="intro"><p class="note">${recent ? "a watched page changed today. go look. " : ""}these pages are where freshman programs show up first. scout reads them every hour and pings you when the words change.</p></div>
     <h2>watched pages</h2>${watched || '<p class="note">no pages yet.</p>'}
     <h2>found in the lists</h2>${finds || '<p class="note">none in the lists right now. the pages above are the early warning.</p>'}`;
-  return page(body, { title: "Programs", page: "programs", lead: "built for", head: "freshmen" });
+  return page(body, { title: "Programs", page: "programs", lead: "built for", head: "freshmen", mood: recent ? "judging" : "sunglasses" });
 }
 
 async function trackerPage(env) {
@@ -615,9 +615,10 @@ async function trackerPage(env) {
     </article>`).join("");
   const body = `
     <div class="pipeline">${pipeline}</div>
-    ${rows.length ? `<div class="intro">${panda(counts.Offer || counts.Interview || counts.OA ? "celebrate" : counts.Applied ? "proud" : "close")}<p class="note">${rows.length} tracked. changes here reach the repo on the next cron run. you still click submit yourself.</p></div>` : ""}
-    ${list || `<div class="empty">${panda("bamboo")}<p class="note">nothing tracked yet. tap "prep this" on New, or run /prep.</p></div>`}`;
-  return page(body, { title: "Tracker", page: "tracker", lead: "where", head: "things stand" });
+    ${rows.length ? `<p class="note">${rows.length} tracked. changes here reach the repo on the next cron run. you still click submit yourself.</p>` : ""}
+    ${list || '<p class="note">nothing tracked yet. tap "prep this" on New, or run /prep.</p>'}`;
+  const mood = !rows.length ? "bamboo" : counts.Offer || counts.Interview || counts.OA ? "celebrate" : counts.Applied ? "proud" : "close";
+  return page(body, { title: "Tracker", page: "tracker", lead: "where", head: "things stand", mood });
 }
 
 async function settingsPage(env) {
@@ -665,13 +666,13 @@ function aboutPage(loggedIn) {
 /* ---------------------------------------------------------------- html */
 
 function page(body, opts, status = 200) {
-  const { title, page: name, lead, head, nav = true } = opts;
+  const { title, page: name, lead, head, nav = true, mood = "" } = opts;
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="${PAGE_COLORS[name] || "#cf6a2e"}">
 <link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Scout · ${esc(title)}</title><style>${tokens}${BASE_CSS}</style></head><body data-page="${esc(name)}">
 <header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
 <main>
-  <h1><span class="lead">${esc(lead)}</span><span class="head">${esc(head)}</span></h1>
+  <h1><span class="lead">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>
   ${body}
 </main>
 ${nav ? NAV.replace(`href="/${name === "new" ? "" : name}"`, `href="/${name === "new" ? "" : name}" class="on"`) : ""}
@@ -886,7 +887,7 @@ h2::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;bor
 .co{display:flex;align-items:center;gap:10px;min-width:0}
 .logo{position:relative;flex:none;width:40px;height:40px;border:2.5px solid var(--ink);border-radius:11px;background:var(--badge);box-shadow:2px 2px 0 var(--ink);overflow:hidden;display:grid;place-items:center}
 .logo b{font-family:var(--display);font-size:18px;color:var(--ink);line-height:1}
-.logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:3px}
+.logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .kitcard .co{margin:2px 0 4px}
 /* the borrowed panda: art with a transparent background, bobbing gently (reduced motion stops it below) */
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -896,6 +897,8 @@ h2::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;bor
 .intro{display:flex;align-items:center;gap:12px;margin:0 0 14px;max-width:760px} .intro .panda{width:84px;flex:none} .intro .note{margin:0}
 .empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:10px 0 18px} .empty .panda{width:150px}
 .login-panda{width:150px;margin:0 auto -6px}
+h1{position:relative} .hero-panda{position:absolute;right:0;top:0;width:clamp(88px,24vw,200px)}
+@media (min-width:900px){.hero-panda{top:-14px}}
 .about-panda{float:right;width:110px;margin:-6px -6px 4px 10px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important}}
 `;
