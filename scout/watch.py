@@ -39,6 +39,7 @@ def run(raw_by_source: dict[str, list], targets: dict, weights: dict, *, check_p
 
     items = listings.normalize_all(raw_by_source)
     counts["rows"] = len(items)
+    share_degrees(items)
     items = [matching.describe(x, targets) for x in items]
 
     kept: list[dict] = []
@@ -72,6 +73,23 @@ def run(raw_by_source: dict[str, list], targets: dict, weights: dict, *, check_p
     kept.sort(key=lambda x: (x.get("eligibility") not in ("ineligible", "closed"), x["score"], x.get("date_posted", 0)), reverse=True)
     counts["kept"] = len(kept)
     return kept, counts
+
+
+def share_degrees(items: list[dict]) -> None:
+    """The community list records no degrees, so a PhD-only posting it carries would pass the graduate filter
+    even though Simplify's copy of the same posting says PhD. Rows with no degrees borrow them from another
+    row with the same link, or the same company and title. (Sony's AI Ethics intern came through this way.)"""
+    from scout.dedupe import normalize_url
+    by_url, by_name = {}, {}
+    for x in items:
+        if x.get("degrees"):
+            by_url.setdefault(normalize_url(x.get("url", "")), x["degrees"])
+            by_name.setdefault((x.get("company", "").lower(), x.get("title", "").lower()), x["degrees"])
+    for x in items:
+        if not x.get("degrees"):
+            found = by_url.get(normalize_url(x.get("url", ""))) or by_name.get((x.get("company", "").lower(), x.get("title", "").lower()))
+            if found:
+                x["degrees"] = list(found)
 
 
 def on_board(item: dict) -> bool:

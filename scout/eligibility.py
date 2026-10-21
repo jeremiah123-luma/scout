@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE_PATH = ROOT / "data" / "eligibility_cache.json"
 CACHE_DAYS = 14
 CLOSED = "\0closed"  # fetch_text's answer for a posting the board says is gone
-CACHE_VERSION = 4  # bump when the verdict rules change, so old verdicts are re-read
+CACHE_VERSION = 5  # bump when the verdict rules change, so old verdicts are re-read
 
 _TAGS = re.compile(r"<script.*?</script>|<style.*?</style>|<[^>]+>", re.S | re.I)
 _YEAR = re.compile(r"\b(20[2-3][0-9])\b")
@@ -66,6 +66,26 @@ _UPPERCLASS = re.compile(
 # not being enrolled. A current college student is ruled out whatever the graduation year.
 _NOT_ENROLLED = re.compile(
     r"\b(?:not|cannot|can't|can not)\s+(?:be )?(?:currently )?enrolled in (?:an? |any )?(?:accredited )?(?:u\.?s\.? )?(?:college|university|degree)", re.I)
+
+
+# Degree level. Sony's AI Ethics intern says "Completed or currently pursuing a PhD in Computer Science"; a page
+# like that names no graduation year, so the year rules above never see it. A sentence that also names a
+# bachelor's or undergraduate degree ("pursuing a BS, MS, or PhD") is open to him and does not count.
+_GRAD_DEGREE = re.compile(
+    r"\b(?:pursuing|enrolled in|currently in|candidates? for|working toward|working towards)\b[^.;]{0,40}?"
+    r"\b(ph\.?\s?d\.?|doctoral|doctorate|master'?s|graduate degree)"
+    r"|\b(ph\.?\s?d\.?|doctoral|master'?s)\s+(?:students?|candidates?|programs?)\b", re.I)
+_UNDERGRAD = re.compile(r"\b(bachelor'?s?|undergrad\w*|b\.?s\.?|b\.?a\.?|bs/ms|ba/bs)\b", re.I)
+
+
+def graduate_only(text: str) -> str:
+    """'PhD' or "master's" when the page asks only for graduate students, else ''."""
+    for sentence in re.split(r"(?<=[.;!?•●])\s+|\n", text):
+        m = _GRAD_DEGREE.search(sentence)
+        if m and not _UNDERGRAD.search(sentence):
+            level = (m.group(1) or m.group(2) or "").lower()
+            return "master's" if level.startswith("master") else "graduate" if "graduate" in level else "PhD"
+    return ""
 
 
 def is_readable_board(url: str) -> bool:
@@ -131,6 +151,9 @@ def verdict_from_text(text: str, graduation_year: int, this_year: int | None = N
     """
     if _NOT_ENROLLED.search(_flat(text)):
         return "ineligible", "page requires not being enrolled in college"
+    level = graduate_only(text)
+    if level:
+        return "ineligible", f"page asks for {level} students"
     ranges = grad_ranges(text, this_year)
     if ranges:
         fits = [r for r in ranges if r[0] <= graduation_year <= r[1]]

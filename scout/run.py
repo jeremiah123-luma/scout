@@ -57,7 +57,8 @@ def score_everything(sender: Sender, now: float, allow_network: bool = True):
     if not raw:
         return [], weights
     check_row_count(sender, sum(len(rows) for rows in raw.values()))
-    matches, counts = watch.run(raw, targets, weights, check_pages=40, allow_network=allow_network, now=now,
+    # Every row the dashboard shows (write_matches keeps 300) gets its page read; verdicts are cached for 14 days.
+    matches, counts = watch.run(raw, targets, weights, check_pages=300, allow_network=allow_network, now=now,
                                 save=not sender.dry_run)
     # Logos only for the rows the dashboard shows (write_matches keeps the top 300), read once per company.
     logo_cache = logos.load()

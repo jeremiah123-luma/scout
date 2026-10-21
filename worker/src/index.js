@@ -535,7 +535,7 @@ async function newPage(env) {
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.date_posted)}${m.eligibility_note && m.eligibility !== "unknown" ? " · " + esc(m.eligibility_note) : ""}</div>
       <details class="why"><summary>why ${m.score}?</summary><div class="meta mono">${esc(breakdown(m))}</div></details>
       <div class="actions">
-        <button class="btn accent" data-act="queue" ${queued.has(m.key) ? "disabled" : ""}>${queued.has(m.key) ? "queued ✓" : "prep this"}</button>
+        ${m.eligibility === "ineligible" || m.eligibility === "closed" ? `<button class="btn" disabled>${m.eligibility === "closed" ? "closed" : "not eligible"}</button>` : `<button class="btn accent" data-act="queue" ${queued.has(m.key) ? "disabled" : ""}>${queued.has(m.key) ? "queued ✓" : "prep this"}</button>`}
         <button class="btn" data-act="pass">pass</button>
         <a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a>
       </div>
