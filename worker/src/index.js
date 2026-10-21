@@ -586,7 +586,8 @@ async function removeCard(request, env) {
   if (kind === "tracker" && key) {
     const tracker = await get(env, "tracker", {});
     if (!tracker[key]) return json({ error: "no such row" }, 404);
-    const now = new Date().toISOString();
+    // New York date first, like every other tracker stamp, then the time, so it outranks a same-day copy from the Mac.
+    const now = `${nyDate()}T${new Date().toISOString().slice(11)}`;
     tracker[key].state = "Passed";
     tracker[key].updated = now;
     (tracker[key].history ||= []).push({ date: nyDate(), state: "Passed", note: "removed on the dashboard" });
