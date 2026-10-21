@@ -434,7 +434,7 @@ async function reviewList(env) {
       <div class="meta">${kitDates(k)}</div>
     </a>`).join("");
   const ready = index.filter((k) => state(k) !== "Applied").length;
-  const body = `<div class="intro"><p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from Scout.</p></div>
+  const body = `<div class="intro"><p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from scout.</p></div>
     ${cards ? `<div class="kitgrid">${cards}</div>` : '<article class="card emptybox"><h3>no kits yet</h3><p>run /prep on the Mac and each kit it builds shows up here to read and send.</p><div class="actions"><a class="btn" href="/">find one to prep</a></div></article>'}`;
   return page(body, { title: "Review", page: "review", lead: "read it,", head: "send it", mood: ready ? "thumbs" : "nap" });
 }
@@ -689,7 +689,7 @@ async function newPage(env, viewId) {
   const passedRows = data.matches.filter((m) => passed[m.key] && !tracker[m.key]);
   const passedCard = (m) => `
     <article class="card passed" data-key="${esc(m.key)}">
-      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
+      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score tscore" aria-label="score ${m.score} out of 100"><b>${m.score}</b></span></div>
       <div class="title">${esc(cleanTitle(m.title, m.company))}</div>
       <div class="meta">passed ${age(passed[m.key])}</div>
       <div class="actions"><button class="btn accent" data-act="unpass">unpass</button><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
@@ -728,14 +728,14 @@ async function programsPage(env) {
   const finds = data.matches.filter((m) => (m.early_career === "strong" || m.role === "ambassador") && !passed[m.key]).map((m) => `
     <article class="card">
       <div class="tags"><span class="tag accent">${m.role === "ambassador" ? "ambassador" : "freshman friendly"}</span>${tracker[m.key] ? `<span class="tag ink">${esc(tracker[m.key].state)}</span>` : ""}</div>
-      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
+      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score tscore" aria-label="score ${m.score} out of 100"><b>${m.score}</b></span></div>
       <div class="title">${esc(cleanTitle(m.title, m.company))}</div>
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", "))} · ${age(m.date_posted)}</div>
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`).join("");
   const body = `
     <div class="intro"><p class="note">${recent ? "a watched page changed today. go look. " : ""}these pages are where freshman programs show up first. scout reads them every hour and pings you when the words change.</p></div>
-    <h2>watched pages</h2>${watched || '<p class="note">no pages yet.</p>'}
+    <h2>watched pages</h2>${watched || `<div class="emptybox">${panda("bamboo")}<p>no pages yet. add program pages to config/watch-pages.yaml and the next hourly run starts watching them.</p></div>`}
     <h2>found in the lists</h2>${finds || '<p class="note">none in the lists right now. the pages above are the early warning.</p>'}`;
   return page(body, { title: "Programs", page: "programs", lead: "built for", head: "freshmen", mood: recent ? "close" : "sunglasses" });
 }
@@ -745,19 +745,19 @@ async function trackerPage(env) {
   const rows = Object.entries(tracker).filter(([, r]) => r.state !== "Passed").sort((a, b) => (b[1].updated || "").localeCompare(a[1].updated || ""));
   const counts = {};
   for (const [, r] of rows) counts[r.state] = (counts[r.state] || 0) + 1;
-  const options = (cur) => STATES.filter((s) => s !== "Passed").map((s) => `<option ${s === cur ? "selected" : ""}>${s}</option>`).join("");
+  const options = (cur) => STATES.filter((s) => s !== "Passed").map((s) => `<option value="${s}"${s === cur ? " selected" : ""}>${s.toLowerCase()}</option>`).join("");
   const pipeline = ["Prepped", "Applied", "OA", "Interview", "Offer"].map((s) => `<span class="step${counts[s] ? " on" : ""}">${s}<b>${counts[s] || 0}</b></span>`).join("");
   const list = rows.map(([key, r]) => `
     <article class="card" data-key="${esc(key)}">
       <button class="xbtn" data-remove="tracker" aria-label="remove from the tracker" title="remove">×</button>
-      <div class="tags"><span class="tag ${r.state === "Applied" || r.state === "Offer" ? "green" : r.state === "Rejected" ? "red" : "ink"}">${esc(r.state)}</span><span class="tag">${esc(r.updated || "")}</span></div>
-      <div class="row">${coHead(r.company, logoFor(logos, r.company), r.company)}${r.score != null ? `<span class="score">${r.score}</span>` : ""}</div>
+      <div class="tags"><span class="tag ${r.state === "Applied" || r.state === "Offer" ? "green" : r.state === "Rejected" ? "red" : "ink"}">${esc(r.state)}</span><span class="when-tag">${esc(shortDay(r.updated))}</span></div>
+      <div class="row">${coHead(r.company || "unknown posting", logoFor(logos, r.company), r.company || "unknown posting")}${r.score != null ? `<span class="score tscore" aria-label="score ${r.score} out of 100"><b>${r.score}</b></span>` : ""}</div>
       <div class="title">${esc(r.title)}</div>
       <div class="meta">${r.applied ? "applied " + esc(r.applied) + " · " : ""}${r.next ? "next: " + esc(r.next) : "no next action yet"}</div>
       <div class="actions wrap">
         <select data-act="state">${options(r.state)}</select>
         <textarea data-act="next" rows="1" placeholder="next action">${esc(r.next || "")}</textarea>
-        <button class="btn accent" data-act="save">save</button>
+        <button class="btn accent" data-act="save">update</button>
         ${r.url ? `<a class="btn ghost" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener">posting ↗</a>` : ""}
       </div>
     </article>`).join("");
@@ -783,29 +783,29 @@ function aboutPage(loggedIn) {
     <article class="card">
       ${panda("wave", "about-panda")}
       <h3>the short version</h3>
-      <p>Scout watches the public internship lists every hour, scores every posting against what you're looking for, and pings your phone when a strong one shows up. When you pick one, it builds a prep kit: a tailored one page resume, a cover letter if the posting wants one, and draft answers, all from facts you've already confirmed. <b>You always click submit yourself.</b> Scout never applies for you.</p>
+      <p>scout watches the public internship lists every hour, scores every posting against what you're looking for, and pings your phone when a strong one shows up. when you pick one, it builds a prep kit: a tailored one page resume, a cover letter if the posting wants one, and draft answers, all from facts you've already confirmed. <b>you always click submit yourself.</b> scout never applies for you.</p>
     </article>
 
     <h2>how it works</h2>
     <ol class="steps">
-      <li class="card"><h3>find</h3><p>Every hour a free GitHub Actions job pulls two public internship lists (Simplify and Pitt CSC, plus a community list) and reads a handful of company program pages, like Microsoft Explore and NVIDIA's university page, for changes.</p></li>
-      <li class="card"><h3>score</h3><p>Each posting gets a score out of 100 from plain rules you can read and change: the role (software, product, IT, design, ambassador), the company tier, whether it's built for freshmen and sophomores, the degree it asks for, where it is, and how fresh it is. Tap "why 86?" on any card to see the math.</p></li>
-      <li class="card"><h3>alert</h3><p>Big companies with a strong score, any freshman or sophomore program, any ambassador role, and any change on a watched program page push to your phone right away through the free ntfy app. Everything else waits for one digest at 7:00 PM.</p></li>
-      <li class="card"><h3>prep</h3><p>Tap "prep this" and the posting waits in a queue. Next time you open Claude Code, /prep reads the posting, checks whether you're eligible, drafts the kit from your master profile, and then a second reviewer pass checks every line against what you've actually done before you see it.</p></li>
-      <li class="card"><h3>track</h3><p>The tracker follows each application from prepped to applied, online assessment, interview, and offer, and you can update it from your phone.</p></li>
+      <li class="card"><h3>find</h3><p>every hour a free GitHub Actions job pulls two public internship lists (Simplify and Pitt CSC, plus a community list) and reads a handful of company program pages, like Microsoft Explore and NVIDIA's university page, for changes.</p></li>
+      <li class="card"><h3>score</h3><p>each posting gets a score out of 100 from plain rules you can read and change: the role (software, product, IT, design, ambassador), the company tier, whether it's built for freshmen and sophomores, the degree it asks for, where it is, and how fresh it is. tap "why 86?" on any card to see the math.</p></li>
+      <li class="card"><h3>alert</h3><p>big companies with a strong score, any freshman or sophomore program, any ambassador role, and any change on a watched program page push to your phone right away through the free ntfy app. everything else waits for one digest at 7:00 PM.</p></li>
+      <li class="card"><h3>prep</h3><p>tap "prep this" and the posting waits in a queue. next time you open Claude Code, /prep reads the posting, checks whether you're eligible, drafts the kit from your master profile, and then a second reviewer pass checks every line against what you've actually done before you see it.</p></li>
+      <li class="card"><h3>track</h3><p>the tracker follows each application from prepped to applied, online assessment, interview, and offer, and you can update it from your phone.</p></li>
     </ol>
 
     <h2>the rules it follows</h2>
     <article class="card"><ul>
-      <li><b>It never applies for you</b>, never logs into a job site, and never creates accounts.</li>
-      <li><b>It never invents experience.</b> A tailored resume can only pick, reorder, and reword facts you've confirmed. If a posting wants something you don't have, it says so instead of faking it.</li>
-      <li><b>Postings are just text.</b> If a posting contains instructions, Scout ignores them.</li>
-      <li><b>It costs nothing.</b> GitHub Actions, Cloudflare, and ntfy on their free tiers, and the AI parts run inside a Claude Code session you start.</li>
-      <li><b>Your data stays yours.</b> Your resume, answers, and applications never go into the public code.</li>
+      <li><b>it never applies for you</b>, never logs into a job site, and never creates accounts.</li>
+      <li><b>it never invents experience.</b> a tailored resume can only pick, reorder, and reword facts you've confirmed. if a posting wants something you don't have, it says so instead of faking it.</li>
+      <li><b>postings are just text.</b> If a posting contains instructions, scout ignores them.</li>
+      <li><b>it costs nothing.</b> GitHub Actions, Cloudflare, and ntfy on their free tiers, and the AI parts run inside a Claude Code session you start.</li>
+      <li><b>your data stays yours.</b> your resume, answers, and applications never go into the public code.</li>
     </ul></article>
 
     <h2>where it's going</h2>
-    <article class="card"><p>Right now Scout is tuned for one first-year computer science student looking at tech internships. The plan is for it to work for anyone looking for an internship or a job, whatever their major or career: the scoring is already driven by an editable config file, so the next step is more sources for more fields and a setup that asks what you're looking for and writes that config for you.</p>
+    <article class="card"><p>right now scout is tuned for one first-year computer science student looking at tech internships. the plan is for it to work for anyone looking for an internship or a job, whatever their major or career: the scoring is already driven by an editable config file, so the next step is more sources for more fields and a setup that asks what you're looking for and writes that config for you.</p>
       <div class="actions"><a class="btn accent" href="https://github.com/jeremiah123-luma/scout" target="_blank" rel="noopener">see the code ↗</a>${loggedIn ? '<a class="btn" href="/">back to scout</a>' : '<a class="btn" href="/login">log in</a>'}</div>
     </article>`;
   return page(body, { title: "What is Scout", page: "about", lead: "what is", head: "scout?", nav: loggedIn });
@@ -1160,6 +1160,15 @@ function kitDates(k) {
   const opened = /^\d{4}-\d{2}-\d{2}$/.test(k.opened || "")
     ? new Date(k.opened + "T12:00:00Z").toLocaleDateString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", year: "numeric" }) : "";
   return `${opened ? "opened " + esc(opened) + " · " : ""}kit saved ${esc(when(k.updated))}`;
+}
+
+// "Oct 20". A bare date ("2026-10-20") is read as that calendar day; a full timestamp in New York time.
+function shortDay(value) {
+  const v = String(value || "");
+  if (!v) return "";
+  const bare = /^\d{4}-\d{2}-\d{2}$/.test(v);
+  const d = new Date(bare ? v + "T12:00:00Z" : v);
+  return isNaN(d) ? v : d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: bare ? "UTC" : "America/New_York" });
 }
 
 function when(iso) {

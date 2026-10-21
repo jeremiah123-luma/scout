@@ -271,4 +271,38 @@ body.themed[data-page="about"] .dock{max-width:860px}
 body[data-page="landing"] :is(.card,.stats,.how-list li){-webkit-backdrop-filter:none;backdrop-filter:none}
 body[data-page="landing"] .lh{height:min(40%,720px)}
 @media (max-width:700px){body[data-page="landing"] .lh{display:none}}
+/* tracker scores look like the feed's: a handwritten number in a rounded box */
+.tscore{background:none!important;padding:0!important;animation:none!important}
+.tscore b{display:grid;place-items:center;width:52px;height:52px;border-radius:14px;font:400 30px/1 var(--hand);background:var(--sbg);color:var(--sfg)!important;border:2px solid #1a1333}
+/* log in and sign up: the headline and the card start together near the top, not floating mid-page */
+@media (min-width:900px){body.themed[data-page="login"] main,body.themed[data-page="signup"] main{align-items:start;min-height:0;padding-top:110px}
+  body.themed[data-page="login"] h1,body.themed[data-page="signup"] h1{margin-top:6px}}
+/* ---- review pass 3 ---- */
+/* dark: no dim bar behind headline words; where a page underlines its word, a clean gold line under it */
+html[data-theme="dark"] body.themed h1 .head{background:none}
+html[data-theme="dark"] body.themed:is([data-page="login"],[data-page="signup"],[data-page="start"],[data-page="you"]) h1 .head,html[data-theme="dark"] body.themed .hero-h1 mark{background:none;text-decoration:underline #ffc93c;text-decoration-thickness:6px;text-underline-offset:6px;text-decoration-skip-ink:none}
+/* dark: header buttons stay solid so they read over the art */
+html[data-theme="dark"] :is(.theme-btn,body.themed .pill-link){background:rgba(26,19,51,.82);border-color:#f6f9dc55}
+/* landing: a smaller sun that clears the header and the handwritten line, and the clouds a little quieter */
+body[data-page="landing"] .sun{width:min(22vw,230px)!important;right:-90px!important;top:-100px!important}
+body[data-page="landing"] .sky-layer{opacity:.85}
+@media (max-width:600px){body[data-page="landing"] .sun{width:150px!important;right:-70px!important;top:-70px!important}}
+/* room under the big headlines */
+body.themed:is([data-page="start"],[data-page="review"],[data-page="about"],[data-page="programs"]) h1{margin-bottom:18px}
+/* the sign-up questions card: sky's soft float, like every other sky card */
+body.themed .qcard{background:var(--card);border:2px solid var(--edge);border-radius:20px;box-shadow:var(--cshadow);color:#1a1333}
+/* log in / sign up: the small note under the password stays readable */
+body.themed .auth .note{color:#5b5673} body.themed .auth{color:#1a1333}
+/* you page, desktop: "your answers" lines up with the top of the left column */
+@media (min-width:900px){body.themed[data-page="you"] .answers-wrap>summary h2{margin-top:0}}
+body.themed .alerts .turn-on{margin-top:14px}
+/* the tape reads at any size */
+.tape{width:80px}.tape b{font-size:13px}
+/* about: a lone last card spans both columns; review: dates stay on one line */
+@media (min-width:900px){body.themed[data-page="about"] .steps li:last-child:nth-child(odd){grid-column:1/-1}}
+body.themed[data-page="review"] .kitcard .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.themed .state-tag{text-transform:lowercase}
+/* empty boxes look the same on every page: the panda small beside one line */
+body.themed .emptybox{display:flex;gap:16px;align-items:center;padding:20px;grid-column:1/-1;max-width:640px}
+body.themed .emptybox .panda{width:96px;height:96px;flex:none} body.themed .emptybox p{margin:0;font-weight:600}
 `;

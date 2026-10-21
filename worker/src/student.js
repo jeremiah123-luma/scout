@@ -225,11 +225,11 @@ export async function studentTracker(env, user, ui) {
     <article class="card track" data-key="${ui.esc(t.key)}">
       <button class="xbtn" data-u="remove" aria-label="take ${ui.esc(t.company)} off your tracker" title="remove">×</button>
       <div class="tags"><span class="tag state-tag ${t.state === "Applied" || t.state === "Offer" ? "green" : t.state === "Rejected" || t.state === "Withdrawn" ? "red" : "ink"}">${ui.esc(t.state)}</span><span class="when-tag">${ui.esc(dayIn(t.updated, user.answers.timezone))}</span></div>
-      <div class="row">${ui.coHead(t.company, ui.logoFor(logos, t.company), t.company)}${t.score != null ? `<span class="score" aria-label="score ${t.score} out of 100">${t.score}<small>/100</small></span>` : ""}</div>
+      <div class="row">${ui.coHead(t.company, ui.logoFor(logos, t.company), t.company)}${t.score != null ? `<span class="score tscore" aria-label="score ${t.score} out of 100"><b>${t.score}</b></span>` : ""}</div>
       <div class="title">${ui.esc(ui.cleanTitle(t.title, t.company))}</div>
       <div class="track-edit">
         <label class="sr" for="state-${i}">status</label>
-        <select id="state-${i}" data-field="state">${TRACK_STATES.map((s) => `<option${s === t.state ? " selected" : ""}>${s}</option>`).join("")}</select>
+        <select id="state-${i}" data-field="state">${TRACK_STATES.map((s) => `<option value="${s}"${s === t.state ? " selected" : ""}>${s.toLowerCase()}</option>`).join("")}</select>
         <label class="sr" for="next-${i}">next step</label>
         <input id="next-${i}" data-field="next" type="text" maxlength="200" value="${ui.esc(t.next || "")}" placeholder="next step">
       </div>
