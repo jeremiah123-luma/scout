@@ -101,7 +101,7 @@ def build_push_payload(data_dir: Path = DATA, config_dir: Path = ROOT / "config"
 # stay in a folder on his Mac (MASCOT_DIR in me/dashboard.env, or the default below) and go straight to KV.
 # Each pose is two layers, made once on the Mac: <file>-bg.png (mood circle, leaves, ground) and <file>-fg.png (the
 # panda alone), so only the panda moves on the page.
-MASCOT_DEFAULT = Path.home() / "Desktop" / "Scroll Jar Panda" / "07 Layers"
+MASCOT_DEFAULT = Path.home() / "Desktop" / "mascot"
 MASCOT_FILES = {  # dashboard name -> file in that folder
     "wave": "01-welcome", "celebrate": "happy-celebrating", "nap": "napping", "bamboo": "eating-bamboo",
     "sunglasses": "sunglasses", "judging": "judging", "proud": "proud", "sad": "sad",

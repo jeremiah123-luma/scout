@@ -334,7 +334,7 @@ async function reviewList(env) {
     </a>`).join("");
   const ready = index.filter((k) => state(k) !== "Applied").length;
   const body = `<div class="intro"><p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from Scout.</p></div>
-    ${cards ? `<div class="kitgrid">${cards}</div>` : '<p class="note">no kits yet. run /prep on the Mac; it uploads each kit here.</p>'}`;
+    ${cards ? `<div class="kitgrid">${cards}</div>` : '<article class="card emptybox"><h3>no kits yet</h3><p>run /prep on the Mac and each kit it builds shows up here to read and send.</p><div class="actions"><a class="btn" href="/">find one to prep</a></div></article>'}`;
   return page(body, { title: "Review", page: "review", lead: "read it,", head: "send it", mood: ready ? "thumbs" : "nap" });
 }
 
@@ -600,7 +600,7 @@ async function programsPage(env) {
     <div class="intro"><p class="note">${recent ? "a watched page changed today. go look. " : ""}these pages are where freshman programs show up first. scout reads them every hour and pings you when the words change.</p></div>
     <h2>watched pages</h2>${watched || '<p class="note">no pages yet.</p>'}
     <h2>found in the lists</h2>${finds || '<p class="note">none in the lists right now. the pages above are the early warning.</p>'}`;
-  return page(body, { title: "Programs", page: "programs", lead: "built for", head: "freshmen", mood: recent ? "judging" : "sunglasses" });
+  return page(body, { title: "Programs", page: "programs", lead: "built for", head: "freshmen", mood: recent ? "close" : "sunglasses" });
 }
 
 async function trackerPage(env) {
@@ -627,7 +627,7 @@ async function trackerPage(env) {
     <div class="pipeline">${pipeline}</div>
     ${rows.length ? `<p class="note">${rows.length} tracked. changes here reach the repo on the next cron run. you still click submit yourself.</p>` : ""}
     ${list || '<p class="note">nothing tracked yet. tap "prep this" on New, or run /prep.</p>'}`;
-  const mood = !rows.length ? "bamboo" : counts.Offer || counts.Interview || counts.OA ? "celebrate" : counts.Applied ? "proud" : "close";
+  const mood = !rows.length ? "bamboo" : counts.Offer || counts.Interview || counts.OA ? "celebrate" : counts.Applied ? "walking" : "close";
   return page(body, { title: "Tracker", page: "tracker", lead: "where", head: "things stand", mood });
 }
 
@@ -733,7 +733,7 @@ h1 .lead{display:block;color:var(--on-page)} h1 .head{display:inline-block;color
 h1 .head::after{content:"";position:absolute;z-index:-1;pointer-events:none;left:0;right:0;bottom:0;height:30px;background:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%2038%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M3.0%206.9%20Q%203.0%206.9%208.0%2018.6%20Q%2012.9%2030.2%2017.6%2019.2%20Q%2022.3%208.2%2027.9%2016.8%20Q%2033.5%2025.5%2039.6%2015.3%20Q%2045.6%205.2%2051.4%2015.4%20Q%2057.2%2025.6%2062.0%2016.6%20Q%2066.7%207.5%2073.7%2016.8%20Q%2080.7%2026.0%2085.9%2017.4%20Q%2091.0%208.8%2098.4%2019.2%20Q%20105.7%2029.6%20111.4%2020.2%20Q%20117.1%2010.9%20121.7%2021.4%20Q%20126.4%2031.9%20131.7%2018.9%20Q%20137.1%205.9%20142.0%2016.7%20Q%20146.8%2027.5%20153.8%2016.8%20Q%20160.7%206.1%20167.0%2018.1%20Q%20173.2%2030.1%20178.8%2019.2%20Q%20184.4%208.3%20189.1%2016.9%20Q%20193.8%2025.5%20198.9%2017.3%20Q%20204.0%209.1%20209.8%2018.3%20Q%20215.6%2027.5%20221.9%2017.6%20Q%20228.1%207.7%20233.5%2019.5%20Q%20238.9%2031.4%20245.5%2018.9%20Q%20252.1%206.5%20258.3%2017.8%20Q%20264.6%2029.2%20271.7%2019.3%20Q%20278.8%209.4%20284.2%2021.1%20Q%20289.5%2032.8%20294.4%2020.2%20Q%20299.3%207.5%20306.0%2016.9%20Q%20312.8%2026.2%20318.8%2015.7%20Q%20324.7%205.2%20331.2%2018.2%20Q%20337.7%2031.1%20344.0%2020.7%20Q%20350.2%2010.3%20355.6%2020.4%20Q%20361.1%2030.6%20367.3%2019.5%20Q%20373.6%208.5%20379.5%2020.1%20T%20385.4%2031.7%27%20fill%3D%27none%27%20stroke%3D%27%23ffc93c%27%20stroke-width%3D%274.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3C%2Fsvg%3E') no-repeat center/100% 100%}
 h1 .head.u-loops::after{background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%2038%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M4%2026%20C%2021.1%2026%2C%2024.9%207.5%2C%2015.4%207.5%20C%205.9%207.5%2C%209.7%2030%2C%2028.7%2027%20C%2041.3%2026%2C%2045.4%206.3%2C%2035.2%206.3%20C%2025.0%206.3%2C%2029.1%2030%2C%2049.5%2027%20C%2061.3%2026%2C%2065.3%206.5%2C%2055.3%206.5%20C%2045.3%206.5%2C%2049.3%2030%2C%2069.2%2027%20C%2076.1%2026%2C%2078.9%209.2%2C%2071.8%209.2%20C%2064.7%209.2%2C%2067.5%2030%2C%2081.8%2027%20C%2096.9%2026%2C%20101.2%208.1%2C%2090.4%208.1%20C%2079.7%208.1%2C%2084.0%2030%2C%20105.5%2027%20C%20118.1%2026%2C%20122.4%2011.3%2C%20111.8%2011.3%20C%20101.2%2011.3%2C%20105.4%2030%2C%20126.6%2027%20C%20136.2%2026%2C%20139.8%2010.5%2C%20130.9%2010.5%20C%20122.0%2010.5%2C%20125.6%2030%2C%20143.3%2027%20C%20154.5%2026%2C%20158.2%208.6%2C%20149.0%208.6%20C%20139.8%208.6%2C%20143.5%2030%2C%20161.9%2027%20C%20169.0%2026%2C%20171.9%2010.7%2C%20164.8%2010.7%20C%20157.8%2010.7%2C%20160.6%2030%2C%20174.7%2027%20C%20185.1%2026%2C%20188.3%206.5%2C%20180.2%206.5%20C%20172.1%206.5%2C%20175.3%2030%2C%20191.6%2027%20C%20204.8%2026%2C%20208.8%2011.0%2C%20198.8%2011.0%20C%20188.7%2011.0%2C%20192.7%2030%2C%20212.9%2027%20C%20225.2%2026%2C%20229.2%2011.2%2C%20219.0%2011.2%20C%20208.9%2011.2%2C%20212.9%2030%2C%20233.3%2027%20C%20244.2%2026%2C%20248.0%2011.2%2C%20238.6%2011.2%20C%20229.1%2011.2%2C%20232.9%2030%2C%20251.8%2027%20C%20258.7%2026%2C%20261.6%206.8%2C%20254.5%206.8%20C%20247.5%206.8%2C%20250.3%2030%2C%20264.4%2027%20C%20274.3%2026%2C%20277.4%2010.7%2C%20269.6%2010.7%20C%20261.7%2010.7%2C%20264.9%2030%2C%20280.5%2027%20C%20295.5%2026%2C%20299.9%206.8%2C%20288.9%206.8%20C%20278.0%206.8%2C%20282.4%2030%2C%20304.2%2027%20C%20312.4%2026%2C%20315.6%206.2%2C%20307.5%206.2%20C%20299.3%206.2%2C%20302.6%2030%2C%20318.9%2027%20C%20330.5%2026%2C%20334.1%207.9%2C%20325.0%207.9%20C%20315.8%207.9%2C%20319.5%2030%2C%20337.8%2027%20C%20346.4%2026%2C%20349.5%206.4%2C%20341.7%206.4%20C%20333.9%206.4%2C%20337.0%2030%2C%20352.6%2027%20C%20365.5%2026%2C%20369.4%206.2%2C%20359.7%206.2%20C%20349.9%206.2%2C%20353.8%2030%2C%20373.3%2027%20C%20386.5%2026%2C%20390.7%2010.2%2C%20380.2%2010.2%20C%20369.6%2010.2%2C%20373.8%2030%2C%20395.0%2027%20C%20388%2025%2C%20392%2024%2C%20396%2022%27%20fill%3D%27none%27%20stroke%3D%27%23ffc93c%27%20stroke-width%3D%274.5%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E')}
 h1 .head.u-highlight::after{left:-6px;right:-6px;top:calc(50% - 6px);bottom:16px;height:auto;background:#ffc93c;transform:rotate(-1deg);border-radius:3px}
-h1 .head.u-circle::after{left:-20px;right:-20px;top:-10px;bottom:10px;height:auto;background:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%20120%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M60%2018%20C%20150%204%2C%20330%206%2C%20384%2034%20C%20410%2050%2C%20396%2092%2C%20300%20108%20C%20190%20122%2C%2050%20116%2C%2018%2086%20C%20-4%2064%2C%2020%2030%2C%20120%2016%20C%20160%2011%2C%20210%2010%2C%20250%2012%27%20fill%3D%27none%27%20stroke%3D%27%23ffc93c%27%20stroke-width%3D%277%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E') no-repeat center/100% 100%}
+h1 .head.u-circle::after{left:-6px;right:-6px;top:-10px;bottom:10px;height:auto;background:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%20120%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M60%2018%20C%20150%204%2C%20330%206%2C%20384%2034%20C%20410%2050%2C%20396%2092%2C%20300%20108%20C%20190%20122%2C%2050%20116%2C%2018%2086%20C%20-4%2064%2C%2020%2030%2C%20120%2016%20C%20160%2011%2C%20210%2010%2C%20250%2012%27%20fill%3D%27none%27%20stroke%3D%27%23ffc93c%27%20stroke-width%3D%277%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E') no-repeat center/100% 100%}
 h1 .head.draw::after{animation:wipe .8s cubic-bezier(.6,0,.2,1) both}
 @keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 h2{font-family:var(--display);font-size:20px;text-transform:uppercase;color:var(--on-page);margin:26px 0 10px;letter-spacing:0}
@@ -862,7 +862,7 @@ textarea.ans[hidden]{display:none}
 }
 @media (min-width:1200px){body[data-page="review"] main > .kit{grid-template-columns:360px minmax(0,var(--sheet-max))}}
 @media (hover:hover){.kitgrid > .card:hover{transform:translate(-2px,-3px);box-shadow:9px 9px 0 var(--ink)}}
-.row h3,.co h3{min-width:0;overflow-wrap:break-word;hyphens:manual} .co h3.long{font-size:.92em} .co h3.xlong{font-size:.84em} .tile b{font-size:clamp(26px,8vw,34px)}
+.row h3,.co h3{min-width:0;overflow-wrap:break-word;hyphens:manual} .co h3.long,.co h3.xlong{font-size:.9em} .co{align-items:flex-start} .co .logo{margin-top:1px} .tile b{font-size:clamp(26px,8vw,34px)}
 /* the next-action box takes its own line and grows with the text, so nothing gets cut off */
 textarea[data-act="next"]{flex:1 1 100%;width:100%;order:-1;resize:none;overflow:hidden;line-height:1.35;border-radius:18px;padding:11px 16px;min-height:44px}
 /* the hero card: a sheen sweeps across, the number pops and counts up (CLIENT_JS), the tiles bounce in one by one */
@@ -905,13 +905,14 @@ h2::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;bor
 .panda{display:block;position:relative;pointer-events:none}
 .panda img{display:block;width:100%;height:auto}
 .panda .panda-fg{position:absolute;inset:0;transform-origin:50% 92%;animation:breathe 3.6s ease-in-out infinite}
-.stat-main{position:relative;padding-right:clamp(104px,30vw,150px)}
-.stat-panda{position:absolute;right:-4px;top:50%;width:clamp(100px,28vw,140px);margin-top:calc(clamp(100px,28vw,140px) / -2)}
+.stat-main{position:relative;padding-right:clamp(112px,32vw,170px)}
+.stat-panda{position:absolute;right:0;top:50%;width:clamp(100px,28vw,140px);margin-top:calc(clamp(100px,28vw,140px) / -2)}
 .intro{display:flex;align-items:center;gap:12px;margin:0 0 14px;max-width:760px} .intro .panda{width:84px;flex:none} .intro .note{margin:0}
 .empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:10px 0 18px} .empty .panda{width:150px}
 .login-panda{width:150px;margin:0 auto -6px}
-h1{position:relative} .hero-panda{position:absolute;right:0;top:0;width:clamp(88px,24vw,200px)}
-@media (min-width:900px){.hero-panda{top:-14px}}
+h1{position:relative} .hero-panda{position:absolute;right:0;top:-6px;width:170px}
+@media (max-width:899px){.hero-panda{width:120px;top:0}}
+@media (max-width:560px){h1:has(.hero-panda){padding-right:78px} .hero-panda{width:72px;top:2px}}
 .about-panda{float:right;width:110px;margin:-6px -6px 4px 10px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important}}
 `;

@@ -1,6 +1,6 @@
 # An animated avatar for Scout
 
-**Status (2026-10-20):** a borrowed panda fills this role for now. It lives only in the dashboard's KV, never in this repo, and comes off with `python -m scout.sync push --mascot --remove`. Its moods map to the states below: celebrating when new matches drop, napping when nothing changed, a side-eye when a watched page changed, proud once applications are in, and a wave on the login page.
+**Status (2026-10-20):** a borrowed panda fills this role for now. It lives only in the dashboard's KV, never in this repo, and comes off with `python -m scout.sync push --mascot --remove`. Its mood follows each page: a wave on the login page, sunglasses on Programs and a worried look at his phone when a watched page changed that day, a thumbs up on Review when a kit is ready and a nap when none is, and on the Tracker he gets nervous, heads outside once applications are in, and celebrates an OA, interview, or offer.
 
 **Idea:** give Scout a character: a small animated avatar that lives in the dashboard and gives the app personality.
 
