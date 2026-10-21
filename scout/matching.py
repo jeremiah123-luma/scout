@@ -258,12 +258,24 @@ def describe(listing: dict, targets: dict) -> dict:
     return listing
 
 
+TERMLESS_MAX_DAYS = 120  # a posting with no term is kept only this long after it went up
+
+
 def passes_filters(listing: dict, cycle_year: str = "2027", max_age_days: int | None = None,
                    now: float | None = None) -> tuple[bool, str]:
     """Hard drops only. Returns (keep, reason). Everything that passes gets scored, nothing is hidden for location."""
     if not listing.get("active", True):
         return False, "inactive"
-    if not any(cycle_year in t for t in listing.get("terms", [])):
+    terms = [t for t in listing.get("terms", []) if t.strip().lower() not in ("n/a", "na", "")]
+    if not terms:
+        # Simplify writes "N/A" for postings that don't name a season (year-round roles, and some real 2027
+        # internships: Palantir's Query Engines intern). Keep the recent ones and label them instead of dropping.
+        posted = listing.get("date_posted") or 0
+        import time
+        if listing.get("source") != "boards" and (not posted or ((now if now is not None else time.time()) - posted) / 86400 > TERMLESS_MAX_DAYS):
+            return False, "no term listed, posted over 120 days ago"
+        listing["term_unknown"] = True
+    elif not any(cycle_year in t for t in terms):
         return False, "not a 2027 term"
     # A company board only lists jobs that are open now, so its rows skip the age cutoff: Palantir reposts
     # the same Meritocracy Fellowship every year, and its posting date is from 2025.

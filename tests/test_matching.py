@@ -242,3 +242,30 @@ class ReviewFixes(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TermlessPostings(unittest.TestCase):
+    """Simplify writes "N/A" for a posting with no season. Recent ones stay, labeled; old ones drop."""
+
+    def row(self, days_old, terms=("N/A",)):
+        now = 1_800_000_000
+        return {"active": True, "terms": list(terms), "date_posted": now - days_old * 86400, "role": "swe"}, now
+
+    def test_recent_termless_posting_is_kept_and_labeled(self):
+        from scout import matching
+        row, now = self.row(2)
+        ok, _ = matching.passes_filters(row, now=now)
+        self.assertTrue(ok)
+        self.assertTrue(row["term_unknown"])
+
+    def test_old_termless_posting_drops(self):
+        from scout import matching
+        row, now = self.row(200)
+        ok, reason = matching.passes_filters(row, now=now)
+        self.assertFalse(ok)
+        self.assertIn("no term", reason)
+
+    def test_a_named_other_term_still_drops(self):
+        from scout import matching
+        row, now = self.row(2, ("Summer 2026",))
+        self.assertEqual(matching.passes_filters(row, now=now), (False, "not a 2027 term"))

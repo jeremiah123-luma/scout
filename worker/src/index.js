@@ -227,7 +227,7 @@ async function ingestKits(request, env) {
     kit.answers = (kit.answers || []).map((a) => kept.get(a.q) || a);
     if (prev?.letter_edited && (prev.letter_edited_at || "") > (kit.updated || "")) Object.assign(kit, { letter: prev.letter, letter_edited: true, letter_edited_at: prev.letter_edited_at });
     await put(env, `kit:${kit.slug}`, kit);
-    index.push({ slug: kit.slug, key: kit.key || "", company: kit.company || "", title: kit.title || "", updated: kit.updated || "" });
+    index.push({ slug: kit.slug, key: kit.key || "", company: kit.company || "", title: kit.title || "", updated: kit.updated || "", opened: kit.opened || "" });
   }
   for (const k of old) if (!index.some((n) => n.slug === k.slug)) await env.SCOUT.delete(`kit:${k.slug}`);
   await put(env, "kits", index);
@@ -330,7 +330,7 @@ async function reviewList(env) {
       <div class="tags"><span class="tag ${state(k) === "Applied" ? "green" : "ink"}">${esc(state(k))}</span></div>
       ${coHead(k.company || k.slug, logoFor(logos, k.company), k.company || k.slug)}
       <div class="title">${esc(k.title)}</div>
-      <div class="meta">kit saved ${esc(when(k.updated))}</div>
+      <div class="meta">${kitDates(k)}</div>
     </a>`).join("");
   const ready = index.filter((k) => state(k) !== "Applied").length;
   const body = `<div class="intro"><p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from Scout.</p></div>
@@ -416,6 +416,7 @@ async function reviewKit(env, slug) {
           <div class="tags"><span class="tag ${st === "Applied" ? "green" : "ink"}">${esc(st)}</span></div>
           <div class="row"><h3>${esc(kit.company)}</h3></div>
           <div class="title">${esc(kit.title)}</div>
+          <div class="meta">${kitDates(kit)}</div>
           <div class="actions">
             <a class="btn accent" href="${esc(safeUrl(kit.url))}" target="_blank" rel="noopener">open the application ↗</a>
             ${kit.resume_pdf ? `<a class="btn" href="/review/${esc(kit.slug)}/resume.pdf" target="_blank">resume.pdf</a>` : ""}
@@ -526,6 +527,7 @@ async function newPage(env) {
         ${m.early_career === "strong" ? '<span class="tag accent">freshman friendly</span>' : ""}
         ${m.eligibility === "ineligible" ? '<span class="tag red">not eligible</span>' : m.eligibility === "closed" ? '<span class="tag red">closed</span>' : ""}
         ${m.citizens_only ? '<span class="tag ink">US citizens only</span>' : ""}
+        ${m.term_unknown ? '<span class="tag">term not listed</span>' : ""}
         ${isNew ? '<span class="tag accent">new</span>' : ""}
       </div>
       <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
@@ -995,6 +997,13 @@ function age(ts) {
   const days = Math.floor((Date.now() / 1000 - sec) / 86400);
   return days <= 0 ? "today" : days === 1 ? "1 day ago" : `${days} days ago`;
 }
+// Review cards: when the internship opened (kept in the kit itself, so it never disappears) and when the kit was saved.
+function kitDates(k) {
+  const opened = /^\d{4}-\d{2}-\d{2}$/.test(k.opened || "")
+    ? new Date(k.opened + "T12:00:00Z").toLocaleDateString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", year: "numeric" }) : "";
+  return `${opened ? "opened " + esc(opened) + " · " : ""}kit saved ${esc(when(k.updated))}`;
+}
+
 function when(iso) {
   if (!iso) return "never";
   return new Date(iso).toLocaleString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });

@@ -94,7 +94,25 @@ def pack(folder: Path) -> dict | None:
         "resume_pdf": _b64(resume),
         "letter_pdf": _b64(folder / "cover-letter.pdf"),
         "updated": _mtime(answers_file),
+        "opened": opened_date(folder, match),
     }
+
+
+def opened_date(folder: Path, match: dict) -> str:
+    """When the posting went up, as YYYY-MM-DD, kept with the kit so the Review page always has it, even after
+    the posting falls out of the dashboard's matches. From the saved posting first, then the list's date."""
+    posting = folder / "posting.txt"
+    if posting.exists():
+        for line in posting.read_text(encoding="utf-8").splitlines()[:8]:
+            if line.lower().startswith("posted:"):
+                value = line.split(":", 1)[1].strip()[:10]
+                if len(value) == 10 and value[4] == "-" and value[7] == "-":
+                    return value
+    ts = match.get("date_posted")
+    if isinstance(ts, (int, float)) and ts > 0:
+        from datetime import datetime, timezone
+        return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%d")
+    return ""
 
 
 def pack_all(root: Path = APPLICATIONS) -> list[dict]:

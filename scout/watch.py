@@ -61,7 +61,7 @@ def run(raw_by_source: dict[str, list], targets: dict, weights: dict, *, check_p
     # a freshman program, an ambassador program) wherever it ranks, so no alert goes out unchecked.
     cache = eligibility.load_cache()
     for i, item in enumerate(kept):
-        if i < check_pages or could_push(item):
+        if i < check_pages or could_push(item) or on_board(item):
             eligibility.check(item, int(targets.get("graduation_year", 2030)), cache, allow_network)
         else:
             item["eligibility"], item["eligibility_note"] = "unknown", "not checked (below top rows)"
@@ -72,6 +72,13 @@ def run(raw_by_source: dict[str, list], targets: dict, weights: dict, *, check_p
     kept.sort(key=lambda x: (x.get("eligibility") not in ("ineligible", "closed"), x["score"], x.get("date_posted", 0)), reverse=True)
     counts["kept"] = len(kept)
     return kept, counts
+
+
+def on_board(item: dict) -> bool:
+    """Postings on Lever, Greenhouse, or Ashby are read through cheap public APIs and cached, and that is where
+    rules like "must be planning on graduating in 2028" live, so every one of them gets checked."""
+    url = item.get("url", "").lower()
+    return any(h in url for h in ("lever.co/", "greenhouse.io/", "ashbyhq.com/", "gh_jid="))
 
 
 def could_push(item: dict) -> bool:
