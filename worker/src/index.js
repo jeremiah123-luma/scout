@@ -9,8 +9,8 @@
  * Review: prep kits uploaded from the Mac (scout.sync push --kits), to read, edit, copy, download, and mark
  * submitted. Kits hold the candidate's phone, email, and answers, so they live only here in KV, never in git.
  * JSON (cookie):                     POST /api/tracker  POST /api/queue  POST /api/pass  POST /api/kit-answer
- * JSON (secret header):              POST /api/ingest   POST /api/ingest-tracker   POST /api/ingest-kits   GET /api/export
- * Open:                              GET /login  POST /login  GET /logout  GET /api/health
+ * JSON (secret header):              POST /api/ingest   POST /api/ingest-tracker   POST /api/ingest-kits   POST /api/ingest-mascot   GET /api/export
+ * Open:                              GET /login  POST /login  GET /logout  GET /api/health  GET /panda/<name>.png
  *
  * Cron (wrangler.toml [triggers]): GitHub skips most of its scheduled runs (4 of 22 on October 15, 2026),
  * so this Worker checks every hour at :47. If no run has reached the dashboard in 50 minutes, it starts one
@@ -31,6 +31,9 @@ export default {
 
     // Home-screen icons and the web app manifest are public: iOS fetches them without the login cookie.
     if (ICONS[path]) return png(ICONS[path]);
+    // The borrowed panda is public like the icons: the login page shows it before anyone has a cookie.
+    const pandaFile = path.match(/^\/panda\/([a-z-]+)\.png$/);
+    if (pandaFile) return servePanda(env, pandaFile[1]);
     if (path === "/manifest.webmanifest") return manifest();
     if (path === "/api/health") return json({ ok: true, time: new Date().toISOString() });
     if (path === "/login") return request.method === "POST" ? login(request, env) : loginForm("");
@@ -38,10 +41,11 @@ export default {
     if (path === "/logout") return redirect("/login", { "Set-Cookie": `${COOKIE}=; Path=/; Max-Age=0` });
 
     // Cron endpoints: a shared secret, no cookie.
-    if (path === "/api/ingest" || path === "/api/ingest-tracker" || path === "/api/ingest-kits" || path === "/api/export") {
+    if (path === "/api/ingest" || path === "/api/ingest-tracker" || path === "/api/ingest-kits" || path === "/api/ingest-mascot" || path === "/api/export") {
       if (!env.INGEST_SECRET || !(await sameSecret(request.headers.get("x-scout-secret") || "", env.INGEST_SECRET))) return json({ error: "unauthorized" }, 401);
       if (path === "/api/ingest-tracker") return ingestTracker(request, env);
       if (path === "/api/ingest-kits") return ingestKits(request, env);
+      if (path === "/api/ingest-mascot") return ingestMascot(request, env);
       return path === "/api/ingest" ? ingest(request, env) : exportState(env);
     }
 
@@ -166,6 +170,7 @@ async function ingest(request, env) {
     }),
     put(env, "pages", body.pages || {}),
     put(env, "config_text", body.config_text || {}),
+    put(env, "logos", body.logos && typeof body.logos === "object" ? body.logos : {}),
   ]);
   // The repo is the long-term record for the tracker; the cron pushes its copy up so edits made
   // through /status on the Mac also show here. Phone edits are newer when their "updated" is later.
@@ -251,18 +256,74 @@ async function kitPdf(env, slug, which) {
   return new Response(bytes, { headers: { "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="${name.replace(/[^\w.-]/g, "")}"`, "Cache-Control": "no-store" } });
 }
 
+/* ---------------------------------------------------------------- the borrowed panda */
+
+// The panda is art borrowed from another project, so it never goes into this public repo. The Mac uploads it
+// straight into KV (scout.sync push --mascot) and removes it the same way (--mascot --remove). With nothing
+// uploaded, every panda image removes itself and the pages look exactly as they did before.
+const PANDAS = ["wave", "celebrate", "nap", "bamboo", "sunglasses", "judging", "proud", "sad", "close", "thumbs", "walking"];
+
+async function ingestMascot(request, env) {
+  const body = await request.json().catch(() => null);
+  if (!body || (typeof body.images !== "object" && !body.clear)) return json({ error: "expected { images: {...} } or { clear: true }" }, 400);
+  if (body.clear) {
+    await Promise.all(PANDAS.map((n) => env.SCOUT.delete(`panda:${n}`)));
+    return json({ ok: true, removed: PANDAS.length });
+  }
+  const names = Object.keys(body.images).filter((n) => PANDAS.includes(n) && typeof body.images[n] === "string");
+  await Promise.all(names.map((n) => env.SCOUT.put(`panda:${n}`, body.images[n])));
+  return json({ ok: true, pandas: names.length });
+}
+
+async function servePanda(env, name) {
+  const b64 = PANDAS.includes(name) ? await env.SCOUT.get(`panda:${name}`) : null;
+  if (!b64) return new Response("not found", { status: 404 });
+  const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  return new Response(bytes, { headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=3600" } });
+}
+
+function panda(name, cls = "") {
+  return `<img class="panda${cls ? " " + cls : ""}" src="/panda/${name}.png" alt="" aria-hidden="true" onerror="this.remove()">`;
+}
+
+/* ---------------------------------------------------------------- company logos */
+
+// The cron finds each company's logo on its Simplify page (scout/logos.py). Without one, a letter badge in a
+// color picked from the name, so every card still has the same shape.
+const BADGE_COLORS = ["#d2612a", "#9b84d8", "#3fa9b5", "#7cc96e", "#e7c98f", "#ffc93c"];
+
+function normName(n) {
+  let s = String(n || "").trim().toLowerCase();
+  for (let i = 0; i < 2; i++) s = s.replace(/[,.]?\s+(inc|llc|ltd|corp|corporation|co|company|plc|group|holdings|technologies)\.?$/i, "").trim();
+  return s.replace(/\s+/g, " ");
+}
+
+function logo(company, url) {
+  const name = String(company || "?").trim();
+  let h = 0;
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const letter = (name.match(/[A-Za-z0-9]/) || ["?"])[0].toUpperCase();
+  const img = /^https:\/\/storage\.googleapis\.com\/simplify-imgs\//.test(url || "")
+    ? `<img src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : "";
+  return `<span class="logo" style="--badge:${BADGE_COLORS[h % BADGE_COLORS.length]}" aria-hidden="true"><b>${esc(letter)}</b>${img}</span>`;
+}
+
+// For cards that only know a company name (tracker, Review): the logo map the cron uploads.
+const logoFor = (logos, company) => logos[normName(company)] || "";
+
 async function reviewList(env) {
-  const [index, tracker] = await Promise.all([get(env, "kits", []), get(env, "tracker", {})]);
+  const [index, tracker, logos] = await Promise.all([get(env, "kits", []), get(env, "tracker", {}), get(env, "logos", {})]);
   const state = (k) => tracker[k.key]?.state || "Prepped";
   const order = (k) => (state(k) === "Applied" ? 1 : 0);
   const cards = [...index].sort((a, b) => order(a) - order(b)).map((k) => `
     <a class="card kitcard" href="/review/${esc(k.slug)}">
       <div class="tags"><span class="tag ${state(k) === "Applied" ? "green" : "ink"}">${esc(state(k))}</span></div>
-      <h3>${esc(k.company || k.slug)}</h3>
+      <div class="co">${logo(k.company || k.slug, logoFor(logos, k.company))}<h3>${esc(k.company || k.slug)}</h3></div>
       <div class="title">${esc(k.title)}</div>
       <div class="meta">kit saved ${esc(when(k.updated))}</div>
     </a>`).join("");
-  const body = `<p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from Scout.</p>
+  const ready = index.filter((k) => state(k) !== "Applied").length;
+  const body = `<div class="intro">${panda(ready ? "thumbs" : "nap")}<p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from Scout.</p></div>
     ${cards ? `<div class="kitgrid">${cards}</div>` : '<p class="note">no kits yet. run /prep on the Mac; it uploads each kit here.</p>'}`;
   return page(body, { title: "Review", page: "review", lead: "read it,", head: "send it" });
 }
@@ -457,7 +518,7 @@ async function newPage(env) {
         ${m.citizens_only ? '<span class="tag ink">US citizens only</span>' : ""}
         ${isNew ? '<span class="tag accent">new</span>' : ""}
       </div>
-      <div class="row"><h3>${esc(m.company)}</h3><span class="score">${m.score}</span></div>
+      <div class="row"><div class="co">${logo(m.company, m.logo)}<h3>${esc(m.company)}</h3></div><span class="score">${m.score}</span></div>
       <div class="title">${esc(m.title)}</div>
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.date_posted)}${m.eligibility_note && m.eligibility !== "unknown" ? " · " + esc(m.eligibility_note) : ""}</div>
       <details class="why"><summary>why ${m.score}?</summary><div class="meta mono">${esc(breakdown(m))}</div></details>
@@ -471,6 +532,7 @@ async function newPage(env) {
   const hero = `
     <div class="stat">
       <div class="stat-main">
+        ${panda(fresh.length ? "celebrate" : "nap", "stat-panda")}
         <div class="stat-label">you have</div>
         <div class="stat-big" id="open-count">${openCount}</div>
         <div class="stat-sub">open matches</div>
@@ -488,7 +550,7 @@ async function newPage(env) {
   const passedRows = data.matches.filter((m) => passed[m.key] && !tracker[m.key]);
   const passedCard = (m) => `
     <article class="card passed" data-key="${esc(m.key)}">
-      <div class="row"><h3>${esc(m.company)}</h3><span class="score">${m.score}</span></div>
+      <div class="row"><div class="co">${logo(m.company, m.logo)}<h3>${esc(m.company)}</h3></div><span class="score">${m.score}</span></div>
       <div class="title">${esc(m.title)}</div>
       <div class="meta">passed ${age(passed[m.key])}</div>
       <div class="actions"><button class="btn accent" data-act="unpass">unpass</button><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
@@ -498,37 +560,41 @@ async function newPage(env) {
     ${hero}
     ${fresh.length ? `<h2>fresh off the lists</h2>${fresh.map((m) => card(m, true)).join("")}` : ""}
     <h2>${fresh.length ? "the rest, best first" : "best first"}</h2>
-    ${rest.slice(0, 60).map((m) => card(m, false)).join("") || '<p class="note">nothing yet. scout checks the lists every hour.</p>'}
+    ${rest.slice(0, 60).map((m) => card(m, false)).join("") || `<div class="empty">${panda("bamboo")}<p class="note">nothing yet. scout checks the lists every hour.</p></div>`}
     <details class="passed-list" id="passed" ${passedRows.length ? "" : "hidden"}><summary><h2>passed (<span id="passed-count">${passedRows.length}</span>)</h2></summary><p class="note">changed your mind? unpass puts it back in the list.</p><div id="passed-cards">${passedRows.map(passedCard).join("")}</div></details>`;
   return page(body, { title: "New", page: "new", lead: "let's get", head: "you hired" });
 }
 
 async function programsPage(env) {
-  const [pages, data, tracker, passed] = await Promise.all([get(env, "pages", {}), get(env, "matches", { matches: [] }), get(env, "tracker", {}), get(env, "passed", {})]);
+  const [pages, data, tracker, passed, logos] = await Promise.all([get(env, "pages", {}), get(env, "matches", { matches: [] }), get(env, "tracker", {}), get(env, "passed", {}), get(env, "logos", {})]);
+  // A watched page has a name ("Microsoft Explore"), not a company: use the longest known company name it starts with.
+  const known = Object.keys(logos).sort((a, b) => b.length - a.length);
+  const pageCompany = (p) => { const n = normName(p.name || ""); return known.find((k) => n === k || n.startsWith(k + " ")) || ""; };
+  const recent = Object.values(pages).some((p) => p.changed_at && Date.now() - Date.parse(p.changed_at) < 86400000);
   const watched = Object.entries(pages).map(([url, p]) => `
     <article class="card">
       <div class="tags"><span class="tag${p.changed_at ? " accent" : ""}">${p.changed_at ? "new words " + age(p.changed_at) : "no changes yet"}</span>${p.failures ? `<span class="tag red">${p.failures} failed fetch${p.failures > 1 ? "es" : ""}</span>` : ""}</div>
-      <h3>${esc(p.name || url)}</h3>
+      <div class="co">${logo(p.name || url, logos[pageCompany(p)] || "")}<h3>${esc(p.name || url)}</h3></div>
       ${p.last_change ? `<div class="change"><b>what changed:</b>${esc(p.last_change).replace(/\n/g, "<br>")}</div><div class="meta">a change means go look. it does not mean applications are open.</div>` : ""}<div class="meta">checked ${age(p.checked_at)}</div>
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(url))}" target="_blank" rel="noopener">open page ↗</a></div>
     </article>`).join("");
   const finds = data.matches.filter((m) => (m.early_career === "strong" || m.role === "ambassador") && !passed[m.key]).map((m) => `
     <article class="card">
       <div class="tags"><span class="tag accent">${m.role === "ambassador" ? "ambassador" : "freshman friendly"}</span>${tracker[m.key] ? `<span class="tag ink">${esc(tracker[m.key].state)}</span>` : ""}</div>
-      <div class="row"><h3>${esc(m.company)}</h3><span class="score">${m.score}</span></div>
+      <div class="row"><div class="co">${logo(m.company, m.logo)}<h3>${esc(m.company)}</h3></div><span class="score">${m.score}</span></div>
       <div class="title">${esc(m.title)}</div>
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", "))} · ${age(m.date_posted)}</div>
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`).join("");
   const body = `
-    <p class="note">these pages are where freshman programs show up first. scout reads them every hour and pings you when the words change.</p>
+    <div class="intro">${panda(recent ? "judging" : "sunglasses")}<p class="note">${recent ? "a watched page changed today. go look. " : ""}these pages are where freshman programs show up first. scout reads them every hour and pings you when the words change.</p></div>
     <h2>watched pages</h2>${watched || '<p class="note">no pages yet.</p>'}
     <h2>found in the lists</h2>${finds || '<p class="note">none in the lists right now. the pages above are the early warning.</p>'}`;
   return page(body, { title: "Programs", page: "programs", lead: "built for", head: "freshmen" });
 }
 
 async function trackerPage(env) {
-  const tracker = await get(env, "tracker", {});
+  const [tracker, logos] = await Promise.all([get(env, "tracker", {}), get(env, "logos", {})]);
   const rows = Object.entries(tracker).filter(([, r]) => r.state !== "Passed").sort((a, b) => (b[1].updated || "").localeCompare(a[1].updated || ""));
   const counts = {};
   for (const [, r] of rows) counts[r.state] = (counts[r.state] || 0) + 1;
@@ -537,7 +603,7 @@ async function trackerPage(env) {
   const list = rows.map(([key, r]) => `
     <article class="card" data-key="${esc(key)}">
       <div class="tags"><span class="tag ${r.state === "Applied" || r.state === "Offer" ? "green" : r.state === "Rejected" ? "red" : "ink"}">${esc(r.state)}</span><span class="tag">${esc(r.updated || "")}</span></div>
-      <div class="row"><h3>${esc(r.company)}</h3>${r.score != null ? `<span class="score">${r.score}</span>` : ""}</div>
+      <div class="row"><div class="co">${logo(r.company, logoFor(logos, r.company))}<h3>${esc(r.company)}</h3></div>${r.score != null ? `<span class="score">${r.score}</span>` : ""}</div>
       <div class="title">${esc(r.title)}</div>
       <div class="meta">${r.applied ? "applied " + esc(r.applied) + " · " : ""}${r.next ? "next: " + esc(r.next) : "no next action yet"}</div>
       <div class="actions wrap">
@@ -549,8 +615,8 @@ async function trackerPage(env) {
     </article>`).join("");
   const body = `
     <div class="pipeline">${pipeline}</div>
-    <p class="note">${rows.length} tracked. changes here reach the repo on the next cron run. you still click submit yourself.</p>
-    ${list || '<p class="note">nothing tracked yet. tap "prep this" on New, or run /prep.</p>'}`;
+    ${rows.length ? `<div class="intro">${panda(counts.Offer || counts.Interview || counts.OA ? "celebrate" : counts.Applied ? "proud" : "close")}<p class="note">${rows.length} tracked. changes here reach the repo on the next cron run. you still click submit yourself.</p></div>` : ""}
+    ${list || `<div class="empty">${panda("bamboo")}<p class="note">nothing tracked yet. tap "prep this" on New, or run /prep.</p></div>`}`;
   return page(body, { title: "Tracker", page: "tracker", lead: "where", head: "things stand" });
 }
 
@@ -566,6 +632,7 @@ async function settingsPage(env) {
 function aboutPage(loggedIn) {
   const body = `
     <article class="card">
+      ${panda("wave", "about-panda")}
       <h3>the short version</h3>
       <p>Scout watches the public internship lists every hour, scores every posting against what you're looking for, and pings your phone when a strong one shows up. When you pick one, it builds a prep kit: a tailored one page resume, a cover letter if the posting wants one, and draft answers, all from facts you've already confirmed. <b>You always click submit yourself.</b> Scout never applies for you.</p>
     </article>
@@ -625,7 +692,7 @@ const PAGE_COLORS = { about: "#3fa9b5", new: "#cf6a2e", programs: "#9b84d8", rev
 const NAV = `<nav class="dock"><a href="/">new</a><a href="/programs">programs</a><a href="/review">review</a><a href="/tracker">tracker</a></nav>`;
 
 function loginForm(message) {
-  return page(`<form method="post" action="/login" class="login">
+  return page(`${panda("wave", "login-panda")}<form method="post" action="/login" class="login">
     <label for="password">password</label>
     <input id="password" name="password" type="password" autocomplete="current-password" autofocus>
     <button class="btn accent big" type="submit">let me in</button>
@@ -705,7 +772,7 @@ body[data-page="login"] main,body[data-page="login"] header{max-width:420px} bod
 @media (min-width:900px){
   main,header,.dock{max-width:1120px}
   main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;align-items:start}
-  main > h1,main > .stat,main > h2,main > .note,main > .pipeline,main > pre,main > form,main > .passed-list{grid-column:1 / -1}
+  main > h1,main > .stat,main > h2,main > .note,main > .pipeline,main > pre,main > form,main > .passed-list,main > .intro,main > .empty{grid-column:1 / -1}
   main > .card{margin-bottom:20px}
   h1{font-size:64px} .stat{grid-template-columns:auto 1fr;column-gap:40px;align-items:center}
   .stat-tiles{gap:14px} .tile{padding:16px 18px} .tile b{font-size:48px}
@@ -815,6 +882,21 @@ h2::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;bor
 @keyframes nudge{0%,80%,100%{transform:none}85%{transform:rotate(-6deg) scale(1.08)}90%{transform:rotate(6deg) scale(1.08)}95%{transform:rotate(-3deg)}}
 /* the dock buttons bounce in */
 .dock a{animation:pop .5s cubic-bezier(.3,1.8,.5,1) both} .dock a:nth-child(2){animation-delay:.06s} .dock a:nth-child(3){animation-delay:.12s} .dock a:nth-child(4){animation-delay:.18s}
+/* company logos: a white tile with the same outline as everything else; the letter badge sits under the image */
+.co{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{position:relative;flex:none;width:40px;height:40px;border:2.5px solid var(--ink);border-radius:11px;background:var(--badge);box-shadow:2px 2px 0 var(--ink);overflow:hidden;display:grid;place-items:center}
+.logo b{font-family:var(--display);font-size:18px;color:var(--ink);line-height:1}
+.logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:3px}
+.kitcard .co{margin:2px 0 4px}
+/* the borrowed panda: art with a transparent background, bobbing gently (reduced motion stops it below) */
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.panda{display:block;height:auto;animation:bob 3.4s ease-in-out infinite;pointer-events:none}
+.stat-main{position:relative;padding-right:clamp(104px,30vw,150px)}
+.stat-panda{position:absolute;right:-4px;top:50%;width:clamp(100px,28vw,140px);margin-top:calc(clamp(100px,28vw,140px) / -2)}
+.intro{display:flex;align-items:center;gap:12px;margin:0 0 14px;max-width:760px} .intro .panda{width:84px;flex:none} .intro .note{margin:0}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:10px 0 18px} .empty .panda{width:150px}
+.login-panda{width:150px;margin:0 auto -6px}
+.about-panda{float:right;width:110px;margin:-6px -6px 4px 10px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important}}
 `;
 

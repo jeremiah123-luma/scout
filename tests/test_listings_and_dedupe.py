@@ -8,7 +8,7 @@ from scout.dedupe import dedupe, make_key, normalize_url
 
 FIXTURES = Path(__file__).parent / "fixtures"
 REQUIRED_KEYS = {"id", "source", "company", "title", "url", "locations", "terms", "degrees",
-                 "sponsorship", "category", "date_posted", "date_updated", "active"}
+                 "sponsorship", "category", "date_posted", "date_updated", "active", "company_url"}
 
 
 class Normalize(unittest.TestCase):

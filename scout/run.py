@@ -19,7 +19,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from scout import alerts, listings, matching, notify, pages, scoring, watch
+from scout import alerts, listings, logos, matching, notify, pages, scoring, watch
 
 ROOT = Path(__file__).resolve().parent.parent
 DIGEST_HOUR_ET = 19  # 7:00 PM: the digest goes out on the first run at or after this hour, once a day
@@ -59,7 +59,13 @@ def score_everything(sender: Sender, now: float, allow_network: bool = True):
     check_row_count(sender, sum(len(rows) for rows in raw.values()))
     matches, counts = watch.run(raw, targets, weights, check_pages=40, allow_network=allow_network, now=now,
                                 save=not sender.dry_run)
+    # Logos only for the rows the dashboard shows (write_matches keeps the top 300), read once per company.
+    logo_cache = logos.load()
+    read = logos.attach(matches[:300], raw, logo_cache, allow_network=allow_network)
+    if read:
+        print(f"read {read} company page(s) for logos")
     if not sender.dry_run:
+        logos.save(logo_cache)
         watch.write_matches(matches, counts)
     print(f"scored {len(matches)} matches " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
     return matches, weights

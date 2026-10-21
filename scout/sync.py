@@ -4,6 +4,8 @@
     .venv/bin/python -m scout.sync pull     # tracker, prep queue, passed keys  <- Worker KV, into data/
     .venv/bin/python -m scout.sync push --tracker-only   # just data/tracker.json -> Worker KV (after /prep or /status)
     .venv/bin/python -m scout.sync push --kits           # applications/*/ -> the dashboard's Review page (Mac only)
+    .venv/bin/python -m scout.sync push --mascot         # the borrowed panda art -> the dashboard (Mac only)
+    .venv/bin/python -m scout.sync push --mascot --remove   # take the panda back off the dashboard
 
 pull also writes answers and cover letters edited on the Review page back into applications/ (when it exists).
 
@@ -27,20 +29,27 @@ import sys
 import urllib.request
 from pathlib import Path
 
-from scout import kits
+from scout import kits, logos
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 ENV_FILE = ROOT / "me" / "dashboard.env"
 
 
-def settings() -> tuple[str, str] | None:
-    env = dict(os.environ)
+def _env_file() -> dict:
+    out = {}
     if ENV_FILE.exists():
         for line in ENV_FILE.read_text(encoding="utf-8").splitlines():
             if "=" in line and not line.strip().startswith("#"):
                 k, v = line.split("=", 1)
-                env.setdefault(k.strip(), v.strip())
+                out[k.strip()] = v.strip()
+    return out
+
+
+def settings() -> tuple[str, str] | None:
+    env = dict(os.environ)
+    for k, v in _env_file().items():
+        env.setdefault(k, v)
     url, secret = env.get("SCOUT_URL", "").rstrip("/"), env.get("SCOUT_INGEST_SECRET", "")
     return (url, secret) if url and secret else None
 
@@ -84,7 +93,39 @@ def build_push_payload(data_dir: Path = DATA, config_dir: Path = ROOT / "config"
         "matches": matches["matches"],
         "pages": _load(data_dir / "pages.json", {}),
         "config_text": config_text,
+        "logos": logos.by_company(matches["matches"]),  # company name -> logo, for tracker and Review cards
     }
+
+
+# The panda is art borrowed from another of Jeremiah's projects. It never goes into this public repo: the files
+# stay in a folder on his Mac (MASCOT_DIR in me/dashboard.env, or the default below) and go straight to KV.
+MASCOT_DEFAULT = Path.home() / "Desktop" / "Scroll Jar Panda" / "06 Transparent"
+MASCOT_FILES = {  # dashboard name -> file in that folder
+    "wave": "01-welcome.png", "celebrate": "happy-celebrating.png", "nap": "napping.png", "bamboo": "eating-bamboo.png",
+    "sunglasses": "sunglasses.png", "judging": "judging.png", "proud": "proud.png", "sad": "sad.png",
+    "close": "07-getting-close.png", "thumbs": "03-screen-time-permission.png", "walking": "walking-tossing-phone.png",
+}
+
+
+def pack_mascot(folder: Path, max_side: int = 360) -> dict[str, str]:
+    """Each panda shrunk to at most max_side pixels (twice its largest size on the page) as base64 PNG."""
+    import base64
+    import io
+
+    from PIL import Image  # Mac only; the cron never runs this
+
+    images = {}
+    for name, file in MASCOT_FILES.items():
+        path = folder / file
+        if not path.exists():
+            print(f"  missing {file}, skipped")
+            continue
+        img = Image.open(path).convert("RGBA")
+        img.thumbnail((max_side, max_side), Image.LANCZOS)
+        buf = io.BytesIO()
+        img.save(buf, "PNG", optimize=True)
+        images[name] = base64.b64encode(buf.getvalue()).decode("ascii")
+    return images
 
 
 def apply_pull(state: dict, data_dir: Path = DATA) -> dict:
@@ -104,6 +145,8 @@ def main() -> int:
     ap.add_argument("command", choices=["push", "pull"])
     ap.add_argument("--tracker-only", action="store_true", help="push: send only data/tracker.json")
     ap.add_argument("--kits", action="store_true", help="push: send the prep kits in applications/ to the Review page")
+    ap.add_argument("--mascot", action="store_true", help="push: upload the borrowed panda art to the dashboard")
+    ap.add_argument("--remove", action="store_true", help="with --mascot: delete the panda from the dashboard")
     args = ap.parse_args()
     cfg = settings()
     if not cfg:
@@ -111,7 +154,16 @@ def main() -> int:
         return 0
     url, secret = cfg
     try:
-        if args.command == "push" and args.kits:
+        if args.command == "push" and args.mascot:
+            if args.remove:
+                result = _call(f"{url}/api/ingest-mascot", secret, "POST", {"clear": True})
+                print(f"removed the panda from the dashboard ({result.get('removed', 0)} images)")
+            else:
+                folder = Path(os.environ.get("MASCOT_DIR") or _env_file().get("MASCOT_DIR") or MASCOT_DEFAULT).expanduser()
+                images = pack_mascot(folder)
+                result = _call(f"{url}/api/ingest-mascot", secret, "POST", {"images": images})
+                print(f"uploaded {result.get('pandas', 0)} panda images from {folder}")
+        elif args.command == "push" and args.kits:
             packed = kits.pack_all()
             result = _call(f"{url}/api/ingest-kits", secret, "POST", {"kits": packed})
             print(f"pushed {result.get('kits', 0)} prep kits to the Review page")

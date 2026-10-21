@@ -82,6 +82,7 @@ def normalize_simplify(row: dict) -> dict:
         "date_posted": int(row.get("date_posted") or 0),
         "date_updated": int(row.get("date_updated") or row.get("date_posted") or 0),
         "active": bool(row.get("active")) and bool(row.get("is_visible", True)),
+        "company_url": (row.get("company_url") or "").strip(),  # Simplify's company page: scout/logos.py reads its logo
     }
 
 
@@ -103,7 +104,7 @@ def normalize_vanshb03(row: dict) -> dict:
         "category": None,
         "date_posted": int(row.get("date_posted") or 0),
         "date_updated": int(row.get("date_updated") or row.get("date_posted") or 0),
-        "active": bool(row.get("active")) and bool(row.get("is_visible", True)),
+        "active": bool(row.get("active")) and bool(row.get("is_visible", True)),        "company_url": (row.get("company_url") or "").strip(),
     }
 
 
