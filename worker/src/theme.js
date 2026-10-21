@@ -339,4 +339,13 @@ body.themed header{padding-top:calc(18px + env(safe-area-inset-top))}
 .viewmenu-list a{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;padding:0 14px;border-radius:12px;font:600 16px var(--round);color:#1a1333;text-decoration:none}
 .viewmenu-list a small{color:#5b5673;font-size:13px}.viewmenu-list a.on{background:#1a133314}.viewmenu-list a.on::after{content:"✓";margin-left:auto;padding-left:8px}
 @media (max-width:600px){.views{display:none}.viewmenu{display:block}.sub{font-size:16px}}
+/* ---- the page never slides sideways on a phone ----
+   The tape hung a few pixels past the card, and on a phone the card sits 16px from the screen's edge, so it stuck past
+   the screen; the sun and the clouds hang off it on purpose. iOS then panned the whole page in both directions (the
+   same bug Command Center had). The page clips sideways at the root, the art layers clip their own children, and on a
+   phone the tape stays inside the screen. */
+html:has(body.themed),body.themed{overflow-x:hidden;max-width:100%;overscroll-behavior-x:none}
+.scene,.sky-layer{contain:paint}
+body.themed main>*{min-width:0;max-width:100%}
+@media (max-width:600px){.tape{right:-6px;top:-12px}}
 `;
