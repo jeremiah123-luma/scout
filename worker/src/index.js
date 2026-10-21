@@ -61,7 +61,7 @@ export default {
       if (path === "/api/remove") return removeCard(request, env);
       return json({ error: "not found" }, 404);
     }
-    if (path === "/") return newPage(env);
+    if (path === "/") return newPage(env, url.searchParams.get("view"));
     if (path === "/programs") return programsPage(env);
     if (path === "/tracker") return trackerPage(env);
     if (path === "/settings") return settingsPage(env);
@@ -530,14 +530,39 @@ async function setPassed(request, env) {
 
 /* ---------------------------------------------------------------- pages */
 
-async function newPage(env) {
+// Ways to slice the New page. Each one is a link (/?view=today), so the browser's back button and a shared
+// link both work, and the "shuffle" button just steps to the next one. Ruled-out postings only show in "ruled out".
+const DAY = 86400000;
+const postedAt = (m) => (m.latest_posted || m.date_posted || 0) * 1000;
+const newestFirst = (a, b) => Math.max(postedAt(b), Date.parse(b.first_seen || 0) || 0) - Math.max(postedAt(a), Date.parse(a.first_seen || 0) || 0);
+// The week uses the posting date only: Scout's first run marked about 1,200 postings as "seen" at once, so a
+// first-seen date says when Scout started, not when the posting appeared. Today also counts a first sighting,
+// which catches postings the lists add a day or two after their posted date.
+const within = (m, ms, sighted = false) => Date.now() - postedAt(m) < ms || (sighted && m.first_seen && Date.now() - Date.parse(m.first_seen) < ms);
+const ruledOut = (m) => m.eligibility === "ineligible" || m.eligibility === "closed";
+const VIEWS = [
+  { id: "best", label: "best fit for you", note: "everything still open, highest score first.", pick: (m) => !ruledOut(m) },
+  { id: "today", label: "new today", note: "posted or first spotted in the last 24 hours, newest first.", pick: (m) => !ruledOut(m) && within(m, DAY, true), sort: newestFirst },
+  { id: "week", label: "new this week", note: "posted in the last 7 days, newest first.", pick: (m) => !ruledOut(m) && within(m, 7 * DAY), sort: newestFirst },
+  { id: "freshman", label: "freshman friendly", note: "programs and roles that say they want first- and second-year students.", pick: (m) => !ruledOut(m) && (m.early_career === "strong" || m.role === "ambassador") },
+  { id: "near", label: "near you", note: "NJ, NYC, and remote.", pick: (m) => !ruledOut(m) && m.location_class === "priority" },
+  { id: "big", label: "big names", note: "tier 1 and tier 2 companies.", pick: (m) => !ruledOut(m) && m.tier <= 2 },
+  { id: "longshots", label: "long shots", note: "big names whose general intern pools mostly hire juniors and seniors. worth a try, don't count on it.", pick: (m) => !ruledOut(m) && m.tier <= 2 && m.early_career !== "strong" && m.role !== "program" },
+  { id: "out", label: "ruled out", note: "pages that ask for a different graduation year, grad students, or have closed. here so you can double check.", pick: ruledOut },
+];
+
+async function newPage(env, viewId) {
   const [data, tracker, queue, passed, lastVisit] = await Promise.all([
     get(env, "matches", { matches: [], counts: {}, generated_at: "" }), get(env, "tracker", {}), get(env, "queue", []), get(env, "passed", {}), get(env, "last_visit", ""),
   ]);
   const queued = new Set(queue.map((q) => q.key));
   const rows = data.matches.filter((m) => !tracker[m.key] && !passed[m.key]);
-  const fresh = rows.filter((m) => m.first_seen && m.first_seen > lastVisit);
-  const rest = rows.filter((m) => !fresh.includes(m));
+  const view = VIEWS.find((v) => v.id === viewId) || VIEWS[0];
+  const inView = rows.filter(view.pick);
+  if (view.sort) inView.sort(view.sort);
+  // "fresh since your last visit" is its own section only on the default view; the others are already a slice.
+  const fresh = view.id === "best" ? inView.filter((m) => m.first_seen && m.first_seen > lastVisit) : [];
+  const rest = inView.filter((m) => !fresh.includes(m));
   const programs = rows.filter((m) => m.early_career === "strong" || m.role === "ambassador").length;
   // The cron uploads only the top matches (scout/watch.py write_matches), so the count comes from its total:
   // everything that passed the filters and that its own page does not rule out (open_total), minus the
@@ -595,11 +620,21 @@ async function newPage(env) {
       <div class="actions"><button class="btn accent" data-act="unpass">unpass</button><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`;
 
+  const next = VIEWS[(VIEWS.indexOf(view) + 1) % VIEWS.length];
+  const views = `
+    <nav class="views" aria-label="ways to look at your matches">
+      ${VIEWS.map((v) => `<a class="view${v === view ? " on" : ""}" href="/?view=${v.id}#views"${v === view ? ' aria-current="page"' : ""}>${v.label}<b>${rows.filter(v.pick).length}</b></a>`).join("")}
+    </nav>
+    <div class="view-head"><p class="note">${view.note}</p><a class="btn shuffle" href="/?view=${next.id}#views" title="next: ${esc(next.label)}">shuffle ↻</a></div>`;
+
   const body = `
     ${hero}
+    <div id="views"></div>
+    ${views}
     ${fresh.length ? `<h2>fresh off the lists</h2>${fresh.map((m) => card(m, true)).join("")}` : ""}
-    <h2>${fresh.length ? "the rest, best first" : "best first"}</h2>
-    ${rest.slice(0, 60).map((m) => card(m, false)).join("") || `<div class="empty">${panda("bamboo")}<p class="note">nothing yet. scout checks the lists every hour.</p></div>`}
+    <h2>${fresh.length ? "the rest, best first" : esc(view.label)}</h2>
+    ${rest.slice(0, 60).map((m) => card(m, view.id === "today")).join("") || `<div class="empty">${panda("bamboo")}<p class="note">${view.id === "best" ? "nothing yet. scout checks the lists every hour." : "nothing here right now. try shuffling to another view."}</p></div>`}
+    ${rest.length > 60 ? `<p class="note">showing the top 60 of ${rest.length}.</p>` : ""}
     <details class="passed-list" id="passed" ${passedRows.length ? "" : "hidden"}><summary><h2>passed (<span id="passed-count">${passedRows.length}</span>)</h2></summary><p class="note">changed your mind? unpass puts it back in the list.</p><div id="passed-cards">${passedRows.map(passedCard).join("")}</div></details>`;
   return page(body, { title: "New", page: "new", lead: "let's get", head: "you hired" });
 }
@@ -776,6 +811,13 @@ h3{font-family:var(--display);font-size:20px;margin:0;text-transform:uppercase;l
 .stat-sub{font-weight:700;font-size:18px}
 .stat-note{color:var(--muted);font-size:13px;font-weight:700;margin-top:4px}
 .stat-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+/* view chips on the New page: one row that scrolls sideways on a phone */
+.views,.view-head,#views{grid-column:1/-1} .views{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px;margin:18px -4px 0;scrollbar-width:none;scroll-snap-type:x proximity} .views::-webkit-scrollbar{display:none}
+.view{flex:none;scroll-snap-align:start;display:inline-flex;align-items:center;gap:8px;font:700 var(--small)/1 var(--font);color:var(--ink);background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius-pill);padding:8px 14px;text-decoration:none;box-shadow:var(--shadow-sm);white-space:nowrap;transition:transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .15s ease}
+.view b{font-size:12px;background:var(--ink);color:var(--cream);border-radius:999px;padding:3px 7px}
+.view.on{background:var(--accent)} .view:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+@media (hover:hover){.view:hover{transform:translate(-1px,-1px) rotate(-1deg)}}
+.view-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px} .view-head .note{margin:0} .shuffle{flex:none}
 .tile{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .tile b{font-family:var(--display);font-size:34px;line-height:1} .tile span{font-size:var(--small);font-weight:700;color:var(--muted);line-height:1.2}
 .tile.hot{background:var(--accent)} .tile.hot span{color:var(--ink)}
