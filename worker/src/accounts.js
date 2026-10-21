@@ -236,9 +236,11 @@ async function checkPassword(password, stored, ui) {
   return !!stored && ok;
 }
 
-async function userCookie(env, id, ui) {
+// The cookie's signature covers a piece of the password hash, so changing the password (a reset) ends every
+// session that was signed in with the old one.
+async function userCookie(env, id, ui, pw) {
   const expires = Date.now() + COOKIE_DAYS * 86400e3;
-  const sig = await ui.hmac(env.SESSION_SECRET, `u:${id}.${expires}`);
+  const sig = await ui.hmac(env.SESSION_SECRET, `u:${id}.${expires}.${String(pw || "").slice(-16)}`);
   return `${USER_COOKIE}=${id}.${expires}.${sig}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${COOKIE_DAYS * 86400}`;
 }
 
@@ -247,9 +249,10 @@ async function currentUser(request, env, ui) {
   if (!raw || !env.SESSION_SECRET || !env.DB) return null;
   const [id, expires, sig] = raw.slice(USER_COOKIE.length + 1).split(".");
   if (!id || !expires || !sig || Number(expires) < Date.now()) return null;
-  if (!(await ui.sameSecret(sig, await ui.hmac(env.SESSION_SECRET, `u:${id}.${expires}`)))) return null;
   await ensureSchema(env);
-  return userById(env, Number(id));
+  const user = await userById(env, Number(id));
+  if (!user || !(await ui.sameSecret(sig, await ui.hmac(env.SESSION_SECRET, `u:${id}.${expires}.${String(user.pw || "").slice(-16)}`)))) return null;
+  return user;
 }
 
 // keys: [name, limit] pairs. A guesser is stopped by the per-IP and per-email-and-IP keys at 8; the email on its
@@ -409,7 +412,7 @@ async function login(request, env, ui) {
     return loginPage(ui, "that email and password don't match.", email);
   }
   const next = row.done ? "/" : `/start?step=${resumeStep({ answers: safeParse(row.answers), step: row.step })}`;
-  return ui.redirect(next, [["Set-Cookie", await userCookie(env, row.id, ui)]]);
+  return ui.redirect(next, [["Set-Cookie", await userCookie(env, row.id, ui, row.pw)]]);
 }
 
 async function signup(request, env, ui) {
@@ -425,11 +428,12 @@ async function signup(request, env, ui) {
   if (taken) return signupPage(ui, "there's already an account with that email. try logging in.", email);
   const now = new Date().toISOString();
   // Two sign ups with one email at the same moment: the second hits the UNIQUE constraint, not a 500.
+  const pw = await hashPassword(password);
   const result = await env.DB.prepare("INSERT INTO users (email, pw, created_at, updated_at) VALUES (?, ?, ?, ?)")
-    .bind(email, await hashPassword(password), now, now).run().catch(() => null);
+    .bind(email, pw, now, now).run().catch(() => null);
   if (!result) return signupPage(ui, "there's already an account with that email. try logging in.", email);
   await noteFail(env, [[`signup:${ip}`, LOCK_AFTER]]); // counts sign ups per IP with the same window as failed logins
-  return ui.redirect("/start?step=1", [["Set-Cookie", await userCookie(env, result.meta.last_row_id, ui)]]);
+  return ui.redirect("/start?step=1", [["Set-Cookie", await userCookie(env, result.meta.last_row_id, ui, pw)]]);
 }
 
 /* ---------------------------------------------------------------- forgot password */
@@ -459,14 +463,14 @@ async function forgot(request, env, url, ui) {
   if (!env.DB || !email) return forgotPage(ui, sent);
   await ensureSchema(env);
   const ip = request.headers.get("CF-Connecting-IP") || "local";
-  const keys = [[`forgot:${ip}`, 5], [`forgot-e:${email}`, 3]];
+  const keys = [[`forgot:${ip}`, 5], [`forgot-e:${email}|${ip}`, 3]];
   if (await lockedOut(env, keys)) return forgotPage(ui, "too many tries. give it 15 minutes.");
   await noteFail(env, keys);
   const row = await env.DB.prepare("SELECT u.id, u.pw, u.answers, m.topic FROM users u JOIN student_meta m ON m.user_id = u.id WHERE u.email = ?").bind(email).first();
   if (row && [].concat(safeParse(row.answers).channel || []).some((c) => String(c).startsWith("phone"))) {
     const exp = Date.now() + RESET_MINUTES * 60e3;
     const link = `${url.origin}/reset?t=${row.id}.${exp}.${await resetSig(env, ui, row.id, exp, row.pw)}`;
-    await ping(row.topic, { title: "Scout: reset your password", message: "tap to pick a new password. if you didn't ask for this, ignore it; nothing changes.", click: link });
+    ui.waitUntil(ping(row.topic, { title: "Scout: reset your password", message: "tap to pick a new password. if you didn't ask for this, ignore it; nothing changes.", click: link }));
   }
   return forgotPage(ui, sent);
 }
@@ -490,12 +494,13 @@ async function reset(request, env, url, ui) {
   if (request.method !== "POST") return form("");
   const password = String((await request.formData()).get("password") || "");
   if (password.length < 10) return form("the password needs 10 characters or more.");
+  const pw = await hashPassword(password);
   await env.DB.batch([
-    env.DB.prepare("UPDATE users SET pw = ?, updated_at = ? WHERE id = ?").bind(await hashPassword(password), new Date().toISOString(), row.id),
+    env.DB.prepare("UPDATE users SET pw = ?, updated_at = ? WHERE id = ?").bind(pw, new Date().toISOString(), row.id),
     // Clear this email's lockout so the new password works right away. Exact prefixes, not LIKE (an email can hold "_").
     env.DB.prepare("DELETE FROM login_fails WHERE key = ? OR substr(key, 1, ?) = ?").bind(`e:${row.email}`, `e+ip:${row.email}|`.length, `e+ip:${row.email}|`),
   ]);
-  return ui.redirect("/", [["Set-Cookie", await userCookie(env, row.id, ui)]]);
+  return ui.redirect("/", [["Set-Cookie", await userCookie(env, row.id, ui, pw)]]);
 }
 
 async function deleteAccount(env, user, ui) {

@@ -94,6 +94,9 @@ const STUDENT_LINKS = '<a class="pill-link" href="/logout">log out</a>';
 // Clicks on the student pages: save, pass, unpass, tracker edits, remove, copy a prep prompt, send a test ping.
 // Every request is same-origin JSON with a custom header, which a form on another site can't send.
 const STUDENT_JS = `(function(){
+var pending={};
+// Leaving the page during the 5-second undo window still sends the remove (keepalive outlives the page).
+addEventListener("pagehide",function(){Object.keys(pending).forEach(function(k){fetch("/api/u/remove",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json","x-scout":"1"},body:JSON.stringify({key:k})})})});
 function post(url,body){return fetch(url,{method:"POST",headers:{"Content-Type":"application/json","x-scout":"1"},body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 function oops(b,t){b.disabled=false;b.textContent="didn't save. check your connection and tap again";b.setAttribute("role","status");setTimeout(function(){b.textContent=t||"try again";b.removeAttribute("role")},3500)}
 function bump(d){var c=document.getElementById("tracker-count");if(c){c.textContent=Math.max(0,(+c.textContent||0)+d);return}var a=document.querySelector('.dock a[href="/tracker"]');if(a&&d>0){var b=document.createElement("b");b.className="count";b.id="tracker-count";b.textContent=d;a.appendChild(document.createTextNode(" "));a.appendChild(b)}}
@@ -106,7 +109,7 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-u]")
  if(act==="pass"){post("/api/u/pass",{key:key}).then(function(){card.classList.add("dim");b.textContent="undo";b.dataset.u="unpass";b.disabled=false},function(){oops(b,"pass")});return}
  if(act==="unpass"){post("/api/u/pass",{key:key,undo:true}).then(function(){card.classList.remove("dim");b.textContent="pass";b.dataset.u="pass";b.disabled=false},function(){oops(b,"undo")});return}
  if(act==="track"){var state=card.querySelector("[data-field=state]").value,next=card.querySelector("[data-field=next]").value;post("/api/u/track",{key:key,state:state,next:next}).then(function(){b.textContent="updated ✓";b.classList.remove("accent");var tag=card.querySelector(".state-tag");if(tag)tag.textContent=state;setTimeout(function(){b.textContent="update";b.disabled=false},1400)},function(){oops(b,"update")});return}
- if(act==="remove"){var bar=document.createElement("div");bar.className="removed";bar.setAttribute("role","status");bar.innerHTML='taken off your tracker. <button class="btn" type="button">undo</button>';card.hidden=true;card.after(bar);var gone=setTimeout(function(){post("/api/u/remove",{key:key}).then(function(){bar.remove();card.remove();bump(-1)},function(){bar.remove();card.hidden=false;b.disabled=false})},5000);bar.querySelector("button").onclick=function(){clearTimeout(gone);bar.remove();card.hidden=false;b.disabled=false};return}
+ if(act==="remove"){var bar=document.createElement("div");bar.className="removed";bar.setAttribute("role","status");bar.innerHTML='taken off your tracker. <button class="btn" type="button">undo</button>';card.hidden=true;card.after(bar);pending[key]=1;var gone=setTimeout(function(){delete pending[key];post("/api/u/remove",{key:key}).then(function(){bar.remove();card.remove();bump(-1)},function(){bar.remove();card.hidden=false;b.disabled=false})},5000);bar.querySelector("button").onclick=function(){clearTimeout(gone);delete pending[key];bar.remove();card.hidden=false;b.disabled=false};return}
 });
 var pick=document.getElementById("view");if(pick)pick.addEventListener("change",function(){pick.form.submit()});
 })();`;

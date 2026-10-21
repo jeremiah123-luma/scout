@@ -102,7 +102,13 @@ test("alert timing", () => {
   assert.ok(!digestDue({ speed: "once a day", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "2026-10-21", at7pmNY), "once a day");
   assert.ok(digestDue({ speed: "once a day", digest_time: "6:00 PM", timezone: "Eastern (New York)" }, "2026-10-20", at7pmNY), "late is still today");
   assert.ok(!digestDue({ speed: "once a day", digest_time: "8:00 PM", timezone: "Eastern (New York)" }, "2026-10-20", at7pmNY), "not before the hour");
-  assert.ok(!digestDue({ speed: "once a week", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "", at7pmNY), "weekly is Mondays");
+  assert.ok(!digestDue({ speed: "once a week", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "", at7pmNY), "first weekly waits for a Monday");
+  assert.ok(digestDue({ speed: "once a week", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "2026-10-12", at7pmNY), "missed this Monday's: catch up Wednesday");
+  assert.ok(!digestDue({ speed: "once a week", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "2026-10-19", at7pmNY), "already sent Monday's");
+  const at9amNY = new Date(Date.UTC(2026, 9, 21, 13, 0));
+  assert.ok(digestDue({ speed: "once a day", digest_time: "10:00 PM", timezone: "Eastern (New York)" }, "2026-10-19", at9amNY), "missed last night's: catch up");
+  assert.ok(!digestDue({ speed: "once a day", digest_time: "10:00 PM", timezone: "Eastern (New York)" }, "2026-10-20", at9amNY), "last night's went out");
+  assert.ok(!digestDue({ speed: "once a day", digest_time: "10:00 PM", timezone: "Eastern (New York)" }, "", at9amNY), "new student waits for tonight");
   assert.ok(!digestDue({ speed: "tell me right away" }, "", at7pmNY));
 });
 

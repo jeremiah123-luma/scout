@@ -21,7 +21,7 @@ import tokens from "./tokens.css";
 import { ICONS } from "./icons.js";
 import { routeAccounts } from "./accounts.js";
 import { runStudentAlerts } from "./student.js";
-import { rank, isOpen, FIELD_ROLES, usLocation, greeting, localNow } from "./match.js";
+import { rank, isOpen, usLocation, greeting, localNow } from "./match.js";
 
 const STATES = ["Found", "Saved", "Prepped", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn", "Passed"];
 const COOKIE = "scout";
@@ -80,7 +80,7 @@ async function route(request, env, ctx) {
 
   // Accounts for other people (accounts.js): the landing page, log in, sign up, the questions, and each user's
   // own page. It answers null for the owner's pages, which carry on below.
-  const accountPage = await routeAccounts(request, env, url, accountUi(env));
+  const accountPage = await routeAccounts(request, env, url, accountUi(env, ctx));
   if (accountPage) return accountPage;
 
   // Everything else needs the login cookie.
@@ -147,10 +147,11 @@ async function startRun(env, ageMin) {
 /* ---------------------------------------------------------------- auth */
 
 // What accounts.js needs from this file, passed in so the two never import each other.
-function accountUi(env) {
+function accountUi(env, ctx) {
   return {
     page, panda, esc, json, redirect, hmac, sameSecret, coHead, safeUrl, when, cleanTitle, logoFor,
     getKV: (key, fallback) => get(env, key, fallback),
+    waitUntil: (promise) => (ctx && ctx.waitUntil ? ctx.waitUntil(promise) : promise),
     isOwner: (request) => validCookie(request, env),
     ownerLogin: (password, onFail) => ownerLogin(env, password, onFail),
     landingData: () => landingData(env),
@@ -167,11 +168,9 @@ function cleanTitle(title, company) {
 // What a student's answers already match: the shared list judged and scored for them (match.js), open postings
 // in a field they picked (or programs, if they asked for those), best first, one card per company.
 async function fitsFor(env, answers) {
-  const roles = new Set((answers.fields || []).flatMap((f) => FIELD_ROLES[f] || []));
-  const early = (answers.early || []).length > 0;
   const data = await get(env, "matches", { matches: [] });
-  const open = rank(data.matches || [], answers).filter((m) => isOpen(m)
-    && (!roles.size || roles.has(m.role) || (early && (m.role === "program" || m.early_career === "strong"))));
+  // rank already keeps only their fields (match.js inTheirFields), so this counts what the New page shows.
+  const open = rank(data.matches || [], answers).filter(isOpen);
   const seen = new Set();
   const varied = open.filter((m) => !seen.has(m.company) && seen.add(m.company));
   return { count: open.length, tech: true,
@@ -237,16 +236,20 @@ const put = (env, key, value) => env.SCOUT.put(key, JSON.stringify(value));
 async function ingest(request, env) {
   const body = await request.json().catch(() => null);
   if (!body || !Array.isArray(body.matches)) return json({ error: "expected { matches: [...] }" }, 400);
-  // When each posting first reached the dashboard, kept from run to run. Student alerts and "new today" use it:
-  // the cron's own first_seen only exists for postings the owner was alerted about. On the first run with no
-  // arrival times at all, existing postings get their posted date, so nobody is pinged about the whole list at once.
-  const before = await get(env, "matches", { matches: [] });
-  const arrivedAt = new Map((before.matches || []).filter((m) => m.arrived).map((m) => [m.key, m.arrived]));
+  // When each posting first reached the dashboard. Student alerts and "new today" use it (the cron's first_seen
+  // only exists for postings the owner was alerted about). It's its own record, set once per posting and kept for
+  // 150 days, because the upload is only the top 300: a posting that drops out and comes back must not look new.
+  // On the very first run, existing postings get their posted date, so nobody is pinged about the whole list.
+  const arrived = await get(env, "arrived", null);
   const now = new Date().toISOString();
-  const firstRun = arrivedAt.size === 0;
   const posted = (m) => new Date(((m.latest_posted || m.date_posted || 0) * 1000) || Date.now()).toISOString();
-  const matches = body.matches.map((m) => ({ ...m, arrived: arrivedAt.get(m.key) || (firstRun ? m.first_seen || posted(m) : now) }));
+  const book = arrived || {};
+  for (const m of body.matches) if (!book[m.key]) book[m.key] = arrived ? now : m.first_seen || posted(m);
+  const cutoff = new Date(Date.now() - 150 * 86400e3).toISOString();
+  for (const k of Object.keys(book)) if (book[k] < cutoff) delete book[k];
+  const matches = body.matches.map((m) => ({ ...m, arrived: book[m.key] }));
   await Promise.all([
+    put(env, "arrived", book),
     put(env, "matches", {
       generated_at: body.generated_at || now, counts: body.counts || {}, matches,
       total_matches: Number.isInteger(body.total_matches) ? body.total_matches : body.matches.length,

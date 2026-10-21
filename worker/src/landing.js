@@ -28,7 +28,7 @@ export function landingBody(ui, signedIn, data) {
     <div><dt>listings checked</dt><dd>${fmt(checked)}</dd></div>
     <div><dt>skipped as a bad fit</dt><dd>${fmt(ruled)}</dd></div>
     <div><dt>actually worth a look</dt><dd>${fmt(open)}</dd></div>
-  </dl>${updated ? `<p class="stats-note">from scout's last run for its first user, ${ui.esc(updated)}. it runs every hour.</p>` : ""}` : "";
+  </dl>${updated ? `<p class="stats-note">from scout's last hourly run, ${ui.esc(updated)}.</p>` : ""}` : "";
   return `
   <section class="hero">
     <div class="hero-copy">

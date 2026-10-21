@@ -226,14 +226,29 @@ export function isQuiet(label, hour) {
   return start < end ? hour >= start && hour < end : hour >= start || hour < end;
 }
 
-// Whether the digest should go out now: at or after the student's digest hour, once that day (weekly: Mondays).
-// "At or after", so a busy run that reaches them late still sends. Quiet hours don't apply: they picked the time.
+// The local date (YYYY-MM-DD) n days before the given one.
+function daysBefore(date, n) {
+  const d = new Date(`${date}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - n);
+  return d.toISOString().slice(0, 10);
+}
+
+// Whether a digest should go out now: when the most recent scheduled digest (today's at their hour, or yesterday's
+// before it; weekly, the most recent Monday's) hasn't been sent. So a run that reaches a student late, or a failed
+// send, catches up instead of skipping. A student who has never had one gets their first at the next scheduled
+// time, not the minute they sign up. Quiet hours don't apply: they picked the time.
 export function digestDue(a, lastDigestDate, now = new Date()) {
   if (a.speed !== "once a day" && a.speed !== "once a week") return false;
   const local = localNow(a.timezone, now);
-  if (local.hour < hourOf(a.digest_time || "7:00 PM")) return false;
-  if (a.speed === "once a week" && local.weekday !== 1) return false;
-  return lastDigestDate !== local.date;
+  const passed = local.hour >= hourOf(a.digest_time || "7:00 PM");
+  let slot;
+  if (a.speed === "once a day") slot = passed ? local.date : daysBefore(local.date, 1);
+  else {
+    const back = (local.weekday - 1 + 7) % 7; // days since Monday
+    slot = back === 0 && !passed ? daysBefore(local.date, 7) : daysBefore(local.date, back);
+  }
+  if (!lastDigestDate) return slot === local.date; // never had one: wait for a slot that falls today
+  return lastDigestDate < slot;
 }
 
 // When a posting reached the dashboard (index.js ingest sets "arrived"); older uploads fall back to first_seen, then
