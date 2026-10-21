@@ -22,6 +22,7 @@ import { ICONS } from "./icons.js";
 import { routeAccounts } from "./accounts.js";
 import { runStudentAlerts } from "./student.js";
 import { rank, isOpen, usLocation, greeting, localNow } from "./match.js";
+import { ART, THEMED, FONTS_LINK, THEME_HEAD, THEME_BUTTON, THEME_JS, SCENE, THEME_CSS, jobCard, coFont, CO_FONTS_LINK } from "./theme.js";
 
 const STATES = ["Found", "Saved", "Prepped", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn", "Passed"];
 const COOKIE = "scout";
@@ -62,6 +63,7 @@ async function route(request, env, ctx) {
 
   // Home-screen icons and the web app manifest are public: iOS fetches them without the login cookie.
   if (ICONS[path]) return png(ICONS[path]);
+  if (ART[path]) return new Response(ART[path], { headers: { "Content-Type": "image/webp", "Cache-Control": "public, max-age=604800" } });
   // The borrowed panda is public like the icons: the login page shows it before anyone has a cookie.
   const pandaFile = path.match(/^\/panda\/([a-z-]+)\.png$/);
   if (pandaFile) return servePanda(env, pandaFile[1]);
@@ -149,7 +151,7 @@ async function startRun(env, ageMin) {
 // What accounts.js needs from this file, passed in so the two never import each other.
 function accountUi(env, ctx) {
   return {
-    page, panda, esc, json, redirect, hmac, sameSecret, coHead, safeUrl, when, cleanTitle, logoFor,
+    page, panda, esc, json, redirect, hmac, sameSecret, coHead, logo, safeUrl, when, cleanTitle, logoFor,
     getKV: (key, fallback) => get(env, key, fallback),
     waitUntil: (promise) => (ctx && ctx.waitUntil ? ctx.waitUntil(promise) : promise),
     isOwner: (request) => validCookie(request, env),
@@ -668,44 +670,21 @@ async function newPage(env, viewId) {
   const openCount = total - (data.matches.length - rows.length);
   await put(env, "last_visit", new Date().toISOString());
 
-  const card = (m, isNew) => `
-    <article class="card${isNew ? " is-new" : ""}" data-key="${esc(m.key)}">
-      <div class="tags">
-        <span class="tag">${esc(roleWord(m))}</span>
-        ${m.tier <= 2 ? `<span class="tag ink">tier ${m.tier}</span>` : ""}
-        ${m.early_career === "strong" ? '<span class="tag accent">freshman friendly</span>' : ""}
-        ${m.eligibility === "ineligible" ? '<span class="tag red">not eligible</span>' : m.eligibility === "closed" ? '<span class="tag red">closed</span>' : ""}
-        ${m.citizens_only ? '<span class="tag ink">US citizens only</span>' : ""}
-        ${isNew ? '<span class="tag accent">new</span>' : ""}
-      </div>
-      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
-      <div class="title">${esc(cleanTitle(m.title, m.company))}</div>
-      <div class="meta">${esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.eligibility_note && m.eligibility !== "unknown" ? " · " + esc(m.eligibility_note) : ""}</div>
-      <details class="why"><summary>why ${m.score}?</summary><div class="meta mono">${esc(breakdown(m))}</div></details>
-      <div class="actions">
-        ${m.eligibility === "ineligible" || m.eligibility === "closed" ? `<button class="btn" disabled>${m.eligibility === "closed" ? "closed" : "not eligible"}</button>` : `<button class="btn accent" data-act="queue" ${queued.has(m.key) ? "disabled" : ""}>${queued.has(m.key) ? "queued ✓" : "prep this"}</button>`}
-        <button class="btn" data-act="pass">pass</button>
-        <a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a>
-      </div>
-    </article>`;
+  // The owner's frames come from targets.yaml tiers: tier 2 (the companies he picked for his interests) is his
+  // dream list, tier 1 (big tech) the big hitters, and freshman programs and fellowships get the orange frame.
+  const ownerFrame = (m) => m.tier === 2 ? ["legendary", "dream company"] : m.tier === 1 ? ["epic", "big hitter"]
+    : m.early_career === "strong" || m.role === "program" || m.role === "ambassador" ? ["rare", /\bfellow/i.test(m.title || "") ? "fellowship" : "freshman program"] : ["", ""];
+  const card = (m, isNew) => {
+    const out = m.eligibility === "ineligible" || m.eligibility === "closed";
+    const [frame, label] = out ? ["", ""] : ownerFrame(m);
+    const tags = `<span>${esc(roleWord(m))}</span>${out ? `<span class="red">${m.eligibility === "closed" ? "closed" : "not eligible"}</span>` : ""}${m.citizens_only ? "<span>US citizens only</span>" : ""}`;
+    const meta = `${esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.eligibility_note && m.eligibility !== "unknown" ? " · " + esc(m.eligibility_note) : ""}`;
+    const acts = `${out ? "" : `<button class="btn accent" data-act="queue" ${queued.has(m.key) ? "disabled" : ""}>${queued.has(m.key) ? "queued ✓" : "prep"}</button>`}<button class="btn link" data-act="pass">pass</button>`;
+    return jobCard({ key: esc(m.key), cls: out ? "is-out" : "", frame, label, fresh: !out && (isNew || Date.now() - postedAt(m) < DAY), logo: logo(m.company, m.logo), company: esc(m.company), coStyle: coFont(m.company),
+      title: esc(cleanTitle(m.title, m.company)), url: esc(safeUrl(m.url)), meta, tags, acts, score: m.score, scoreTitle: esc(`why ${m.score}: ${breakdown(m)}`) });
+  };
 
-  const hero = `
-    <div class="stat">
-      <div class="stat-main">
-        ${panda(fresh.length ? "celebrate" : "nap", "stat-panda")}
-        <div class="stat-label">you have</div>
-        <div class="stat-big" id="open-count">${openCount.toLocaleString("en-US")}</div>
-        <div class="stat-sub">open matches</div>
-        ${total > data.matches.length ? `<div class="stat-note">showing the top ${data.matches.length}</div>` : ""}
-      </div>
-      <div class="stat-tiles">
-        <div class="tile${fresh.length ? " hot" : ""}"><b>${fresh.length}</b><span>new since your last visit</span></div>
-        <div class="tile"><b>${programs}</b><span>freshman friendly</span></div>
-        <div class="tile"><b>${queue.length}</b><span>queued for /prep</span></div>
-      </div>
-      <div class="stat-foot">updated ${esc(when(data.generated_at))}</div>
-    </div>`;
-
+  const hero = `<p class="sub">${fresh.length ? `<b>${fresh.length} new</b> since your last visit · ` : ""}<span id="open-count">${openCount.toLocaleString("en-US")}</span> open${total > data.matches.length ? ` (showing the top ${data.matches.length})` : ""} · ${programs} freshman friendly · ${queue.length} queued for /prep</p>`;
 
   const passedRows = data.matches.filter((m) => passed[m.key] && !tracker[m.key]);
   const passedCard = (m) => `
@@ -716,19 +695,8 @@ async function newPage(env, viewId) {
       <div class="actions"><button class="btn accent" data-act="unpass">unpass</button><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`;
 
-  const groups = [...new Set(VIEWS.map((v) => v.group))];
-  const views = `
-    <form class="viewpick" method="get" action="/#list">
-      <label for="view">view</label>
-      <div class="select-wrap">
-        <select id="view" name="view" onchange="this.form.submit()">
-          ${groups.map((g) => `<optgroup label="${g}">${VIEWS.filter((v) => v.group === g).map((v) => `<option value="${v.id}"${v === view ? " selected" : ""}>${v.label} · ${rows.filter(v.pick).length.toLocaleString("en-US")}</option>`).join("")}</optgroup>`).join("")}
-        </select>
-        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <noscript><button class="btn" type="submit">show</button></noscript>
-      <p class="note view-note" aria-live="polite">${view.note}</p>
-    </form>`;
+  const views = `<nav class="views" aria-label="views">${VIEWS.map((v) => `<a href="/?view=${v.id}#list"${v === view ? ' class="on" aria-current="page"' : ""}>${v.label.replace(" for you", "")}<small>${rows.filter(v.pick).length.toLocaleString("en-US")}</small></a>`).join("")}</nav>
+    <p class="view-line" aria-live="polite">${view.note} updated ${esc(when(data.generated_at))}.</p>`;
 
   const body = `
     ${hero}
@@ -740,7 +708,8 @@ async function newPage(env, viewId) {
     ${rest.length > 60 ? `<p class="note">showing the top 60 of ${rest.length}.</p>` : ""}
     <details class="passed-list" id="passed" ${passedRows.length ? "" : "hidden"}><summary><h2>passed (<span id="passed-count">${passedRows.length}</span>)</h2></summary><p class="note">changed your mind? unpass puts it back in the list.</p><div id="passed-cards">${passedRows.map(passedCard).join("")}</div></details>`;
   // "good morning, jeremy", in New York time. OWNER_NAME is a plain var in wrangler.toml.
-  return page(body, { title: "New", page: "new", lead: greeting(localNow("Eastern (New York)").hour), head: (env.OWNER_NAME || "you").toLowerCase() });
+  return page(body, { title: "New", page: "new", lead: greeting(localNow("Eastern (New York)").hour), head: (env.OWNER_NAME || "you").toLowerCase(), extraHead: CO_FONTS_LINK,
+    css: "body[data-page=new] main>.sub,body[data-page=new] main>.empty,body[data-page=new] main>.note{grid-column:1/-1}" });
 }
 
 async function programsPage(env) {
@@ -846,17 +815,19 @@ function aboutPage(loggedIn) {
 
 function page(body, opts, status = 200) {
   // links, dock, and css let the account pages (accounts.js) use this shell with their own header and nav.
-  const { title, page: name, lead, head, nav = true, mood = "", links = null, dock = null, css = "", script = "" } = opts;
+  const { title, page: name, lead, head, nav = true, mood = "", links = null, dock = null, css = "", script = "", extraHead = "" } = opts;
+  // The app pages wear the themes (theme.js): light, sky, or dark, with art behind the page.
+  const themed = THEMED.has(name);
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="${PAGE_COLORS[name] || "#cf6a2e"}">
-<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Scout · ${esc(title)}</title><style>${tokens}${BASE_CSS}${css}</style></head><body data-page="${esc(name)}">
-<header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${links !== null ? links : name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
+<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Scout · ${esc(title)}</title>${themed ? FONTS_LINK + THEME_HEAD : ""}${extraHead}<style>${tokens}${BASE_CSS}${css}${themed ? THEME_CSS : ""}</style></head><body data-page="${esc(name)}"${themed ? ' class="themed"' : ""}>${themed ? SCENE : ""}
+<header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${themed ? THEME_BUTTON : ""}${links !== null ? links : name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
 <main>
   ${lead || head ? `<h1><span class="lead${String(lead).length > 12 ? " long" : ""}">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>` : ""}
   ${body}
 </main>
 ${dock !== null ? dock : nav ? NAV.replace(`href="/${name === "new" ? "" : name}"`, `href="/${name === "new" ? "" : name}" class="on"`) : ""}
-${nav && dock === null ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS}</script>${script ? `<script>${script}</script>` : ""}</body></html>`;
+${nav && dock === null ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS}</script>${themed ? `<script>${THEME_JS}</script>` : ""}${script ? `<script>${script}</script>` : ""}</body></html>`;
   return new Response(html, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
 }
 

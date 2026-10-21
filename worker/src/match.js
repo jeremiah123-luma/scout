@@ -176,6 +176,17 @@ export function rank(matches, answers, now = Date.now()) {
   }).sort((x, y) => y.my.score - x.my.score);
 }
 
+// Why a posting matters to this student, which sets its card's frame: one of their dream companies (rainbow), a big
+// hitter (big tech or a company they're excited about, purple), or a freshman program or fellowship (orange).
+// The higher frame wins when a posting is two of these.
+export function frameFor(m) {
+  const company = (m.my && m.my.parts && m.my.parts.company) || 0;
+  if (company >= 25) return ["legendary", "dream company"];
+  if (company >= 12) return ["epic", "big hitter"];
+  if (m.early_career === "strong" || m.role === "program" || m.role === "ambassador") return ["rare", /\bfellow/i.test(m.title || "") ? "fellowship" : "freshman program"];
+  return ["", ""];
+}
+
 export const isOpen = (m) => !m.my.out && m.my.eligibility !== "ineligible" && m.my.eligibility !== "closed";
 
 // Whether a posting is in a field they picked, or a program and they asked for programs. Postings outside their

@@ -1,6 +1,5 @@
-/* Scout design tokens. Every color, size, and font lives here, so restyling means editing this file.
-   The look: poster display type, thick navy outlines with a hard offset shadow, cream cards on a
-   saturated page color (one color per page), one warm accent for the action that matters on each card. */
+/* Scout design tokens: the base colors, sizes, and fonts. The app pages add the three themes (light, sky, dark),
+   the glass cards, and the art on top of these (src/theme.js). The whole brand is written up in docs/BRAND.md. */
 @import url("https://fonts.googleapis.com/css2?family=Bowlby+One&family=Titan+One&family=Rubik:wght@500;700&display=swap");
 
 :root {

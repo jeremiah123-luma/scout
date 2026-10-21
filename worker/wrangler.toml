@@ -29,6 +29,12 @@ type = "Text"
 globs = ["**/*.css"]
 fallthrough = true
 
+# the Blender art behind the themes (src/theme.js), bundled into the Worker
+[[rules]]
+type = "Data"
+globs = ["**/*.webp"]
+fallthrough = true
+
 [vars]
 GH_REPO = "jeremiah123-luma/scout"
 OWNER_NAME = "jeremy"   # the owner's New page says "good morning, jeremy"

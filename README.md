@@ -5,7 +5,7 @@ An internship radar for college students in tech, freshman year and up. Sign up 
 <img src="docs/screens/landing-desktop.png" alt="Scout's landing page: the good internships close in days, scout finds them first, next to a phone getting a Scout notification">
 
 <p align="center">
-  <img src="docs/screens/new-phone.png" width="30%" alt="A student's New page on a phone: a time-of-day greeting, open match count, and scored postings">
+  <img src="docs/screens/new-phone.png" width="30%" alt="A student's New page on a phone in the light theme: a handwritten greeting, view pills, and framed postings with scores">
   <img src="docs/screens/tracker-phone.png" width="30%" alt="The tracker on a phone: saved and applied postings with a prep prompt for Claude Code">
   <img src="docs/screens/companies-phone.png" width="30%" alt="Sign-up question: pick dream companies from real logos">
 </p>
@@ -50,10 +50,12 @@ Cloudflare Worker (JavaScript, free tier)
 - **Claude Code** for the owner's own prep kits (`.claude/commands/`).
 
 ## What changed in this release
+- A new look: three themes that follow the time of day where you are (light with a sun, sky with drifting clouds, dark with a lighthouse sweeping its beam), cream glass cards, a handwritten greeting, and scores in a hand-drawn style. The ◐ button picks a theme. The sun and lighthouse were modeled in Blender ([worker/art/scene.py](worker/art/scene.py)). The brand is written up in [docs/BRAND.md](docs/BRAND.md).
+- Cards say why a posting matters: a rainbow frame for a dream company, purple for a big hitter, orange for a freshman program or fellowship, and a "fresh!" strip of tape on anything new. Company names show in each company's own type.
+- More postings: Jobright's daily lists (the ones on intern-list.com) and about 1,100 company job boards found in the lists' own links, read a rotating batch every hour.
 - Opened to other students: accounts, the sign-up questions, each student's own matches, tracker, alerts, and prep prompt.
 - A public landing page that explains why Scout exists, with live numbers from the last run.
 - The New page's views moved into one dropdown, with a big hitters view; a time-of-day greeting.
-- A new source: Jobright's daily lists (the postings on intern-list.com), about 300 postings the other lists didn't have.
 - Contrast: text on the page colors is navy, and the big cream headline words carry a navy outline.
 - A full bug review in three rounds, every finding fixed with a test where it could have one.
 

@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { greeting, verdict, profileFrom, yearFromGrad, standingMinYear, exclusion, score, rank, isOpen, inUS, isQuiet, hourOf, digestDue, instantPicks, localNow } from "../src/match.js";
+import { greeting, verdict, profileFrom, yearFromGrad, standingMinYear, exclusion, score, rank, isOpen, inUS, isQuiet, hourOf, digestDue, instantPicks, localNow, frameFor } from "../src/match.js";
 
 const cases = JSON.parse(readFileSync(new URL("./fixtures/verdicts.json", import.meta.url), "utf8"));
 
@@ -125,4 +125,16 @@ test("instant picks respect their rule and never repeat", () => {
   assert.deepEqual(instantPicks(ranked, { speed: "tell me right away" }, new Set(), since).map((m) => m.key), ["high", "nostamp"]);
   assert.deepEqual(instantPicks(ranked, { speed: "tell me right away" }, new Set(["high", "nostamp"]), since), []);
   assert.deepEqual(instantPicks(ranked, { speed: "once a day" }, new Set(), since), []);
+});
+
+test("frames say why a posting matters, the higher one winning", () => {
+  const card = (company, extra = {}) => ({ title: "Software Engineer Intern", my: { parts: { company } }, ...extra });
+  assert.deepEqual(frameFor(card(25)), ["legendary", "dream company"]);
+  assert.deepEqual(frameFor(card(25, { early_career: "strong" })), ["legendary", "dream company"]);
+  assert.deepEqual(frameFor(card(18)), ["epic", "big hitter"]);
+  assert.deepEqual(frameFor(card(12)), ["epic", "big hitter"]);
+  assert.deepEqual(frameFor(card(0, { early_career: "strong" })), ["rare", "freshman program"]);
+  assert.deepEqual(frameFor(card(0, { role: "program", title: "Anthropic Fellows Program" })), ["rare", "fellowship"]);
+  assert.deepEqual(frameFor(card(8)), ["", ""]);
+  assert.deepEqual(frameFor({ title: "x" }), ["", ""]);
 });

@@ -7,7 +7,8 @@
  * tracker, queue, or kits.
  */
 
-import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf, arrivedMs, greeting } from "./match.js";
+import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf, arrivedMs, greeting, frameFor } from "./match.js";
+import { jobCard, coFont, CO_FONTS_LINK } from "./theme.js";
 
 const TRACK_STATES = ["Saved", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn"];
 const SHOWN = 60;
@@ -105,7 +106,7 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-u]")
  if(act==="copy"){var t=document.getElementById(b.dataset.src);if(!t)return;var text=t.value||t.textContent;(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){b.textContent="copied ✓";setTimeout(function(){b.textContent=b.dataset.label||"copy"},1800)},function(){t.select&&t.select();b.textContent="select and copy"});return}
  b.disabled=true;
  if(act==="test"){post("/api/u/test",{}).then(function(r){b.textContent=r.ok?"sent. check your phone":"that didn't send. try again";b.disabled=false},function(){oops(b)});return}
- if(act==="save"){post("/api/u/save",{key:key}).then(function(){var a=document.createElement("a");a.className="btn saved";a.href="/tracker";a.textContent="saved ✓ · open tracker";b.replaceWith(a);bump(1)},function(){oops(b,"save")});return}
+ if(act==="save"){post("/api/u/save",{key:key}).then(function(){var a=document.createElement("a");a.className="btn saved";a.href="/tracker";a.title="open your tracker";a.textContent="saved ✓";b.replaceWith(a);bump(1)},function(){oops(b,"save")});return}
  if(act==="pass"){post("/api/u/pass",{key:key}).then(function(){card.classList.add("dim");b.textContent="undo";b.dataset.u="unpass";b.disabled=false},function(){oops(b,"pass")});return}
  if(act==="unpass"){post("/api/u/pass",{key:key,undo:true}).then(function(){card.classList.remove("dim");b.textContent="pass";b.dataset.u="pass";b.disabled=false},function(){oops(b,"undo")});return}
  if(act==="track"){var state=card.querySelector("[data-field=state]").value,next=card.querySelector("[data-field=next]").value;post("/api/u/track",{key:key,state:state,next:next}).then(function(){b.textContent="updated ✓";b.classList.remove("accent");var tag=card.querySelector(".state-tag");if(tag)tag.textContent=state;setTimeout(function(){b.textContent="update";b.disabled=false},1400)},function(){oops(b,"update")});return}
@@ -157,62 +158,33 @@ export async function studentHome(env, user, url, ui) {
   await env.DB.prepare("UPDATE student_meta SET last_visit = ? WHERE user_id = ?").bind(new Date().toISOString(), user.id).run();
   const first = (user.answers.name || "").split(" ")[0];
 
+  const lastVisit = meta.last_visit ? Date.parse(meta.last_visit) : 0;
   const card = (m) => {
-    const dream = (m.my.parts.company || 0) >= 25;
     const out = !isOpen(m);
-    return `
-    <article class="card${out ? " is-out" : ""}" data-key="${ui.esc(m.key)}">
-      <div class="tags"><span class="tag">${roleWord(m)}</span>${dream ? '<span class="tag ink">dream</span>' : ""}${m.early_career === "strong" ? '<span class="tag accent">freshman friendly</span>' : ""}${out ? `<span class="tag red">${ui.esc(m.my.out || (m.my.eligibility === "closed" ? "closed" : "not eligible"))}</span>` : ""}</div>
-      <div class="row">${ui.coHead(m.company, m.logo, m.company)}<span class="score" aria-label="score ${m.my.score} out of 100">${m.my.score}<small>/100</small></span></div>
-      <div class="title">${ui.esc(ui.cleanTitle(m.title, m.company))}</div>
-      <div class="meta">${ui.esc(placesFor(m, user.answers) || "location not listed")} · ${age(m.latest_posted || m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.my.eligibility !== "unknown" ? " · " + ui.esc(m.my.note) : ""}</div>
-      <details class="why"><summary>why ${m.my.score}?</summary><div class="meta mono">${ui.esc(why(m.my.parts))}</div></details>
-      <div class="actions">
-        ${out ? "" : '<button class="btn accent" data-u="save">save</button>'}
-        <button class="btn" data-u="pass">pass</button>
-        <a class="btn ghost" href="${ui.esc(ui.safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a>
-      </div>
-    </article>`;
+    const [frame, label] = out ? ["", ""] : frameFor(m);
+    // "fresh!": arrived since their last visit, or in the last day.
+    const fresh = !out && ((lastVisit && seenMs(m) > lastVisit) || within(m, 1));
+    const tags = `<span>${roleWord(m)}</span>${out ? `<span class="red">${ui.esc(m.my.out || (m.my.eligibility === "closed" ? "closed" : "not eligible"))}</span>` : ""}`;
+    const meta = `${ui.esc(placesFor(m, user.answers) || "location not listed")} · ${age(m.latest_posted || m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.my.eligibility !== "unknown" ? " · " + ui.esc(m.my.note) : ""}`;
+    return jobCard({ key: ui.esc(m.key), cls: out ? "is-out" : "", frame, label, fresh, logo: ui.logo(m.company, m.logo), company: ui.esc(m.company), coStyle: coFont(m.company),
+      title: ui.esc(ui.cleanTitle(m.title, m.company)), url: ui.esc(ui.safeUrl(m.url)), meta, tags,
+      acts: `${out ? "" : '<button class="btn accent" data-u="save">save</button>'}<button class="btn link" data-u="pass">pass</button>`,
+      score: m.my.score, scoreTitle: ui.esc("why " + m.my.score + ": " + why(m.my.parts)) });
   };
 
-  const groups = [...new Set(VIEWS.map((v) => v.group))];
-  const picker = `
-    <form class="viewpick" method="get" action="/#list">
-      <label for="view">view</label>
-      <div class="select-wrap">
-        <select id="view" name="view">
-          ${groups.map((g) => `<optgroup label="${g}">${VIEWS.filter((v) => v.group === g).map((v) => `<option value="${v.id}"${v === view ? " selected" : ""}>${v.label} · ${listFor(v).length.toLocaleString("en-US")}</option>`).join("")}</optgroup>`).join("")}
-        </select>
-        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <noscript><button class="btn" type="submit">show</button></noscript>
-      <p class="note view-note" aria-live="polite">${view.note}</p>
-    </form>`;
-
-  const hero = `
-    <div class="stat">
-      <div class="stat-main">
-        ${ui.panda(open.length ? (fresh ? "celebrate" : "sunglasses") : "nap", "stat-panda")}
-        <div class="stat-label">you have</div>
-        <div class="stat-big">${open.length.toLocaleString("en-US")}</div>
-        <div class="stat-sub">open ${open.length === 1 ? "match" : "matches"}</div>
-      </div>
-      <div class="stat-tiles">
-        ${fresh ? `<div class="tile hot"><b>${fresh}</b><span>new since your last visit</span></div>` : `<div class="tile"><b>${ranked.filter((m) => isOpen(m) && (m.my.parts.company || 0) >= 18).length}</b><span>at companies on your lists</span></div>`}
-        <div class="tile"><b>${freshman}</b><span>freshman friendly</span></div>
-        <div class="tile"><b>${tracks.length}</b><span>on your tracker</span></div>
-      </div>
-      <div class="stat-foot">updated ${ui.esc(ui.when(data.generated_at))}</div>
-    </div>`;
+  // The views as pills, each with its count; the line under them says what the view is.
+  const views = `<nav class="views" aria-label="views">${VIEWS.map((v) => `<a href="/?view=${v.id}#list"${v === view ? ' class="on" aria-current="page"' : ""}>${v.label.replace(" for you", "")}<small>${listFor(v).length.toLocaleString("en-US")}</small></a>`).join("")}</nav>
+    <p class="view-line" aria-live="polite">${view.note} <span class="when">updated ${ui.esc(ui.when(data.generated_at))}.</span></p>`;
+  const sub = `<p class="sub">${fresh ? `<b>${fresh} new</b> since your last visit · ` : ""}${open.length.toLocaleString("en-US")} open for you${tracks.length ? ` · ${tracks.length} on your tracker` : ""}</p>`;
 
   const empty = `<div class="empty">${ui.panda("bamboo")}<p class="note">${view.id === "best" ? "nothing open fits yet. scout checks the lists every hour, and you can widen your answers on the you page." : "nothing here right now. pick another view above."}</p></div>`;
   const welcome = url.searchParams.get("welcome") ? `<div class="welcome" role="status">${ui.panda("celebrate", "welcome-panda")}<p><b>you're in.</b> save anything good and it lands in your tracker.</p><a class="welcome-x" href="/" aria-label="close">×</a></div>` : "";
-  const body = `${welcome}${hero}<div id="list"></div>${picker}
+  const body = `${sub}${welcome}<div id="list"></div>${views}
     ${inView.slice(0, SHOWN).map(card).join("") || empty}
     ${inView.length > SHOWN ? `<p class="note">showing the top ${SHOWN} of ${inView.length.toLocaleString("en-US")}.</p>` : ""}`;
   // "good morning, maya", by the hour in the time zone they picked.
   return ui.page(body, { title: "New", page: "new", lead: greeting(localNow(user.answers.timezone).hour), head: first ? first.toLowerCase() : "you", nav: false,
-    links: STUDENT_LINKS, dock: studentDock("new", tracks.length), css: STUDENT_CSS, script: STUDENT_JS });
+    links: STUDENT_LINKS, dock: studentDock("new", tracks.length), css: STUDENT_CSS + NEW_CSS, script: STUDENT_JS, extraHead: CO_FONTS_LINK });
 }
 
 /* ---------------------------------------------------------------- the tracker */
@@ -434,6 +406,9 @@ export function privacyPage(ui, signedIn) {
     </article>`;
   return ui.page(body, { title: "Privacy", page: "about", lead: "your data,", head: "plainly", nav: false, links: signedIn ? STUDENT_LINKS : '<a class="pill-link" href="/login">log in</a>', dock: signedIn ? studentDock("") : "", css: STUDENT_CSS });
 }
+
+// The New page's top: the line under the greeting, then the views.
+const NEW_CSS = `body[data-page="new"] main>.sub,body[data-page="new"] main>.welcome,body[data-page="new"] main>.empty,body[data-page="new"] main>.note{grid-column:1/-1}`;
 
 export const STUDENT_CSS = `
 .card.is-out{opacity:.75}
