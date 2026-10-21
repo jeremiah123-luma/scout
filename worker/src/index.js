@@ -261,7 +261,9 @@ async function kitPdf(env, slug, which) {
 // The panda is art borrowed from another project, so it never goes into this public repo. The Mac uploads it
 // straight into KV (scout.sync push --mascot) and removes it the same way (--mascot --remove). With nothing
 // uploaded, every panda image removes itself and the pages look exactly as they did before.
-const PANDAS = ["wave", "celebrate", "nap", "bamboo", "sunglasses", "judging", "proud", "sad", "close", "thumbs", "walking"];
+// Each pose is two layers: "<name>" is the panda alone and "<name>-bg" his mood circle and leaves, so only he moves.
+const POSES = ["wave", "celebrate", "nap", "bamboo", "sunglasses", "judging", "proud", "sad", "close", "thumbs", "walking"];
+const PANDAS = POSES.flatMap((n) => [n, `${n}-bg`]);
 
 async function ingestMascot(request, env) {
   const body = await request.json().catch(() => null);
@@ -282,8 +284,9 @@ async function servePanda(env, name) {
   return new Response(bytes, { headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=3600" } });
 }
 
+// The background sits still and the panda breathes on top of it. If either layer is missing, the whole thing goes.
 function panda(name, cls = "") {
-  return `<img class="panda${cls ? " " + cls : ""}" src="/panda/${name}.png" alt="" aria-hidden="true" onerror="this.remove()">`;
+  return `<span class="panda${cls ? " " + cls : ""}" aria-hidden="true"><img class="panda-bg" src="/panda/${name}-bg.png" alt="" onerror="this.parentNode.remove()"><img class="panda-fg" src="/panda/${name}.png" alt="" onerror="this.parentNode.remove()"></span>`;
 }
 
 /* ---------------------------------------------------------------- company logos */
@@ -308,6 +311,13 @@ function logo(company, url) {
   return `<span class="logo" style="--badge:${BADGE_COLORS[h % BADGE_COLORS.length]}" aria-hidden="true"><b>${esc(letter)}</b>${img}</span>`;
 }
 
+// Logo plus company name. Words never break in the middle: names with a long word ("Communications") get smaller.
+function coHead(company, url, label) {
+  const longest = Math.max(0, ...String(label || "").split(/\s+/).map((w) => w.length));
+  const size = longest >= 14 ? " class=\"xlong\"" : longest >= 11 ? " class=\"long\"" : "";
+  return `<div class="co">${logo(company, url)}<h3${size}>${esc(label)}</h3></div>`;
+}
+
 // For cards that only know a company name (tracker, Review): the logo map the cron uploads.
 const logoFor = (logos, company) => logos[normName(company)] || "";
 
@@ -318,7 +328,7 @@ async function reviewList(env) {
   const cards = [...index].sort((a, b) => order(a) - order(b)).map((k) => `
     <a class="card kitcard" href="/review/${esc(k.slug)}">
       <div class="tags"><span class="tag ${state(k) === "Applied" ? "green" : "ink"}">${esc(state(k))}</span></div>
-      <div class="co">${logo(k.company || k.slug, logoFor(logos, k.company))}<h3>${esc(k.company || k.slug)}</h3></div>
+      ${coHead(k.company || k.slug, logoFor(logos, k.company), k.company || k.slug)}
       <div class="title">${esc(k.title)}</div>
       <div class="meta">kit saved ${esc(when(k.updated))}</div>
     </a>`).join("");
@@ -518,7 +528,7 @@ async function newPage(env) {
         ${m.citizens_only ? '<span class="tag ink">US citizens only</span>' : ""}
         ${isNew ? '<span class="tag accent">new</span>' : ""}
       </div>
-      <div class="row"><div class="co">${logo(m.company, m.logo)}<h3>${esc(m.company)}</h3></div><span class="score">${m.score}</span></div>
+      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
       <div class="title">${esc(m.title)}</div>
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.date_posted)}${m.eligibility_note && m.eligibility !== "unknown" ? " · " + esc(m.eligibility_note) : ""}</div>
       <details class="why"><summary>why ${m.score}?</summary><div class="meta mono">${esc(breakdown(m))}</div></details>
@@ -550,7 +560,7 @@ async function newPage(env) {
   const passedRows = data.matches.filter((m) => passed[m.key] && !tracker[m.key]);
   const passedCard = (m) => `
     <article class="card passed" data-key="${esc(m.key)}">
-      <div class="row"><div class="co">${logo(m.company, m.logo)}<h3>${esc(m.company)}</h3></div><span class="score">${m.score}</span></div>
+      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
       <div class="title">${esc(m.title)}</div>
       <div class="meta">passed ${age(passed[m.key])}</div>
       <div class="actions"><button class="btn accent" data-act="unpass">unpass</button><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
@@ -574,14 +584,14 @@ async function programsPage(env) {
   const watched = Object.entries(pages).map(([url, p]) => `
     <article class="card">
       <div class="tags"><span class="tag${p.changed_at ? " accent" : ""}">${p.changed_at ? "new words " + age(p.changed_at) : "no changes yet"}</span>${p.failures ? `<span class="tag red">${p.failures} failed fetch${p.failures > 1 ? "es" : ""}</span>` : ""}</div>
-      <div class="co">${logo(p.name || url, logos[pageCompany(p)] || "")}<h3>${esc(p.name || url)}</h3></div>
+      ${coHead(p.name || url, logos[pageCompany(p)] || "", p.name || url)}
       ${p.last_change ? `<div class="change"><b>what changed:</b>${esc(p.last_change).replace(/\n/g, "<br>")}</div><div class="meta">a change means go look. it does not mean applications are open.</div>` : ""}<div class="meta">checked ${age(p.checked_at)}</div>
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(url))}" target="_blank" rel="noopener">open page ↗</a></div>
     </article>`).join("");
   const finds = data.matches.filter((m) => (m.early_career === "strong" || m.role === "ambassador") && !passed[m.key]).map((m) => `
     <article class="card">
       <div class="tags"><span class="tag accent">${m.role === "ambassador" ? "ambassador" : "freshman friendly"}</span>${tracker[m.key] ? `<span class="tag ink">${esc(tracker[m.key].state)}</span>` : ""}</div>
-      <div class="row"><div class="co">${logo(m.company, m.logo)}<h3>${esc(m.company)}</h3></div><span class="score">${m.score}</span></div>
+      <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
       <div class="title">${esc(m.title)}</div>
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", "))} · ${age(m.date_posted)}</div>
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
@@ -603,7 +613,7 @@ async function trackerPage(env) {
   const list = rows.map(([key, r]) => `
     <article class="card" data-key="${esc(key)}">
       <div class="tags"><span class="tag ${r.state === "Applied" || r.state === "Offer" ? "green" : r.state === "Rejected" ? "red" : "ink"}">${esc(r.state)}</span><span class="tag">${esc(r.updated || "")}</span></div>
-      <div class="row"><div class="co">${logo(r.company, logoFor(logos, r.company))}<h3>${esc(r.company)}</h3></div>${r.score != null ? `<span class="score">${r.score}</span>` : ""}</div>
+      <div class="row">${coHead(r.company, logoFor(logos, r.company), r.company)}${r.score != null ? `<span class="score">${r.score}</span>` : ""}</div>
       <div class="title">${esc(r.title)}</div>
       <div class="meta">${r.applied ? "applied " + esc(r.applied) + " · " : ""}${r.next ? "next: " + esc(r.next) : "no next action yet"}</div>
       <div class="actions wrap">
@@ -852,7 +862,7 @@ textarea.ans[hidden]{display:none}
 }
 @media (min-width:1200px){body[data-page="review"] main > .kit{grid-template-columns:360px minmax(0,var(--sheet-max))}}
 @media (hover:hover){.kitgrid > .card:hover{transform:translate(-2px,-3px);box-shadow:9px 9px 0 var(--ink)}}
-.row h3{min-width:0;overflow-wrap:anywhere} .tile b{font-size:clamp(26px,8vw,34px)}
+.row h3,.co h3{min-width:0;overflow-wrap:break-word;hyphens:manual} .co h3.long{font-size:.92em} .co h3.xlong{font-size:.84em} .tile b{font-size:clamp(26px,8vw,34px)}
 /* the next-action box takes its own line and grows with the text, so nothing gets cut off */
 textarea[data-act="next"]{flex:1 1 100%;width:100%;order:-1;resize:none;overflow:hidden;line-height:1.35;border-radius:18px;padding:11px 16px;min-height:44px}
 /* the hero card: a sheen sweeps across, the number pops and counts up (CLIENT_JS), the tiles bounce in one by one */
@@ -890,8 +900,11 @@ h2::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;bor
 .logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .kitcard .co{margin:2px 0 4px}
 /* the borrowed panda: art with a transparent background, bobbing gently (reduced motion stops it below) */
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.panda{display:block;height:auto;animation:bob 3.4s ease-in-out infinite;pointer-events:none}
+/* only the panda layer moves: a slow breath that grows him from his feet, so the circle behind never shows a seam */
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035,1.05)}}
+.panda{display:block;position:relative;pointer-events:none}
+.panda img{display:block;width:100%;height:auto}
+.panda .panda-fg{position:absolute;inset:0;transform-origin:50% 92%;animation:breathe 3.6s ease-in-out infinite}
 .stat-main{position:relative;padding-right:clamp(104px,30vw,150px)}
 .stat-panda{position:absolute;right:-4px;top:50%;width:clamp(100px,28vw,140px);margin-top:calc(clamp(100px,28vw,140px) / -2)}
 .intro{display:flex;align-items:center;gap:12px;margin:0 0 14px;max-width:760px} .intro .panda{width:84px;flex:none} .intro .note{margin:0}

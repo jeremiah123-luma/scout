@@ -99,32 +99,36 @@ def build_push_payload(data_dir: Path = DATA, config_dir: Path = ROOT / "config"
 
 # The panda is art borrowed from another of Jeremiah's projects. It never goes into this public repo: the files
 # stay in a folder on his Mac (MASCOT_DIR in me/dashboard.env, or the default below) and go straight to KV.
-MASCOT_DEFAULT = Path.home() / "Desktop" / "Scroll Jar Panda" / "06 Transparent"
+# Each pose is two layers, made once on the Mac: <file>-bg.png (mood circle, leaves, ground) and <file>-fg.png (the
+# panda alone), so only the panda moves on the page.
+MASCOT_DEFAULT = Path.home() / "Desktop" / "Scroll Jar Panda" / "07 Layers"
 MASCOT_FILES = {  # dashboard name -> file in that folder
-    "wave": "01-welcome.png", "celebrate": "happy-celebrating.png", "nap": "napping.png", "bamboo": "eating-bamboo.png",
-    "sunglasses": "sunglasses.png", "judging": "judging.png", "proud": "proud.png", "sad": "sad.png",
-    "close": "07-getting-close.png", "thumbs": "03-screen-time-permission.png", "walking": "walking-tossing-phone.png",
+    "wave": "01-welcome", "celebrate": "happy-celebrating", "nap": "napping", "bamboo": "eating-bamboo",
+    "sunglasses": "sunglasses", "judging": "judging", "proud": "proud", "sad": "sad",
+    "close": "07-getting-close", "thumbs": "03-screen-time-permission", "walking": "walking-tossing-phone",
 }
 
 
 def pack_mascot(folder: Path, max_side: int = 360) -> dict[str, str]:
-    """Each panda shrunk to at most max_side pixels (twice its largest size on the page) as base64 PNG."""
+    """Both layers of each pose, shrunk to at most max_side pixels (twice its largest size on the page), as base64
+    PNG: "<name>" is the panda, "<name>-bg" the background."""
     import base64
     import io
 
     from PIL import Image  # Mac only; the cron never runs this
 
     images = {}
-    for name, file in MASCOT_FILES.items():
-        path = folder / file
-        if not path.exists():
-            print(f"  missing {file}, skipped")
-            continue
-        img = Image.open(path).convert("RGBA")
-        img.thumbnail((max_side, max_side), Image.LANCZOS)
-        buf = io.BytesIO()
-        img.save(buf, "PNG", optimize=True)
-        images[name] = base64.b64encode(buf.getvalue()).decode("ascii")
+    for name, stem in MASCOT_FILES.items():
+        for suffix, key in (("-fg", name), ("-bg", f"{name}-bg")):
+            path = folder / f"{stem}{suffix}.png"
+            if not path.exists():
+                print(f"  missing {path.name}, skipped")
+                continue
+            img = Image.open(path).convert("RGBA")
+            img.thumbnail((max_side, max_side), Image.LANCZOS)
+            buf = io.BytesIO()
+            img.save(buf, "PNG", optimize=True)
+            images[key] = base64.b64encode(buf.getvalue()).decode("ascii")
     return images
 
 
