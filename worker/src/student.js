@@ -7,11 +7,15 @@
  * tracker, queue, or kits.
  */
 
-import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, norm } from "./match.js";
+import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation } from "./match.js";
 
 const TRACK_STATES = ["Saved", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn"];
 const SHOWN = 60;
 const ALERT_SENDS_PER_RUN = 40; // free Workers allow 50 outbound requests per run; leave room for the rest
+// Ranking 300 postings for one student takes about 0.8 ms of CPU, and a free Worker gets about 10 ms per run, so
+// each run handles the students who have waited longest. The alert cron runs every 10 minutes (wrangler.toml),
+// which covers about 48 students an hour on the free plan.
+const STUDENTS_PER_RUN = 8;
 
 /* ---------------------------------------------------------------- storage */
 
@@ -57,6 +61,14 @@ export async function deleteStudentData(env, userId) {
 }
 
 /* ---------------------------------------------------------------- shared bits */
+
+// US places first for a student who said no to working abroad: a posting that's open in London and remote in the
+// US is on their list for the US part, so that's what the card should show.
+function placesFor(m, a) {
+  const locs = m.locations || [];
+  const sorted = a.abroad === "yes" ? locs : [...locs.filter(usLocation), ...locs.filter((l) => !usLocation(l))];
+  return sorted.slice(0, 2).join(", ");
+}
 
 const roleWord = (m) => ({ swe: "software", pm: "product", it: "IT", design: "design", program: "program", ambassador: "ambassador" })[m.role] || "role";
 
@@ -131,7 +143,7 @@ export async function studentHome(env, user, url, ui) {
       <div class="tags"><span class="tag">${roleWord(m)}</span>${dream ? '<span class="tag ink">dream</span>' : ""}${m.early_career === "strong" ? '<span class="tag accent">freshman friendly</span>' : ""}${out ? `<span class="tag red">${ui.esc(m.my.out || (m.my.eligibility === "closed" ? "closed" : "not eligible"))}</span>` : ""}</div>
       <div class="row">${ui.coHead(m.company, m.logo, m.company)}<span class="score">${m.my.score}</span></div>
       <div class="title">${ui.esc(ui.cleanTitle(m.title, m.company))}</div>
-      <div class="meta">${ui.esc((m.locations || []).slice(0, 2).join(", ") || "location not listed")} · ${age(m.latest_posted || m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.my.eligibility !== "unknown" ? " · " + ui.esc(m.my.note) : ""}</div>
+      <div class="meta">${ui.esc(placesFor(m, user.answers) || "location not listed")} · ${age(m.latest_posted || m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.my.eligibility !== "unknown" ? " · " + ui.esc(m.my.note) : ""}</div>
       <details class="why"><summary>why ${m.my.score}?</summary><div class="meta mono">${ui.esc(why(m.my.parts))}</div></details>
       <div class="actions">
         ${out ? "" : '<button class="btn accent" data-u="save">save</button>'}
@@ -316,7 +328,8 @@ export async function runStudentAlerts(env, getKV, now = new Date()) {
   const data = await getKV("matches", { matches: [] });
   if (!(data.matches || []).length) return { sent: 0 };
   const { results } = await env.DB.prepare(`SELECT u.id, u.answers, m.topic, m.last_check, m.last_digest FROM users u
-    JOIN student_meta m ON m.user_id = u.id WHERE u.done = 1`).all().catch(() => ({ results: [] }));
+    JOIN student_meta m ON m.user_id = u.id WHERE u.done = 1 ORDER BY m.last_check ASC LIMIT ?`).bind(STUDENTS_PER_RUN).all()
+    .catch((err) => { console.log("student alerts: query failed:", err && err.message); return { results: [] }; });
   let sent = 0;
   for (const row of results || []) {
     if (sent >= ALERT_SENDS_PER_RUN) break;

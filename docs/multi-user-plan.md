@@ -1,6 +1,6 @@
 # Scout for other people: the plan
 
-Status: U0 to U2 built locally on the multi-user branch, 2026-10-20. U3 onward not started.
+Status: U0 to U5 and U7 built on the multi-user branch, 2026-10-21. U6 (fields beyond tech) is dropped: Scout is for college students in tech, freshman year and up.
 
 ## Decisions so far
 - **Sign up, then a long set of questions.** Right after someone makes an account, Scout asks everything it needs to find the right jobs for them: major, year, where they want to work, what roles, what companies. Their answers become their settings. Nobody edits YAML.
@@ -107,3 +107,10 @@ The repo is public, and a few things in it are about Jeremiah specifically (see 
 - **U2:** the 9 steps of questions, a live count of fitting postings from step 4, and a "you" page that ends on a first look at real postings, with every answer editable and a delete-my-account button.
 - **Landing page** (`worker/src/landing.js`): public, explains why Scout exists, with numbers from the last run.
 - **Before deploying:** create the D1 database (`npx wrangler d1 create scout-users`) and put its id in `worker/wrangler.toml`; keep the landing page's alert and prep claims in step with U4 and U5.
+
+## What U3 to U7 built (2026-10-21)
+- **U3:** every student gets their own New page (`worker/src/student.js`): the shared postings judged and scored for them by `worker/src/match.js`, with views, save, and pass. Their tracker lives in D1.
+- **U4:** phone alerts through each student's own ntfy topic, from the Worker's hourly cron: instant pings for strong matches by their own rule, or a daily or weekly digest at their hour, never in their quiet hours. Email alerts are out (no free sender).
+- **U5:** instead of a separate repo, each tracker row has a prep prompt for the student's own Claude Code (or Claude): the posting, their answers, and Scout's rules (never invent, say what's missing, apply yourself). Their resume never comes to Scout.
+- **U7:** a privacy page, download my data, delete my account, security headers, same-origin POSTs, and rate-limited logins. Password reset still needs an email sender.
+- **Audience:** the questions are now for college students in tech, freshman year and up, and the company questions pick from logos.

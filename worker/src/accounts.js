@@ -610,6 +610,7 @@ async function saveStep(request, env, user, url, ui) {
   }
   await env.DB.prepare("UPDATE users SET answers = ?, step = ?, done = ?, updated_at = ? WHERE id = ?")
     .bind(JSON.stringify(answers), furthest, done, new Date().toISOString(), user.id).run();
+  if (done) await metaFor(env, user.id); // alerts need the student's topic row, even before they open a page
   if (url.searchParams.get("from") === "you") return ui.redirect(`/you?saved=${step.id}`);
   return ui.redirect(n === STEPS.length ? "/you?saved=all" : `/start?step=${n + 1}`);
 }

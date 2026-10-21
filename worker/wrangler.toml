@@ -35,4 +35,5 @@ GH_REPO = "jeremiah123-luma/scout"
 # Every hour at :47, skipping 10 and 11 UTC like the GitHub schedule (the Morning Brief's hours).
 # See heartbeat() in src/index.js.
 [triggers]
-crons = ["47 0-9,12-23 * * *"]
+# Every 10 minutes: student phone alerts (src/student.js runStudentAlerts), a few students per run.
+crons = ["47 0-9,12-23 * * *", "*/10 * * * *"]

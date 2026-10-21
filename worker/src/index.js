@@ -34,6 +34,8 @@ const SECURITY_HEADERS = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()", "Strict-Transport-Security": "max-age=31536000",
 };
 
+const STUDENT_ALERT_CRON = "*/10 * * * *";
+
 export default {
   async fetch(request, env, ctx) {
     const response = await route(request, env, ctx);
@@ -42,8 +44,10 @@ export default {
     return out;
   },
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(heartbeat(env, Date.now()));
-    ctx.waitUntil(runStudentAlerts(env, (key, fallback) => get(env, key, fallback)).catch((err) => console.log("student alerts failed:", err && err.message)));
+    // Two schedules (wrangler.toml): the hourly :47 check that keeps the cron alive, and every 10 minutes for
+    // student alerts, which handle a few students per run to stay inside the free CPU limit.
+    if (event.cron === STUDENT_ALERT_CRON) ctx.waitUntil(runStudentAlerts(env, (key, fallback) => get(env, key, fallback)).catch((err) => console.log("student alerts failed:", err && err.message)));
+    else ctx.waitUntil(heartbeat(env, Date.now()));
   },
 };
 
