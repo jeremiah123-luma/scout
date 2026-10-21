@@ -21,7 +21,7 @@ import tokens from "./tokens.css";
 import { ICONS } from "./icons.js";
 import { routeAccounts } from "./accounts.js";
 import { runStudentAlerts } from "./student.js";
-import { rank, isOpen, FIELD_ROLES, usLocation } from "./match.js";
+import { rank, isOpen, FIELD_ROLES, usLocation, greeting, localNow } from "./match.js";
 
 const STATES = ["Found", "Saved", "Prepped", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn", "Passed"];
 const COOKIE = "scout";
@@ -736,7 +736,8 @@ async function newPage(env, viewId) {
     ${rest.slice(0, 60).map((m) => card(m, view.id === "today")).join("") || `<div class="empty">${panda("bamboo")}<p class="note">${view.id === "best" ? "nothing yet. scout checks the lists every hour." : "nothing here right now. pick another view above."}</p></div>`}
     ${rest.length > 60 ? `<p class="note">showing the top 60 of ${rest.length}.</p>` : ""}
     <details class="passed-list" id="passed" ${passedRows.length ? "" : "hidden"}><summary><h2>passed (<span id="passed-count">${passedRows.length}</span>)</h2></summary><p class="note">changed your mind? unpass puts it back in the list.</p><div id="passed-cards">${passedRows.map(passedCard).join("")}</div></details>`;
-  return page(body, { title: "New", page: "new", lead: "let's get", head: "you hired" });
+  // "good morning, jeremy", in New York time. OWNER_NAME is a plain var in wrangler.toml.
+  return page(body, { title: "New", page: "new", lead: greeting(localNow("Eastern (New York)").hour), head: (env.OWNER_NAME || "you").toLowerCase() });
 }
 
 async function programsPage(env) {
@@ -848,7 +849,7 @@ function page(body, opts, status = 200) {
 <link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Scout · ${esc(title)}</title><style>${tokens}${BASE_CSS}${css}</style></head><body data-page="${esc(name)}">
 <header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${links !== null ? links : name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
 <main>
-  ${lead || head ? `<h1><span class="lead">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>` : ""}
+  ${lead || head ? `<h1><span class="lead${String(lead).length > 12 ? " long" : ""}">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>` : ""}
   ${body}
 </main>
 ${dock !== null ? dock : nav ? NAV.replace(`href="/${name === "new" ? "" : name}"`, `href="/${name === "new" ? "" : name}" class="on"`) : ""}
@@ -966,7 +967,6 @@ body{--page-hi:color-mix(in srgb,var(--page) 62%,#fff);--page-lo:color-mix(in sr
 body::before{content:"";position:fixed;inset:-25%;z-index:-1;pointer-events:none;
   background:radial-gradient(circle at 18% 12%,var(--page-hi) 0,transparent 38%),radial-gradient(circle at 85% 30%,var(--page-pop) 0,transparent 34%),radial-gradient(circle at 70% 90%,var(--page-lo) 0,transparent 45%),var(--page);
 }
-@keyframes drift{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(3%,-2%) rotate(4deg)}100%{transform:translate(-3%,2%) rotate(-3deg)}}
 /* cards rise in one after another on load */
 main > *{animation:rise .5s cubic-bezier(.2,.9,.3,1.2) both}
 main > *:nth-child(2){animation-delay:.04s} main > *:nth-child(3){animation-delay:.08s} main > *:nth-child(4){animation-delay:.12s} main > *:nth-child(5){animation-delay:.16s} main > *:nth-child(6){animation-delay:.2s} main > *:nth-child(7){animation-delay:.24s} main > *:nth-child(n+8){animation-delay:.28s}
@@ -1093,10 +1093,13 @@ h1{position:relative} .hero-panda{position:absolute;right:0;top:-6px;width:170px
    green), and navy passes on all of them (4.63 to 11.1). So text that sits on the page color is navy, and the big
    cream headline words keep their cream with the brand's navy outline around each letter. Sand pages keep navy. */
 body{--on-page:var(--ink);--lead:var(--cream)}
+/* "good afternoon," is twice as long as most leads: a bit smaller on a phone so it stays on one line */
+@media (max-width:560px){h1 .lead.long{font-size:min(.72em,6.4vw);white-space:nowrap}}
 body[data-page="settings"],body[data-color="sand"]{--lead:var(--ink)}
-h1 .lead,.hero-h1 .lead,.end-h,.sec-h{paint-order:stroke fill}
-h1 .lead,.hero-h1 .lead{-webkit-text-stroke:.14em var(--ink);color:var(--lead)}
-body[data-page="settings"] h1 .lead,body[data-color="sand"] h1 .lead{-webkit-text-stroke:0}
+/* The outline is a ring of 3px shadows, the same weight as every card's border, with round corners on each
+   letter (a text stroke draws sharp spikes past them). */
+h1 .lead,.hero-h1 .lead{color:var(--lead);text-shadow:3px 0 0 var(--ink),-3px 0 0 var(--ink),0 3px 0 var(--ink),0 -3px 0 var(--ink),2px 2px 0 var(--ink),-2px 2px 0 var(--ink),2px -2px 0 var(--ink),-2px -2px 0 var(--ink)}
+body[data-page="settings"] h1 .lead,body[data-color="sand"] h1 .lead{text-shadow:none}
 `;
 
 // The only JavaScript the pages need: send a tap to the API and update the card in place.

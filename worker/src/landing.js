@@ -88,7 +88,7 @@ body[data-page="landing"] main,body[data-page="landing"] header{max-width:1120px
 body[data-page="landing"] main{display:block}
 .hero{display:grid;gap:28px;align-items:center;padding:18px 0 34px}
 .hero-h1{font-family:var(--display);text-transform:uppercase;line-height:.95;margin:0 0 18px;font-size:clamp(34px,8.6vw,72px);letter-spacing:0}
-.hero-h1 .lead{display:block;color:var(--on-page)} .hero-h1 .hl{display:block;color:var(--ink)}
+.hero-h1 .lead{display:block;color:var(--lead)} .hero-h1 .hl{display:block;color:var(--ink)}
 .hero-h1 mark{color:var(--ink);background:linear-gradient(transparent 52%,var(--accent) 52%,var(--accent) 88%,transparent 88%);padding:0 .06em}
 .hero-sub{font-size:clamp(17px,2.4vw,20px);font-weight:700;color:var(--on-page);max-width:44ch;margin:0 0 22px}
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}

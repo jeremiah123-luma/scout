@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { verdict, profileFrom, yearFromGrad, standingMinYear, exclusion, score, rank, isOpen, inUS, isQuiet, hourOf, digestDue, instantPicks, localNow } from "../src/match.js";
+import { greeting, verdict, profileFrom, yearFromGrad, standingMinYear, exclusion, score, rank, isOpen, inUS, isQuiet, hourOf, digestDue, instantPicks, localNow } from "../src/match.js";
 
 const cases = JSON.parse(readFileSync(new URL("./fixtures/verdicts.json", import.meta.url), "utf8"));
 
@@ -83,6 +83,13 @@ test("only postings in their fields, plus programs if they asked", () => {
   assert.deepEqual(rank(ms, { fields: ["software engineering"] }).map((m) => m.key).sort(), ["swe"]);
   assert.deepEqual(rank(ms, { fields: ["software engineering"], early: ["fellowships"] }).map((m) => m.key).sort(), ["prog", "swe"]);
   assert.equal(rank(ms, {}).length, 3, "no fields picked yet: show everything");
+});
+
+test("greeting by time of day", () => {
+  assert.equal(greeting(5), "good morning,"); assert.equal(greeting(11), "good morning,");
+  assert.equal(greeting(12), "good afternoon,"); assert.equal(greeting(16), "good afternoon,");
+  assert.equal(greeting(17), "good evening,"); assert.equal(greeting(21), "good evening,");
+  assert.equal(greeting(22), "up late,"); assert.equal(greeting(0), "up late,"); assert.equal(greeting(4), "up late,");
 });
 
 test("alert timing", () => {

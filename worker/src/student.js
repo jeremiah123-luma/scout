@@ -7,7 +7,7 @@
  * tracker, queue, or kits.
  */
 
-import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf, arrivedMs } from "./match.js";
+import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf, arrivedMs, greeting } from "./match.js";
 
 const TRACK_STATES = ["Saved", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn"];
 const SHOWN = 60;
@@ -117,7 +117,7 @@ const VIEWS = [
   { id: "best", group: "for you", label: "best fit for you", note: "everything still open for you, highest score first.", pick: (m) => isOpen(m) },
   { id: "today", group: "fresh", label: "new today", note: "posted or first spotted in the last 24 hours.", pick: (m) => isOpen(m) && within(m, 1), sort: newest },
   { id: "week", group: "fresh", label: "new this week", note: "posted in the last 7 days, newest first.", pick: (m) => isOpen(m) && within(m, 7, false), sort: newest },
-  { id: "big", group: "for you", label: "big hitters", note: "your dream companies first, then the ones you're excited about, then big tech.", pick: (m) => isOpen(m) && (m.my.parts.company || 0) >= 12 && m.my.score >= 30,
+  { id: "big", group: "for you", label: "big hitters", note: "your dream companies first, then the ones you're excited about, then big tech.", pick: (m) => isOpen(m) && (m.my.parts.company || 0) >= 12 && m.my.score >= 40,
     sort: (a, b) => (b.my.parts.company || 0) - (a.my.parts.company || 0) || b.my.score - a.my.score },
   { id: "freshman", group: "for you", label: "freshman friendly", note: "programs and roles that say they want first- and second-year students.", pick: (m) => isOpen(m) && (m.early_career === "strong" || m.role === "ambassador") },
   { id: "near", group: "for you", label: "near you", note: "the places you picked, plus remote.", pick: (m) => isOpen(m) && (m.my.parts.location || 0) >= 6 },
@@ -137,10 +137,16 @@ export async function studentHome(env, user, url, ui) {
   const tracked = new Set(tracks.map((t) => t.key));
   const ranked = rank(data.matches || [], user.answers).filter((m) => !tracked.has(m.key) && !passed.has(m.key));
   const view = VIEWS.find((v) => v.id === url.searchParams.get("view")) || VIEWS[0];
-  let inView = ranked.filter(view.pick);
-  if (view.sort) inView.sort(view.sort);
-  // On best fit, at most two cards per company, so five fellowships from one lab don't fill the first screen.
-  if (view.id === "best") { const per = {}; inView = inView.filter((m) => (per[m.company] = (per[m.company] || 0) + 1) <= 2); }
+  // One function for each view's list, used for both the dropdown counts and the cards, so they always agree.
+  // Big hitters shows at most two cards per company, so five roles from one company don't fill it. Best fit shows
+  // everything, so its count matches the "open matches" total; old duplicates sink there on their own (match.js).
+  const listFor = (v) => {
+    let list = ranked.filter(v.pick);
+    if (v.sort) list.sort(v.sort);
+    if (v.id === "big") { const per = {}; list = list.filter((m) => (per[m.company] = (per[m.company] || 0) + 1) <= 2); }
+    return list;
+  };
+  const inView = listFor(view);
   const open = ranked.filter(isOpen);
   const fresh = meta.last_visit ? open.filter((m) => seenMs(m) > Date.parse(meta.last_visit)).length : 0;
   const freshman = open.filter((m) => m.early_career === "strong" || m.role === "ambassador").length;
@@ -172,7 +178,7 @@ export async function studentHome(env, user, url, ui) {
       <label for="view">view</label>
       <div class="select-wrap">
         <select id="view" name="view">
-          ${groups.map((g) => `<optgroup label="${g}">${VIEWS.filter((v) => v.group === g).map((v) => `<option value="${v.id}"${v === view ? " selected" : ""}>${v.label} · ${ranked.filter(v.pick).length.toLocaleString("en-US")}</option>`).join("")}</optgroup>`).join("")}
+          ${groups.map((g) => `<optgroup label="${g}">${VIEWS.filter((v) => v.group === g).map((v) => `<option value="${v.id}"${v === view ? " selected" : ""}>${v.label} · ${listFor(v).length.toLocaleString("en-US")}</option>`).join("")}</optgroup>`).join("")}
         </select>
         <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
@@ -197,11 +203,12 @@ export async function studentHome(env, user, url, ui) {
     </div>`;
 
   const empty = `<div class="empty">${ui.panda("bamboo")}<p class="note">${view.id === "best" ? "nothing open fits yet. scout checks the lists every hour, and you can widen your answers on the you page." : "nothing here right now. pick another view above."}</p></div>`;
-  const welcome = url.searchParams.get("welcome") ? `<div class="welcome" role="status">${ui.panda("celebrate", "welcome-panda")}<p><b>you're in${first ? `, ${ui.esc(first.toLowerCase())}` : ""}.</b> this is your list, ranked for you and checked every hour. tap <b>save</b> on anything good and it goes to your tracker with a prep prompt. phone alerts are one minute of setup on the <a href="/you#alerts">you</a> page.</p></div>` : "";
+  const welcome = url.searchParams.get("welcome") ? `<div class="welcome" role="status">${ui.panda("celebrate", "welcome-panda")}<p><b>you're in.</b> tap <b>save</b> on anything good. it lands in your tracker with a prep prompt.</p><a class="welcome-x" href="/" aria-label="close">×</a></div>` : "";
   const body = `${welcome}${hero}<div id="list"></div>${picker}
     ${inView.slice(0, SHOWN).map(card).join("") || empty}
     ${inView.length > SHOWN ? `<p class="note">showing the top ${SHOWN} of ${inView.length.toLocaleString("en-US")}.</p>` : ""}`;
-  return ui.page(body, { title: "New", page: "new", lead: first ? `fresh for` : "fresh", head: first ? first.toLowerCase() : "for you", nav: false,
+  // "good morning, maya", by the hour in the time zone they picked.
+  return ui.page(body, { title: "New", page: "new", lead: greeting(localNow(user.answers.timezone).hour), head: first ? first.toLowerCase() : "you", nav: false,
     links: STUDENT_LINKS, dock: studentDock("new", tracks.length), css: STUDENT_CSS, script: STUDENT_JS });
 }
 
@@ -250,7 +257,7 @@ export async function studentTracker(env, user, ui) {
         <label class="sr" for="state-${i}">status</label>
         <select id="state-${i}" data-field="state">${TRACK_STATES.map((s) => `<option${s === t.state ? " selected" : ""}>${s}</option>`).join("")}</select>
         <label class="sr" for="next-${i}">next step</label>
-        <input id="next-${i}" data-field="next" type="text" maxlength="200" value="${ui.esc(t.next || "")}" placeholder="next step, like &quot;finish the cover letter&quot;">
+        <input id="next-${i}" data-field="next" type="text" maxlength="200" value="${ui.esc(t.next || "")}" placeholder="next step">
       </div>
       <div class="actions">
         <button class="btn" data-u="track">update</button>
@@ -433,7 +440,9 @@ export const STUDENT_CSS = `
 .dock a.on .count{background:var(--cream);color:var(--ink)}
 .when-tag{font-weight:700;font-size:12px;color:var(--muted);align-self:center}
 .welcome{grid-column:1/-1;display:flex;gap:14px;align-items:center;background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 18px;margin:0 0 18px}
-.welcome p{margin:0;font-weight:600} .welcome a{color:var(--ink);font-weight:700} .welcome-panda{width:84px;height:84px;flex:none}
+.welcome p{margin:0;font-weight:600;flex:1} .welcome-panda{width:56px;height:56px;flex:none}
+.welcome-x{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;color:var(--ink);font:700 24px/1 var(--font);text-decoration:none}
+body:has(.welcome) .stat-panda{display:none}
 .removed{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cream);border:var(--line) dashed var(--ink);border-radius:var(--radius);padding:10px 16px;margin:0 0 16px;font-weight:700}
 .track .xbtn{width:44px;height:44px;top:4px;right:4px;padding:6px;background-clip:content-box;box-shadow:none;border-width:0} .track .xbtn::before{content:"";position:absolute;inset:6px;border:2.5px solid var(--ink);border-radius:50%;box-shadow:2px 2px 0 var(--ink);z-index:-1}
 @media (max-width:560px){

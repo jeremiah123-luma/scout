@@ -31,6 +31,7 @@ fallthrough = true
 
 [vars]
 GH_REPO = "jeremiah123-luma/scout"
+OWNER_NAME = "jeremy"   # the owner's New page says "good morning, jeremy"
 
 # Every hour at :47, skipping 10 and 11 UTC like the GitHub schedule (the Morning Brief's hours).
 # See heartbeat() in src/index.js.

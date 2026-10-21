@@ -324,7 +324,7 @@ const AUTH_CSS = `
 .auth input{font:500 var(--text) var(--font);color:var(--ink);background:#fff;border:var(--line) solid var(--ink);border-radius:12px;padding:12px 14px;width:100%}
 .auth input:focus{outline:none;box-shadow:0 0 0 4px var(--accent)}
 .auth .btn.big{margin-top:22px;justify-self:stretch;text-align:center}
-.auth p{margin:0} .auth .note{margin-top:6px;color:var(--muted);font-size:var(--small)} .auth .warn{margin-top:12px} .auth .swap{margin-top:14px}
+.auth p{margin:0} .auth .note{margin-top:6px;color:var(--ink);font-size:var(--small)} .auth .note a{color:var(--ink);font-weight:700} .auth .warn{margin-top:12px} .auth .swap{margin-top:14px}
 .auth .swap{font-size:var(--small)} .auth .swap a{color:var(--ink);font-weight:700}
 .pw{position:relative} .pw input{padding-right:74px}
 .pw .show{position:absolute;right:8px;top:50%;transform:translateY(-50%);font:700 var(--small) var(--font);color:var(--ink);background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:5px 11px;cursor:pointer}
@@ -340,7 +340,7 @@ body[data-page="signup"]{--page:var(--orange)} body[data-page="signup"] main{dis
 @media (min-width:900px){
   body[data-page="login"] main,body[data-page="login"] header,body[data-page="signup"] main,body[data-page="signup"] header{max-width:1000px}
   body[data-page="login"] main,body[data-page="signup"] main{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:60px;align-items:center;min-height:calc(100vh - 140px)}
-  body[data-page="login"] h1,body[data-page="signup"] h1{font-size:clamp(48px,5.2vw,76px);grid-column:1;margin:0}
+  body[data-page="login"] h1,body[data-page="signup"] h1{font-size:clamp(40px,4.6vw,68px);grid-column:1;margin:0}
   .auth-wrap{margin-top:0} .auth-panda{top:-104px;width:130px;height:130px}
 }
 `;
@@ -447,7 +447,7 @@ function forgotPage(ui, message) {
     <label for="email">your email</label>
     <input id="email" name="email" type="email" autocomplete="username" required autofocus>
     <button class="btn accent big" type="submit">ping me a reset link</button>
-    ${message ? `<p class="note" role="status">${ui.esc(message)}</p>` : '<p class="note">the link goes to your phone through scout\'s alerts. no alerts set up? there\'s no email reset yet, so make a new account and delete the old one later.</p>'}
+    ${message ? `<p class="note" role="status">${ui.esc(message)}</p>` : '<p class="note">the link goes to your phone through scout\'s alerts. no phone alerts set up? there\'s no other reset yet; <a href="https://github.com/jeremiah123-luma/scout/issues" target="_blank" rel="noopener">ask for help here</a>.</p>'}
     <p class="swap"><a href="/login">back to log in</a></p>
   </form></div>`, { title: "Forgot password", page: "login", lead: "it happens.", head: "let's fix it", nav: false, links: '<a class="pill-link" href="/hello">what is scout?</a>', css: HEAD_CSS + AUTH_CSS });
 }
@@ -533,7 +533,7 @@ body[data-page="start"] h1{padding-right:190px;text-wrap:balance} body[data-page
 .opt input{position:absolute;opacity:0;top:0;left:0;width:100%;height:100%;min-width:0;border:0;box-shadow:none;margin:0;padding:0;cursor:pointer;appearance:none;-webkit-appearance:none}
 .opt span{display:inline-block;font-weight:700;font-size:14px;background:#fff;border:var(--line) solid var(--ink);border-radius:999px;padding:8px 14px;box-shadow:3px 3px 0 var(--ink);transition:transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .15s,background-color .15s;user-select:none}
 .opt input:checked+span{background:var(--ink);color:var(--cream)}
-.opt.taken span{opacity:.45;text-decoration:line-through} .opt.taken{cursor:not-allowed}
+.opt.taken span{border-style:dashed;box-shadow:none;background:transparent} .opt.taken span::after{content:" · dream";font-weight:700;color:var(--muted)} .opt.taken{cursor:not-allowed}
 .co-opt span{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 5px}
 .co-opt img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--ink);flex:none}
 .opt input:checked+span img{border-color:var(--cream)} .co-opt input:checked+span::before{content:none}
@@ -791,7 +791,7 @@ function youPage(user, ui, saved, meta, tracked) {
   const body = `
     <p class="you-line">${all ? `that's everything scout needs, ${ui.esc(first)}.` : `everything you told scout, ${ui.esc(first)}.`} ${all ? "change any answer whenever you want." : "tap edit to change anything."}</p>
     ${alerts}
-    <details class="answers-wrap" open><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
+    <details class="answers-wrap"${saved && saved !== "all" ? " open" : ""}><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
       <div class="answers">${cards}</div>
     </details>
     <p class="you-links"><a href="/you/export">download my data</a> · <a href="/privacy">privacy</a></p>

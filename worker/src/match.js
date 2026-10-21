@@ -202,6 +202,14 @@ export function localNow(label, now = new Date()) {
   return { hour: Number(parts.hour) % 24, weekday: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(parts.weekday), date: `${parts.year}-${parts.month}-${parts.day}` };
 }
 
+// The greeting at the top of the New page, by the hour where the student is.
+export function greeting(hour) {
+  if (hour >= 5 && hour < 12) return "good morning,";
+  if (hour >= 12 && hour < 17) return "good afternoon,";
+  if (hour >= 17 && hour < 22) return "good evening,";
+  return "up late,";
+}
+
 // "7:00 PM" -> 19
 export function hourOf(label) {
   const m = String(label || "").match(/^(\d{1,2}):\d{2}\s*(AM|PM)$/i);
