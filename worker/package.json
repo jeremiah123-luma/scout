@@ -1,10 +1,11 @@
 {
   "name": "scout-dashboard",
   "version": "1.0.0",
-  "description": "Scout dashboard: a Cloudflare Worker with Workers KV",
+  "description": "Scout dashboard: one Cloudflare Worker with KV for the owner's data and D1 for student accounts.",
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev"
+    "dev": "wrangler dev",
+    "test": "node --test \"test/*.test.mjs\""
   },
   "license": "MIT",
   "type": "module",
