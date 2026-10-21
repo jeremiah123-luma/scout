@@ -63,13 +63,28 @@ def normalize_url(url: str) -> str:
     return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), path, urlencode(query), ""))
 
 
+_WORKDAY_JOB = re.compile(r"^https?://([a-z0-9-]+)\.wd\d+\.myworkdayjobs\.com/.*_([a-z]*-?[0-9][a-z0-9-]*?)(?:-\d)?/?(?:[?#].*)?$", re.I)
+
+
+def posting_id(url: str) -> str:
+    """'workday:<tenant>:<requisition>' for a Workday link, else ''.
+
+    Workday serves one requisition under several links: with and without "/en-US/", under two career sites
+    (Salesforce's External_Career_Site and Futureforce_Internships), with "-1" and "-2" suffixes (Kensho and S&P Global
+    share the spgi tenant), and with different letter case (Booz Allen). The lists carry each link as its own row,
+    often under a different title or company name, so five postings showed up twice on the New page."""
+    m = _WORKDAY_JOB.match((url or "").strip())
+    return f"workday:{m.group(1).lower()}:{m.group(2).upper()}" if m else ""
+
+
 def dedupe(listings: list[dict]) -> list[dict]:
     """Keep one listing per posting. Prefer the one updated most recently.
 
-    Two listings are the same posting when their normalized URLs match, or when their
-    company+title key matches. The survivor records every source it was seen in.
+    Two listings are the same posting when their normalized URLs match, their Workday requisition matches,
+    or their company+title key matches. The survivor records every source it was seen in.
     """
     by_url: dict[str, dict] = {}
+    by_id: dict[str, dict] = {}
     by_key: dict[str, dict] = {}
     survivors: list[dict] = []
 
@@ -79,7 +94,8 @@ def dedupe(listings: list[dict]) -> list[dict]:
         url = normalize_url(item.get("url", ""))
         key = make_key(item.get("company", ""), item.get("title", ""))
         item["key"] = key
-        existing = (by_url.get(url) if url else None) or by_key.get(key)
+        pid = posting_id(item.get("url", ""))
+        existing = (by_url.get(url) if url else None) or (by_id.get(pid) if pid else None) or by_key.get(key)
         if existing is not None:
             sources = existing.setdefault("sources", [existing.get("source")])
             if item.get("source") not in sources:
@@ -94,6 +110,8 @@ def dedupe(listings: list[dict]) -> list[dict]:
         item["latest_posted"] = item.get("date_posted") or 0
         if url:
             by_url[url] = item
+        if pid:
+            by_id[pid] = item
         by_key[key] = item
         survivors.append(item)
     return survivors

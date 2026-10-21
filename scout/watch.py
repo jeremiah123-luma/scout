@@ -60,12 +60,20 @@ def run(raw_by_source: dict[str, list], targets: dict, weights: dict, *, check_p
 
     # Read the posting page for the top rows, plus every row that could push on its own (Tier 1 or 2,
     # a freshman program, an ambassador program) wherever it ranks, so no alert goes out unchecked.
+    #
+    # "Top rows" means the rows that will be shown, counted after the sort below moves ruled-out rows to the bottom.
+    # Counting by score rank instead let every ineligible or closed row among the first 300 pull an unchecked row up
+    # into view: on October 20, 70 of the 300 cards on the New page were never read (Workday's "graduation between
+    # December 2027 and June 2028" interns among them).
     cache = eligibility.load_cache()
-    for i, item in enumerate(kept):
-        if i < check_pages or could_push(item) or on_board(item):
+    shown = 0
+    for item in kept:
+        if shown < check_pages or could_push(item) or on_board(item):
             eligibility.check(item, int(targets.get("graduation_year", 2030)), cache, allow_network)
         else:
             item["eligibility"], item["eligibility_note"] = "unknown", "not checked (below top rows)"
+        if item.get("eligibility") not in ("ineligible", "closed"):
+            shown += 1
     if allow_network and save:
         eligibility.save_cache(cache)
     # A posting the page itself rules out (wrong graduation year, upperclassmen only, taken down) drops to the

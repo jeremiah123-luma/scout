@@ -11,7 +11,7 @@ Supported:
   Ashby        (jobs.ashbyhq.com/<org>/<id>): the page is a JavaScript app; the public posting API lists every
                open job on the board with its full text.
   Eightfold    (Netflix, Microsoft): the same /api/apply/v2/jobs/<id> endpoint their careers pages call.
-  Google, Amazon, Lever: plain HTML.
+  Google, Amazon, Lever, SmartRecruiters, Jobvite, SuccessFactors, iCIMS, and a few more: plain HTML (PLAIN_HOSTS).
   Anything else is tried as plain HTML and reported "unreadable" if it comes back thin.
 
 A posting the board says is gone (a 404 from an API, missing from an Ashby board, or Google's careers site
@@ -36,11 +36,20 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 THIN = 400
 _TAGS = re.compile(r"<script.*?</script>|<style.*?</style>|<noscript.*?</noscript>|<!--.*?-->|<[^>]+>", re.S | re.I)
 _WORKDAY = re.compile(r"^https://([a-z0-9-]+)\.(wd\d+)\.myworkdayjobs\.com/(?:[a-z]{2}-[A-Z]{2}/)?([^/?#]+)/job/([^?#]+)")
-PLAIN_HOSTS = ("greenhouse.io", "lever.co", "ashbyhq.com", "google.com", "amazon.jobs")
+PLAIN_HOSTS = ("greenhouse.io", "lever.co", "ashbyhq.com", "google.com", "amazon.jobs",
+               # Checked 2026-10-20: these serve the whole description as plain HTML, yet their rows were labeled
+               # "can't be read" and never checked (Wellmark's "Current junior or senior", SRC's "Completion of two
+               # years of college", Rippling's required previous internship). Apple's page is mostly a shell, but a
+               # removed role says "no longer available", which is worth knowing for a Tier 1 company.
+               "smartrecruiters.com", "jobvite.com", "applytojob.com", "paylocity.com", "ats.rippling.com",
+               "icims.com", "jobs.apple.com")
+# SuccessFactors and iCIMS career sites live on each company's own domain; the lists tag their links with ?ats= or ?icims=.
+_PLAIN_QUERY = re.compile(r"[?&](?:ats=successfactors|icims=1)\b", re.I)
 _GREENHOUSE = re.compile(r"^https://(?:boards|job-boards)\.greenhouse\.io/([a-z0-9_-]+)/jobs/(\d+)", re.I)
 # Company career sites that are Greenhouse underneath: host -> Greenhouse board name.
 GREENHOUSE_HOSTS = {"www.pinterestcareers.com": "pinterest", "pinterestcareers.com": "pinterest",
-                    "careers.withwaymo.com": "waymo"}
+                    "careers.withwaymo.com": "waymo", "careers.datadoghq.com": "datadog", "stripe.com": "stripe",
+                    "www.sagesure.com": "sagesure"}
 _ASHBY = re.compile(r"^https://jobs\.ashbyhq\.com/([^/?#]+)/([0-9a-f-]{36})", re.I)
 # Careers sites run on Eightfold: host -> the domain their API wants.
 EIGHTFOLD_HOSTS = {"explore.jobs.netflix.net": "netflix.com", "apply.careers.microsoft.com": "microsoft.com"}
@@ -56,7 +65,7 @@ def is_readable_board(url: str) -> bool:
     if _WORKDAY.match(url):
         return True
     host = host_of(url)
-    if host in GREENHOUSE_HOSTS or host in EIGHTFOLD_HOSTS:
+    if host in GREENHOUSE_HOSTS or host in EIGHTFOLD_HOSTS or _PLAIN_QUERY.search(url):
         return True
     return any(host == h or host.endswith("." + h) for h in PLAIN_HOSTS)
 
@@ -98,7 +107,9 @@ def read_workday(url: str) -> dict | None:
         return None
     tenant, wd, site, path = m.groups()
     api = f"https://{tenant}.{wd}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/job/{path}"
-    raw = _get(api, accept="application/json")
+    status, raw = _fetch(api, accept="application/json")
+    if status == 404:
+        return dict(CLOSED, apply_url=url)  # Workday answers 404 for a requisition it took down (Moog's Product Engineering intern)
     if not raw:
         return None
     try:
@@ -208,7 +219,10 @@ def read_eightfold(url: str) -> dict | None:
 
 
 def read_plain(url: str) -> dict | None:
-    raw = _get(url)
+    status, raw = _fetch(url)
+    if status == 404 and host_of(url).endswith("amazon.jobs"):
+        # Amazon answers 404 for a removed posting; two "Fall 2026" Amazon rows were still listed as open 2027 jobs.
+        return dict(CLOSED, apply_url=url)
     if not raw:
         return None
     text = _clean(raw.decode("utf-8", errors="replace"))
