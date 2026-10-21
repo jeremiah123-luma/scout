@@ -70,15 +70,16 @@ def is_readable_board(url: str) -> bool:
     return any(host == h or host.endswith("." + h) for h in PLAIN_HOSTS)
 
 
-def _fetch(url: str, timeout: int = 20, accept: str = "text/html") -> tuple[int, bytes | None]:
-    """(HTTP status, body). Status 0 means the request never got an answer."""
+def _fetch(url: str, timeout: int = 20, accept: str = "text/html", error_body: bool = False) -> tuple[int, bytes | None]:
+    """(HTTP status, body). Status 0 means the request never got an answer. An error's body comes back only when
+    error_body is set, so no caller mistakes an error page for the posting."""
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": accept,
                                                    "Accept-Language": "en-US,en;q=0.9"})
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
             return response.status, response.read(6_000_000)
     except urllib.error.HTTPError as err:
-        return err.code, None
+        return err.code, (err.read(20_000) if error_body else None)
     except Exception:
         return 0, None
 
@@ -107,10 +108,15 @@ def read_workday(url: str) -> dict | None:
         return None
     tenant, wd, site, path = m.groups()
     api = f"https://{tenant}.{wd}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/job/{path}"
-    status, raw = _fetch(api, accept="application/json")
+    status, raw = _fetch(api, accept="application/json", error_body=True)
     if status == 404:
         return dict(CLOSED, apply_url=url)  # Workday answers 404 for a requisition it took down (Moog's Product Engineering intern)
-    if not raw:
+    # A requisition that's been unposted answers 403 with error code S22 ("permission denied"), not 404: GDIT's
+    # Software Development intern on October 20, 2026, and CACI, Northrop, and Medtronic interns the same day.
+    # It isn't rate limiting: the same postings gave S22 on three parallel rounds while every other one gave 200.
+    if status == 403 and raw and b'"errorCode":"S22"' in raw.replace(b" ", b""):
+        return dict(CLOSED, apply_url=url)
+    if status != 200 or not raw:
         return None
     try:
         info = json.loads(raw).get("jobPostingInfo", {})

@@ -12,7 +12,7 @@ class FakeWeb:
     def __init__(self, answers):
         self.answers, self.asked = answers, []
 
-    def __call__(self, url, timeout=20, accept="text/html"):
+    def __call__(self, url, timeout=20, accept="text/html", error_body=False):
         self.asked.append(url)
         status, body = self.answers.get(url, (404, None))
         return status, (json.dumps(body).encode() if isinstance(body, dict) else body)

@@ -47,8 +47,71 @@ class Pull(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             d = Path(tmp)
             summary = sync.apply_pull({"tracker": {"a": {"state": "Applied"}}, "queue": [{"key": "b"}], "passed": {"c": "2026-10-14"}}, d)
-            self.assertEqual(summary, {"tracker": 1, "queue": 1, "passed": 1})
+            self.assertEqual(summary, {"tracker": 1, "kept_local": 0, "queue": 1, "passed": 1})
             self.assertEqual(json.loads((d / "queue.json").read_text())[0]["key"], "b")
+
+
+class PullKeepsMacChanges(unittest.TestCase):
+    """pull used to replace data/tracker.json, so a /prep or scout.tracker set change not pushed yet was lost."""
+
+    def pull(self, local, remote):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "tracker.json").write_text(json.dumps(local))
+            summary = sync.apply_pull({"tracker": remote, "queue": [], "passed": {}}, d)
+            return json.loads((d / "tracker.json").read_text()), summary
+
+    def test_a_newer_local_row_survives_an_older_dashboard_copy(self):
+        local = {"a": {"state": "Prepped", "updated": "2026-10-21", "history": [{"state": "Found"}, {"state": "Prepped"}]}}
+        remote = {"a": {"state": "Found", "updated": "2026-10-19", "history": [{"state": "Found"}]}}
+        tracker, summary = self.pull(local, remote)
+        self.assertEqual(tracker["a"]["state"], "Prepped")
+        self.assertEqual(summary["kept_local"], 1)
+
+    def test_a_newer_phone_change_wins(self):
+        local = {"a": {"state": "Prepped", "updated": "2026-10-19", "history": [{"state": "Prepped"}]}}
+        remote = {"a": {"state": "Applied", "updated": "2026-10-21", "history": [{"state": "Prepped"}, {"state": "Applied"}]}}
+        self.assertEqual(self.pull(local, remote)[0]["a"]["state"], "Applied")
+
+    def test_same_day_the_longer_history_wins(self):
+        # The X on the dashboard stamps a full timestamp and appends to the history.
+        local = {"a": {"state": "Prepped", "updated": "2026-10-21", "history": [{"state": "Prepped"}]}}
+        remote = {"a": {"state": "Passed", "updated": "2026-10-21T14:02:00Z", "history": [{"state": "Prepped"}, {"state": "Passed"}]}}
+        self.assertEqual(self.pull(local, remote)[0]["a"]["state"], "Passed")
+
+    def test_rows_only_on_the_mac_are_kept_and_dashboard_rows_added(self):
+        tracker, _ = self.pull({"mac": {"state": "Prepped", "updated": "2026-10-21"}}, {"phone": {"state": "Applied", "updated": "2026-10-20"}})
+        self.assertEqual(sorted(tracker), ["mac", "phone"])
+
+
+class RefreshMatches(unittest.TestCase):
+    def run_refresh(self, local, remote):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            if local is not None:
+                (d / "matches.json").write_text(json.dumps(local))
+            asked = []
+            note = sync.refresh_matches(d, repo="someone/scout", fetch=lambda url: asked.append(url) or json.dumps(remote).encode())
+            return note, json.loads((d / "matches.json").read_text()), asked
+
+    def test_a_newer_cron_copy_replaces_a_stale_one(self):
+        note, matches, asked = self.run_refresh({"generated_at": "2026-10-15T00:00:00+00:00", "matches": []},
+                                                {"generated_at": "2026-10-21T02:00:00+00:00", "matches": [{"key": "x"}]})
+        self.assertEqual(matches["matches"], [{"key": "x"}])
+        self.assertIn("refreshed", note)
+        self.assertEqual(asked, ["https://raw.githubusercontent.com/someone/scout/data/matches.json"])
+
+    def test_an_older_or_broken_copy_never_replaces_the_local_one(self):
+        local = {"generated_at": "2026-10-21T02:00:00+00:00", "matches": [{"key": "keep"}]}
+        for remote in ({"generated_at": "2026-10-20T00:00:00+00:00", "matches": []}, {"oops": True}):
+            note, matches, _ = self.run_refresh(local, remote)
+            self.assertEqual(matches["matches"], [{"key": "keep"}], note)
+
+    def test_a_failed_fetch_is_a_note_not_a_crash(self):
+        def boom(url):
+            raise OSError("offline")
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertIn("not refreshed", sync.refresh_matches(Path(tmp), repo="x/y", fetch=boom))
 
 
 class Settings(unittest.TestCase):

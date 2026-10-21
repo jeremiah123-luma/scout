@@ -2,6 +2,7 @@
 
     .venv/bin/python -m scout.sync push     # matches, page state, config text, tracker  -> Worker KV
     .venv/bin/python -m scout.sync pull     # tracker, prep queue, passed keys  <- Worker KV, into data/
+                                            # (on the Mac, also the cron's latest matches.json from the data branch)
     .venv/bin/python -m scout.sync push --tracker-only   # just data/tracker.json -> Worker KV (after /prep or /status)
     .venv/bin/python -m scout.sync push --kits           # applications/*/ -> the dashboard's Review page (Mac only)
     .venv/bin/python -m scout.sync push --mascot         # the borrowed panda art -> the dashboard (Mac only)
@@ -9,8 +10,8 @@
 
 pull also writes answers and cover letters edited on the Review page back into applications/ (when it exists).
 
---tracker-only exists because the Mac's data/matches.json is an old copy: a full push from the Mac would
-replace the dashboard's matches with it. The tracker merges per posting, newer "updated" wins.
+--tracker-only exists because a full push from the Mac would replace the dashboard's matches with the Mac's copy.
+The tracker merges per posting both ways, newer "updated" wins: the Worker merges on push, merge_tracker on pull.
 
 Needs two settings, from the environment or from me/dashboard.env (gitignored, KEY=value lines):
     SCOUT_URL            https://scout-dashboard.<account>.workers.dev
@@ -44,6 +45,10 @@ def _env_file() -> dict:
                 k, v = line.split("=", 1)
                 out[k.strip()] = v.strip()
     return out
+
+
+def _env_value(key: str) -> str:
+    return os.environ.get(key) or _env_file().get(key, "")
 
 
 def settings() -> tuple[str, str] | None:
@@ -132,16 +137,67 @@ def pack_mascot(folder: Path, max_side: int = 360) -> dict[str, str]:
     return images
 
 
-def apply_pull(state: dict, data_dir: Path = DATA) -> dict:
-    """Write what the phone changed into data/. Returns a summary. The Worker already merged the tracker."""
+def _newer(a: dict, b: dict) -> bool:
+    """True when tracker row a is newer than row b. "updated" decides; on the same day (the Mac writes a date, the
+    phone sometimes a full timestamp), the row with the longer history wins, since every change appends to it."""
+    ka = (str(a.get("updated") or "")[:10], len(a.get("history") or []), str(a.get("updated") or ""))
+    kb = (str(b.get("updated") or "")[:10], len(b.get("history") or []), str(b.get("updated") or ""))
+    return ka > kb
+
+
+def merge_tracker(local: dict, remote: dict) -> tuple[dict, int]:
+    """The dashboard's tracker with every local row that is newer, or not on the dashboard yet, kept.
+
+    pull used to replace data/tracker.json with the dashboard's copy, so a change made on the Mac (by /prep or
+    scout.tracker set) and not pushed yet was lost on the next pull. Returns (merged, rows kept from the Mac)."""
+    merged, kept = dict(remote), 0
+    for key, row in local.items():
+        if not isinstance(row, dict):
+            continue
+        if key not in remote or _newer(row, remote[key]):
+            merged[key] = row
+            kept += 1
+    return merged, kept
+
+
+def _fetch_raw(url: str) -> bytes:
+    request = urllib.request.Request(url, headers={"User-Agent": "scout-sync/0.1 (Mac pull)"})
+    with urllib.request.urlopen(request, timeout=30) as response:
+        return response.read(30_000_000)
+
+
+def refresh_matches(data_dir: Path = DATA, repo: str | None = None, fetch=_fetch_raw) -> str:
+    """Copy the cron's latest matches.json from the data branch into data/, when it's newer than the local one.
+
+    The cron commits its output to the repo's data branch, never to the Mac's data/ folder, so the Mac's copy went
+    days stale: /prep couldn't find new postings and scout.tracker set left company and title blank. Returns a
+    short note for the pull summary."""
+    repo = repo or _env_value("SCOUT_REPO") or "jeremiah123-luma/scout"
+    try:
+        fresh = json.loads(fetch(f"https://raw.githubusercontent.com/{repo}/data/matches.json"))
+    except Exception as exc:
+        return f"matches not refreshed ({exc.__class__.__name__})"
+    if not isinstance(fresh, dict) or not isinstance(fresh.get("matches"), list):
+        return "matches not refreshed (unexpected file)"
+    local = _load(data_dir / "matches.json", {})
+    if str(fresh.get("generated_at", "")) <= str(local.get("generated_at", "")):
+        return "matches already current"
     data_dir.mkdir(parents=True, exist_ok=True)
-    tracker = state.get("tracker", {})
+    (data_dir / "matches.json").write_text(json.dumps(fresh, indent=1, ensure_ascii=False), encoding="utf-8")
+    return f"matches refreshed ({len(fresh['matches'])} from {fresh.get('generated_at', '?')})"
+
+
+def apply_pull(state: dict, data_dir: Path = DATA) -> dict:
+    """Write what the phone changed into data/. Returns a summary. The tracker is merged, not replaced: rows
+    changed on the Mac since the last push survive (see merge_tracker)."""
+    data_dir.mkdir(parents=True, exist_ok=True)
+    tracker, kept = merge_tracker(_load(data_dir / "tracker.json", {}), state.get("tracker", {}))
     (data_dir / "tracker.json").write_text(json.dumps(tracker, indent=1, sort_keys=True, ensure_ascii=False), encoding="utf-8")
     queue = state.get("queue", [])
     (data_dir / "queue.json").write_text(json.dumps(queue, indent=1), encoding="utf-8")
     passed = state.get("passed", {})
     (data_dir / "passed.json").write_text(json.dumps(passed, indent=1, sort_keys=True), encoding="utf-8")
-    return {"tracker": len(tracker), "queue": len(queue), "passed": len(passed)}
+    return {"tracker": len(tracker), "kept_local": kept, "queue": len(queue), "passed": len(passed)}
 
 
 def main() -> int:
@@ -181,8 +237,12 @@ def main() -> int:
             state = _call(f"{url}/api/export", secret)
             summary = apply_pull(state)
             edits = kits.apply_edits(state.get("kit_edits", {}))
-            print(f"pulled tracker ({summary['tracker']}), queue ({summary['queue']}), passed ({summary['passed']})"
-                  + (f", {edits} edit(s) from the Review page written into applications/" if edits else ""))
+            # The cron checks out the data branch itself; only the Mac needs its matches refreshed.
+            fresh = "" if os.environ.get("GITHUB_ACTIONS") else "; " + refresh_matches()
+            print(f"pulled tracker ({summary['tracker']}"
+                  + (f", kept {summary['kept_local']} newer row(s) from this Mac" if summary["kept_local"] else "")
+                  + f"), queue ({summary['queue']}), passed ({summary['passed']})"
+                  + (f", {edits} edit(s) from the Review page written into applications/" if edits else "") + fresh)
     except Exception as exc:
         print(f"sync {args.command} failed: {exc}", file=sys.stderr)
         return 1

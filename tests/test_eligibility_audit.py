@@ -213,12 +213,32 @@ class Readers(unittest.TestCase):
         posting._fetch = self.original
 
     def test_workday_404_is_closed(self):
-        posting._fetch = lambda url, timeout=20, accept="text/html": (404, b'{"httpStatus":404}')
+        posting._fetch = lambda url, timeout=20, accept="text/html", error_body=False: (404, b'{"httpStatus":404}')
         url = "https://moog.wd5.myworkdayjobs.com/en-US/MOOG_External_Career_Site/job/Buffalo-NY/Intern--Product-Engineering_R-26-20429"
         self.assertTrue(posting.read_posting(url)["closed"])
 
+    GDIT = "https://gdit.wd5.myworkdayjobs.com/gdit_earlytalent/job/USA-NJ-Egg-Harbor-Township/GDIT-Summer-Internship-Program---Summer-2027-Software-Development-Internship--_RQ230643"
+
+    def test_workday_403_s22_is_closed(self):
+        # Workday's real answer for GDIT's unposted intern on October 20, 2026.
+        body = b'{"errorCode":"S22","errorCaseId":"043BDBMVHJI699","httpStatus":403,"message":"permission denied","messageParams":{}}'
+        posting._fetch = lambda url, timeout=20, accept="text/html", error_body=False: (403, body if error_body else None)
+        self.assertTrue(posting.read_posting(self.GDIT)["closed"])
+
+    def test_other_workday_403s_are_not_closed(self):
+        # A 403 without S22 (a block page, a different error) says nothing about the posting, so it stays unread.
+        for body in (b'<html>Access denied</html>', b'{"errorCode":"S99","httpStatus":403}', None):
+            posting._fetch = lambda url, timeout=20, accept="text/html", error_body=False, b=body: (403, b if error_body else None)
+            post = posting.read_workday(self.GDIT)
+            self.assertFalse(post and post.get("closed"), body)
+
+    def test_s22_reaches_the_page_check_as_closed(self):
+        body = b'{"errorCode":"S22","httpStatus":403}'
+        posting._fetch = lambda url, timeout=20, accept="text/html", error_body=False: (403, body if error_body else None)
+        self.assertEqual(eligibility.fetch_text(self.GDIT), eligibility.CLOSED)
+
     def test_amazon_404_is_closed(self):
-        posting._fetch = lambda url, timeout=20, accept="text/html": (404, None)
+        posting._fetch = lambda url, timeout=20, accept="text/html", error_body=False: (404, None)
         url = "https://www.amazon.jobs/en/jobs/10412530/software-development-engineer-intern-aws-data-services-fall-2026-us"
         self.assertTrue(posting.read_posting(url)["closed"])
 
