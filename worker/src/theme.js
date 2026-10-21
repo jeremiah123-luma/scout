@@ -305,4 +305,10 @@ body.themed .state-tag{text-transform:lowercase}
 /* empty boxes look the same on every page: the panda small beside one line */
 body.themed .emptybox{display:flex;gap:16px;align-items:center;padding:20px;grid-column:1/-1;max-width:640px}
 body.themed .emptybox .panda{width:96px;height:96px;flex:none} body.themed .emptybox p{margin:0;font-weight:600}
+/* no panda: give back the room it used to hold */
+body.themed[data-page="start"] h1{padding-right:0}
+body.themed .alerts h3,body.themed .alerts h3+p{padding-right:0}
+body.themed .auth-wrap{margin-top:24px}
+body.themed .promise{grid-template-columns:1fr}
+body.themed .hero-art{min-height:0}
 `;

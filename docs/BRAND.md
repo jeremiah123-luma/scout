@@ -53,4 +53,4 @@ All of them are free Google Fonts. Fonts that are free only for personal use (Ha
 
 ## Art
 - The sun and the lighthouse are modeled for Scout in Blender (`worker/art/scene.py`) and served as small WebP files. The clouds are drawn in code. None of it needs credit.
-- The panda is borrowed art that lives only in the Worker's storage, never in the repo or in screenshots. It appears only where a page would otherwise feel empty: empty states, the welcome note, log in, and the landing page.
+- No mascot for now. The panda was borrowed from another project and was retired on October 21, 2026. Small Scout-owned art for the empty states and the welcome note is in the works; until then those moments are words only.

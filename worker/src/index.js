@@ -384,8 +384,10 @@ async function servePanda(env, name) {
 }
 
 // The background sits still and the panda breathes on top of it. If either layer is missing, the whole thing goes.
+// The panda was borrowed art from another project and is retired from Scout (October 21, 2026). Scout's own art
+// lives in theme.js. Every call site stays, so new art can drop in here later.
 function panda(name, cls = "") {
-  return `<span class="panda${cls ? " " + cls : ""}" aria-hidden="true"><img class="panda-bg" src="/panda/${name}-bg.png" alt="" onerror="this.parentNode.remove()"><img class="panda-fg" src="/panda/${name}.png" alt="" onerror="this.parentNode.remove()"></span>`;
+  return "";
 }
 
 /* ---------------------------------------------------------------- company logos */
