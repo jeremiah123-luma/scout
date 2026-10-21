@@ -18,10 +18,10 @@ import LIGHTHOUSE from "./art/lighthouse.webp";
 
 export const ART = { "/art/sun.webp": SUN, "/art/lighthouse.webp": LIGHTHOUSE };
 
-// Pages that wear the themes. The landing page, sign-up, and log in keep their poster look.
+// Pages that wear the themes: the app, plus the landing page, log in, sign up, and the questions.
 export const THEMED = new Set(["new", "tracker", "you", "programs", "review", "settings", "about", "login", "signup", "landing", "start"]);
 
-export const FONTS_LINK = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Patrick+Hand&family=Coming+Soon&display=swap" rel="stylesheet">';
+export const FONTS_LINK = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Patrick+Hand&family=Coming+Soon&display=swap" rel="stylesheet">';
 
 // Runs in <head> before anything paints: the saved pick, or the clock.
 export const THEME_HEAD = `<script>(function(){var t="auto";try{t=localStorage.getItem("scout-theme")||"auto"}catch(e){}
@@ -35,8 +35,10 @@ function show(){var p=document.documentElement.dataset.pick||"auto";s.textConten
 b.addEventListener("click",function(){var p=document.documentElement.dataset.pick||"auto",n=order[(order.indexOf(p)+1)%order.length];try{localStorage.setItem("scout-theme",n)}catch(e){}
 var h=new Date().getHours();document.documentElement.dataset.pick=n;document.documentElement.dataset.theme=n==="auto"?(h>=7&&h<19?"light":"dark"):n;show()})})();
 // Sky: the clouds drift up a little slower than the page, so they feel far away. Still for reduced motion.
-(function(){var cs=[].slice.call(document.querySelectorAll(".cl"));if(!cs.length||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-addEventListener("scroll",function(){var y=scrollY;cs.forEach(function(c){c.style.transform="translateY("+(-y*c.dataset.speed)+"px)"})},{passive:true})})();`;
+(function(){var layer=document.querySelector(".sky-layer"),cs=[].slice.call(document.querySelectorAll(".cl"));if(!cs.length||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+// only while the clouds are showing (the sky theme, or the landing page)
+if(getComputedStyle(layer).display==="none"){var mo=new MutationObserver(function(){if(getComputedStyle(layer).display!=="none"){mo.disconnect();start()}});mo.observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});return}start();function start(){
+var queued=false;addEventListener("scroll",function(){if(queued)return;queued=true;requestAnimationFrame(function(){queued=false;var y=scrollY;cs.forEach(function(c){c.style.transform="translateY("+(-y*c.dataset.speed)+"px)"})})},{passive:true})}})();`;
 
 // The art behind the page. Each theme shows only its own; a hidden layer's background image never loads.
 const PUFFS = [[0, 40, 46], [18, 22, 58], [40, 8, 70], [62, 20, 56], [80, 38, 44], [28, 44, 52], [54, 46, 50]];
@@ -62,7 +64,7 @@ const CO_FONTS = {
   databricks: ["Montserrat", 700], coinbase: ["Inter", 700], openai: ["Inter", 600], doordash: ["Montserrat", 700],
 };
 const FAMILIES = [...new Set(Object.values(CO_FONTS).map(([f, w]) => `family=${f.replace(/ /g, "+")}:wght@${w}`))];
-export const CO_FONTS_LINK = `<link href="https://fonts.googleapis.com/css2?${FAMILIES.join("&")}&display=swap" rel="stylesheet">`;
+export const CO_FONTS_LINK = `<link href="https://fonts.googleapis.com/css2?${FAMILIES.join("&")}&display=swap" rel="stylesheet" media="print" onload="this.media='all'">`;
 const coKey = (name) => String(name || "").toLowerCase().replace(/[,.]?\s+(inc|llc|ltd|corp|corporation|co|company|plc)\.?$/, "").trim();
 export function coFont(name) {
   const f = CO_FONTS[coKey(name)];
@@ -74,7 +76,7 @@ export function coFont(name) {
 export function jobCard({ key, cls = "", frame = "", label = "", fresh = false, logo, company, coStyle = "", title, url, meta, tags = "", acts, score, scoreTitle }) {
   return `
     <article class="card jc${frame ? " " + frame : ""}${cls ? " " + cls : ""}" data-key="${key}">
-      ${fresh ? '<span class="tape" aria-label="new"><b>fresh<em>!</em></b></span>' : ""}
+      ${fresh ? '<span class="tape"><b>fresh<em>!</em></b></span>' : ""}
       <div class="jc-row">
         ${logo}
         <div class="jc-body">
@@ -84,7 +86,7 @@ export function jobCard({ key, cls = "", frame = "", label = "", fresh = false, 
           <div class="jc-tags">${label ? `<span class="why-tag ${frame}">${label}</span>` : ""}${tags}</div>
         </div>
         <div class="jc-acts">${acts}</div>
-        <div class="jc-score score" title="${scoreTitle}" aria-label="score ${score} out of 100"><b>${score}</b></div>
+        <details class="jc-score score"><summary aria-label="score ${score} out of 100. why?"><b>${score}</b></summary><div class="why-pop" role="note">${scoreTitle}</div></details>
       </div>
     </article>`;
 }
@@ -95,7 +97,7 @@ export const THEME_CSS = `
 :root{--round:"Fredoka","Rubik",system-ui,sans-serif;--hand:"Patrick Hand","Comic Sans MS",cursive;--tapefont:"Coming Soon","Patrick Hand",cursive}
 html[data-theme="light"]{--g0:#e2672f;--g1:#f08c4c;--g2:#f6a99a;--g3:#c9a7e8;--g4:#9fcaf0;--tx:#1a1333;--name:#1a1333;--handc:#f6f9dc;--hand-shadow:2px 2px 0 #1a1333;--pill:#1a13331f;--pill-edge:#1a133333;--card:rgba(248,250,223,.9);--edge:#1a1333;--cshadow:inset 0 1px 0 rgba(255,255,255,.8),4px 4px 0 #1a1333;--chip-on:#f6f9dc;--sbg:#f6f9dc;--sfg:#1a1333}
 html[data-theme="dark"]{--g0:#1a1333;--g1:#2a1652;--g2:#3a1a5c;--g3:#14305a;--g4:#0e3a44;--tx:#f6f9dc;--name:#f6f9dc;--handc:#ffc93c;--hand-shadow:none;--pill:#f6f9dc22;--pill-edge:#f6f9dc40;--card:rgba(246,249,220,.95);--edge:transparent;--cshadow:inset 0 1px 0 rgba(255,255,255,.9),0 8px 24px rgba(0,0,0,.35);--chip-on:#1a1333;--sbg:#1a1333;--sfg:#f6f9dc}
-html[data-theme="sky"]{--g0:#9fb6d6;--g1:#a9bfdc;--g2:#b8c6e6;--g3:#cbbfe4;--g4:#e9d6e0;--tx:#1d3d6e;--name:#3f78c8;--handc:#fdf3cf;--hand-shadow:0 2px 0 #1d3d6e,0 0 12px #1d3d6e66;--pill:#ffffff66;--pill-edge:#1d3d6e22;--card:rgba(253,249,234,.8);--edge:#1d3d6e33;--cshadow:inset 0 1px 0 rgba(255,255,255,.9),0 8px 24px rgba(29,61,110,.18);--chip-on:#fdf3cf;--sbg:#e3ecf8;--sfg:#1d3d6e}
+html[data-theme="sky"]{--g0:#9fb6d6;--g1:#a9bfdc;--g2:#b8c6e6;--g3:#cbbfe4;--g4:#e9d6e0;--tx:#1d3d6e;--name:#1d4f9a;--handc:#fdf3cf;--hand-shadow:2px 0 0 #1d3d6e,-2px 0 0 #1d3d6e,0 2px 0 #1d3d6e,0 -2px 0 #1d3d6e,0 0 12px #1d3d6e66;--pill:#ffffff66;--pill-edge:#1d3d6e22;--card:rgba(253,249,234,.8);--edge:#1d3d6e33;--cshadow:inset 0 1px 0 rgba(255,255,255,.9),0 8px 24px rgba(29,61,110,.18);--chip-on:#fdf3cf;--sbg:#e3ecf8;--sfg:#1d3d6e}
 body.themed{--on-page:var(--tx);--lead:var(--handc);color:var(--tx);background:linear-gradient(180deg,var(--g0) 0%,var(--g1) 22%,var(--g2) 48%,var(--g3) 74%,var(--g4) 100%);background-color:var(--g0);min-height:100vh;position:relative;display:flex;flex-direction:column;padding-bottom:40px;overflow-x:clip}
 body.themed::before{display:none}
 html:has(body.themed){background:var(--g0)}
@@ -125,7 +127,7 @@ body.themed h2::after{display:none}
 body.themed .note,body.themed .goal{color:var(--tx)}
 body.themed .card .note,body.themed .card .goal,body.themed .sheet .note,body.themed .emptybox .note,body.themed .stat .note{color:#5b5673}
 .sub{font:600 18px var(--round);margin:12px 0 16px;color:var(--tx)} .sub b{color:var(--hl,var(--tx))}
-html[data-theme="dark"] .sub b{color:#ffc93c} html[data-theme="sky"] .sub b{color:#3f78c8}
+html[data-theme="dark"] .sub b{color:#ffc93c} html[data-theme="sky"] .sub b{color:#1d4f9a}
 /* view pills */
 .views{grid-column:1/-1;display:flex;gap:8px;overflow-x:auto;margin:0 -16px 18px;padding:2px 16px 6px;scrollbar-width:none} .views::-webkit-scrollbar{display:none}
 .views a{white-space:nowrap;border:2px solid var(--tx);border-radius:99px;padding:7px 14px;font:600 15px var(--round);color:var(--tx);text-decoration:none;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
@@ -134,6 +136,10 @@ html[data-theme="dark"] .sub b{color:#ffc93c} html[data-theme="sky"] .sub b{colo
 /* glass cards everywhere on the themed pages */
 body.themed .card,body.themed .stat,body.themed .sheet,body.themed .emptybox,body.themed .welcome,body.themed .removed,body.themed pre{background:var(--card);border:2px solid var(--edge);border-radius:20px;box-shadow:var(--cshadow);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);color:#1a1333}
 body.themed .card:hover{transform:none}
+html[data-theme="sky"] body.themed .card,html[data-theme="sky"] body.themed .stats{-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-theme="sky"]{--card:rgba(253,249,234,.9)}
+/* touch screens: every control is at least 44px tall */
+@media (pointer:coarse){body.themed .dock a,.views a,.theme-btn,body.themed .pill-link,.jc-acts .btn,.jc-acts .link{min-height:44px;display:inline-flex;align-items:center;justify-content:center}.jc-acts .link{padding:0 10px}}
 /* boxes that aren't .card but are cream too: their text stays navy in every theme */
 body.themed .ans,body.themed .stat,body.themed .tile,body.themed .account,body.themed .alerts,body.themed .auth,body.themed .login{color:#1a1333}
 body.themed .ans{background:var(--card);border:2px solid var(--edge);border-radius:18px;box-shadow:var(--cshadow)}
@@ -162,15 +168,18 @@ body.themed .btn{font-family:var(--round);font-weight:600}
 .jc-tags .red{background:#e04b3a;color:#fff}
 .why-tag{border:1.5px solid #1a1333}
 .why-tag.legendary{background:linear-gradient(90deg,#ff9bd6,#8fd8ff,#bfff9e)!important}
-.why-tag.epic{background:linear-gradient(#c56bff,#7a2bd9)!important;color:#fff!important}
-.why-tag.rare{background:linear-gradient(#ffb24a,#e0701f)!important;color:#fff!important}
+.why-tag.epic{background:linear-gradient(#8a35e8,#6a1fc9)!important;color:#fff!important}
+.why-tag.rare{background:linear-gradient(#ffc56a,#f08a2f)!important;color:#1a1333!important}
 .jc-acts{display:grid;gap:4px;justify-items:center;align-content:center;height:68px}
 .jc-acts .btn{padding:6px 16px;font-size:15px;box-shadow:2px 2px 0 #1a1333;border-width:2px}
 .jc-acts .btn.accent{background:#ffc93c}
 .jc-acts .link{background:none;border:0;box-shadow:none;padding:2px;font:500 13px var(--round);color:#5b5673;text-decoration:underline;cursor:pointer}
 .jc-score b{display:grid;place-items:center;width:68px;height:68px;border-radius:18px;font:400 40px/1 var(--hand);background:var(--sbg);color:var(--sfg);border:2px solid #1a1333}
-.jc-score{background:none!important;padding:0!important;animation:none!important}
-.jc.dim>.jc-row>:not(.jc-acts){opacity:.35}
+.jc-score{background:none!important;padding:0!important;animation:none!important;position:relative}
+.jc-score summary{list-style:none;cursor:pointer;border-radius:18px}.jc-score summary::-webkit-details-marker{display:none}
+.jc-score summary:focus-visible{outline:3px solid #ffc93c;outline-offset:2px}
+.why-pop{position:absolute;right:0;top:calc(100% + 8px);z-index:5;width:max-content;max-width:240px;background:#1a1333;color:#f6f9dc;font:500 13px/1.4 var(--font);padding:8px 12px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.card.jc.dim>.jc-row{opacity:1}.jc.dim .jc-row>:not(.jc-acts){opacity:.35}
 .jc.is-out{opacity:.8}
 @media (max-width:600px){.jc-row{grid-template-columns:46px minmax(0,1fr) auto}.jc-acts{grid-column:2;grid-row:2;display:flex;gap:14px;align-items:center;height:auto;margin-top:2px}.jc-score{grid-column:3;grid-row:1/span 2;align-self:end}.jc-score b{width:60px;height:60px;font-size:36px}}
 @media (min-width:900px){body.themed[data-page="new"] main{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:16px}}
@@ -189,7 +198,7 @@ html:not([data-theme="light"]) .jc.legendary{box-shadow:inset 0 1px 0 #fffc,0 10
 html:not([data-theme="light"]) .jc.epic{box-shadow:inset 0 1px 0 #fffc,0 8px 26px #a13bf077!important}
 html:not([data-theme="light"]) .jc.rare{box-shadow:inset 0 1px 0 #fffc,0 8px 22px #f0812f55!important}
 .legendary .jc-score b{background:conic-gradient(from 200deg,#ffe36e,#ff8bd1,#8fe3ff,#b9ff9e,#ffe36e);color:#1a1333}
-.epic .jc-score b{background:linear-gradient(#d68bff,#8a35e8);color:#fff}
+.epic .jc-score b{background:linear-gradient(#8a35e8,#6a1fc9);color:#fff}
 .rare .jc-score b{background:linear-gradient(#ffc56a,#f08a2f);color:#1a1333}
 @keyframes turn{to{--a:360deg}}@keyframes glint{0%{--p:-20%}60%,100%{--p:120%}}
 @media (prefers-reduced-motion:no-preference){
@@ -208,20 +217,58 @@ html:not([data-theme="light"]) .jc.rare{box-shadow:inset 0 1px 0 #fffc,0 8px 22p
 .scene{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .sky-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;display:none}
 .sun,.lh{display:none}
-html[data-theme="light"] .sun{display:block;position:absolute;right:-100px;top:-110px;width:min(32vw,330px);aspect-ratio:1;background:url(/art/sun.webp) center/100% no-repeat;border-radius:50%;box-shadow:0 0 60px 20px rgba(255,190,60,.4),0 0 140px 60px rgba(255,170,60,.2)}
+/* the landing page shows all three: the sun, the clouds, and the lighthouse */
+html[data-theme="light"] .sun,body[data-page="landing"] .sun{display:block;position:absolute;right:-100px;top:-110px;width:min(32vw,330px);aspect-ratio:1;background:url(/art/sun.webp) center/100% no-repeat;border-radius:50%;box-shadow:0 0 60px 20px rgba(255,190,60,.4),0 0 140px 60px rgba(255,170,60,.2)}
 .sun::before{content:"";position:absolute;inset:-70%;border-radius:50%;z-index:-1;background:repeating-conic-gradient(from 0deg,rgba(255,214,120,.38) 0deg 2.5deg,rgba(255,214,120,0) 2.5deg 15deg);
   -webkit-mask:radial-gradient(circle,transparent 30%,#000 34%,rgba(0,0,0,.55) 52%,transparent 70%);mask:radial-gradient(circle,transparent 30%,#000 34%,rgba(0,0,0,.55) 52%,transparent 70%)}
 @keyframes rays{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:no-preference){.sun::before{animation:rays 180s linear infinite}}
-html[data-theme="dark"] .lh{display:block;position:absolute;right:-90px;bottom:-50px;height:min(88%,1500px);aspect-ratio:558/1300;background:url(/art/lighthouse.webp) bottom/contain no-repeat;filter:drop-shadow(0 0 30px #1a133399)}
+html[data-theme="dark"] .lh,body[data-page="landing"] .lh{display:block;position:absolute;right:-90px;bottom:-50px;height:min(88%,1500px);aspect-ratio:558/1300;background:url(/art/lighthouse.webp) bottom/contain no-repeat;filter:drop-shadow(0 0 30px #1a133399)}
 .beam{position:absolute;left:53%;top:12.4%;width:0;height:0}
 .beam::before{content:"";position:absolute;left:0;top:0;width:160vw;height:240px;margin-top:-120px;transform-origin:0 50%;background:linear-gradient(90deg,rgba(255,226,150,.5),rgba(255,226,150,.16) 35%,rgba(255,226,150,0) 75%);clip-path:polygon(0 48%,100% 0,100% 100%,0 52%);filter:blur(6px);transform:rotate(200deg)}
 .beam::after{content:"";position:absolute;left:-55px;top:-55px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(255,225,150,.95),rgba(255,200,100,.3) 40%,rgba(255,200,100,0) 70%)}
 @keyframes sweep2{0%,100%{transform:rotate(195deg)}50%{transform:rotate(240deg)}}
 @media (prefers-reduced-motion:no-preference){.beam::before{animation:sweep2 14s ease-in-out infinite}}
-html[data-theme="sky"] .sky-layer{display:block}
+html[data-theme="sky"] .sky-layer,body[data-page="landing"] .sky-layer{display:block}
+body[data-page="landing"] .lh{height:min(46%,820px)}
 .cl{position:absolute;filter:url(#wisp);will-change:transform}
 .cl i{position:absolute;border-radius:50%;background:radial-gradient(circle at 45% 40%,#fff 0,#fffffff2 38%,#ffffff99 58%,#fff0 72%)}
 .cl .belly{position:absolute;left:8%;right:8%;bottom:4%;height:38%;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#dfe7f5cc 0,#c3d1ea88 50%,#c3d1ea00 72%);z-index:1}
-@media (max-width:600px){html[data-theme="light"] .sun{top:-60px;right:-70px;width:190px}html[data-theme="dark"] .lh{height:70%;right:-120px}}
+@media (max-width:600px){html[data-theme="light"] .sun,body[data-page="landing"] .sun{top:-60px;right:-70px;width:190px}html[data-theme="dark"] .lh{height:70%;right:-120px}body[data-page="landing"] .lh{height:40%;right:-110px}}
+/* ---- review pass 2 ---- */
+/* text on cream stays navy in every theme, whatever the page around it says */
+body.themed :is(.card,.how-list li,.stats,.sheet,.emptybox,.welcome,.removed,.ans,.answers-wrap:not([open])>summary) :is(h2,h3,h4,p,li,dt,dd,label,summary,strong,b:not(.count)){color:#1a1333}
+/* the score keeps its own colors */
+body.themed .jc .jc-score b{color:var(--sfg)!important} body.themed .jc.legendary .jc-score b,body.themed .jc.rare .jc-score b{color:#1a1333!important} body.themed .jc.epic .jc-score b{color:#fff!important}
+/* dark landing: the clouds sit back so the cream words in front of them read */
+html[data-theme="dark"] body[data-page="landing"] .sky-layer{opacity:.4}
+body.themed .answers-wrap:not([open])>summary{color:#1a1333;background:var(--card);border:2px solid var(--edge);box-shadow:var(--cshadow)}
+body.themed .how-list li{color:#1a1333;background:var(--card);border:2px solid var(--edge);border-radius:20px;box-shadow:var(--cshadow)}
+/* the gold highlight under a headline word: navy word in light and sky; in dark the word stays cream and the bar dims */
+html[data-theme="dark"] body.themed h1 .head{background:linear-gradient(transparent 60%,rgba(255,201,60,.38) 60%,rgba(255,201,60,.38) 90%,transparent 90%)}
+html[data-theme="dark"] body.themed .hero-h1 mark{color:#f6f9dc;background:linear-gradient(transparent 60%,rgba(255,201,60,.38) 60%,rgba(255,201,60,.38) 90%,transparent 90%)}
+html[data-theme="sky"] body.themed .hero-h1 mark{color:#1d4f9a}
+/* sky: the handwritten line in deep blue, plain, so it reads on the dusty blue */
+html[data-theme="sky"]{--handc:#1d3d6e;--hand-shadow:none}
+/* quieter frames: a soft glow, not a halo */
+html:not([data-theme="light"]) .jc.legendary{box-shadow:inset 0 1px 0 #fffc,0 6px 14px rgba(255,139,209,.28)!important}
+html:not([data-theme="light"]) .jc.epic{box-shadow:inset 0 1px 0 #fffc,0 6px 14px rgba(161,59,240,.28)!important}
+html:not([data-theme="light"]) .jc.rare{box-shadow:inset 0 1px 0 #fffc,0 6px 14px rgba(240,129,47,.25)!important}
+/* light: the current tab and header buttons in cream glass with a navy line, not muddy brown */
+html[data-theme="light"]{--pill:rgba(246,249,220,.7);--pill-edge:#1a1333}
+/* the score's "why" opens above the next card */
+.jc:has(.jc-score[open]){z-index:6}
+/* phone: the score sits in the save/pass row, so the title gets the full width */
+@media (max-width:600px){.jc-body{grid-column:2/4}.jc-acts{grid-column:2;grid-row:2}.jc-score{grid-column:3;grid-row:2;align-self:center}.jc-score b{width:56px;height:56px;font-size:34px}}
+@media (pointer:coarse){.jc-acts{height:auto;min-height:68px}}
+/* the tape: wide enough for the whole word */
+.tape{width:74px}
+/* lowercase labels, the brand's voice */
+body.themed .tag,body.themed .step,body.themed .when-tag{text-transform:lowercase;letter-spacing:.02em}
+/* about and privacy: the nav lines up with the logo's column */
+body.themed[data-page="about"] .dock{max-width:860px}
+/* the landing page: no blur behind its boxes (the clouds move behind them), and no lighthouse on phones, where it would sit behind the last call to action */
+body[data-page="landing"] :is(.card,.stats,.how-list li){-webkit-backdrop-filter:none;backdrop-filter:none}
+body[data-page="landing"] .lh{height:min(40%,720px)}
+@media (max-width:700px){body[data-page="landing"] .lh{display:none}}
 `;

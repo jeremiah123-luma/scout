@@ -153,7 +153,6 @@ export async function studentHome(env, user, url, ui) {
   const inView = listFor(view);
   const open = ranked.filter(isOpen);
   const fresh = meta.last_visit ? open.filter((m) => seenMs(m) > Date.parse(meta.last_visit)).length : 0;
-  const freshman = open.filter((m) => m.early_career === "strong" || m.role === "ambassador").length;
   // One write per visit, in D1 (KV's free tier allows only 1,000 writes a day across everyone).
   await env.DB.prepare("UPDATE student_meta SET last_visit = ? WHERE user_id = ?").bind(new Date().toISOString(), user.id).run();
   const first = (user.answers.name || "").split(" ")[0];
