@@ -8,7 +8,7 @@
  */
 
 import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf, arrivedMs, greeting, frameFor } from "./match.js";
-import { jobCard, coFont, CO_FONTS_LINK } from "./theme.js";
+import { jobCard, coFont, CO_FONTS_LINK, viewPicker } from "./theme.js";
 
 const TRACK_STATES = ["Saved", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn"];
 const SHOWN = 60;
@@ -172,8 +172,8 @@ export async function studentHome(env, user, url, ui) {
   };
 
   // The views as pills, each with its count; the line under them says what the view is.
-  const views = `<nav class="views" aria-label="views">${VIEWS.map((v) => `<a href="/?view=${v.id}#list"${v === view ? ' class="on" aria-current="page"' : ""}>${v.label.replace(" for you", "")}<small>${listFor(v).length.toLocaleString("en-US")}</small></a>`).join("")}</nav>
-    <p class="view-line" aria-live="polite">${view.note} <span class="when">updated ${ui.esc(ui.when(data.generated_at))}.</span></p>`;
+  const views = viewPicker(VIEWS.map((v) => ({ id: v.id, label: v.label.replace(" for you", ""), count: listFor(v).length, on: v === view })),
+    `${view.note} updated ${ui.esc(ui.when(data.generated_at))}.`);
   const sub = `<p class="sub">${fresh ? `<b>${fresh} new</b> since your last visit · ` : ""}${open.length.toLocaleString("en-US")} open for you${tracks.length ? ` · ${tracks.length} on your tracker` : ""}</p>`;
 
   const empty = `<div class="empty">${ui.panda("bamboo")}<p class="note">${view.id === "best" ? "nothing open fits yet. scout checks the lists every hour, and you can widen your answers on the you page." : "nothing here right now. pick another view above."}</p></div>`;

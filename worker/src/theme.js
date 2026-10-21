@@ -26,14 +26,18 @@ export const FONTS_LINK = '<link rel="preconnect" href="https://fonts.googleapis
 // Runs in <head> before anything paints: the saved pick, or the clock.
 export const THEME_HEAD = `<script>(function(){var t="auto";try{t=localStorage.getItem("scout-theme")||"auto"}catch(e){}
 var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="sky"||q==="dark")t=q;
-var h=new Date().getHours();document.documentElement.dataset.theme=t==="auto"?(h>=7&&h<19?"light":"dark"):t;document.documentElement.dataset.pick=t})();</script>`;
+var h=new Date().getHours(),th=t==="auto"?(h>=7&&h<19?"light":"dark"):t;document.documentElement.dataset.theme=th;document.documentElement.dataset.pick=t;
+var m=document.querySelector('meta[name="theme-color"]');if(m)m.content={light:"#e2672f",sky:"#9fb6d6",dark:"#1a1333"}[th]})();</script>`;
 
 // The header button: light, sky, dark, then back to following the clock.
 export const THEME_BUTTON = '<button class="theme-btn" type="button" id="theme-btn" aria-label="change theme">◐ <span></span></button>';
 export const THEME_JS = `(function(){var order=["auto","light","sky","dark"],b=document.getElementById("theme-btn");if(!b)return;var s=b.querySelector("span");
 function show(){var p=document.documentElement.dataset.pick||"auto";s.textContent=p==="auto"?"auto":p}show();
 b.addEventListener("click",function(){var p=document.documentElement.dataset.pick||"auto",n=order[(order.indexOf(p)+1)%order.length];try{localStorage.setItem("scout-theme",n)}catch(e){}
-var h=new Date().getHours();document.documentElement.dataset.pick=n;document.documentElement.dataset.theme=n==="auto"?(h>=7&&h<19?"light":"dark"):n;show()})})();
+var h=new Date().getHours(),th=n==="auto"?(h>=7&&h<19?"light":"dark"):n;document.documentElement.dataset.pick=n;document.documentElement.dataset.theme=th;
+var m=document.querySelector('meta[name="theme-color"]');if(m)m.content={light:"#e2672f",sky:"#9fb6d6",dark:"#1a1333"}[th];show()})})();
+// the phone's view menu closes when you tap anywhere else
+document.addEventListener("click",function(e){document.querySelectorAll(".viewmenu[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})});
 // Sky: the clouds drift up a little slower than the page, so they feel far away. Still for reduced motion.
 (function(){var layer=document.querySelector(".sky-layer"),cs=[].slice.call(document.querySelectorAll(".cl"));if(!cs.length||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
 // only while the clouds are showing (the sky theme, or the landing page)
@@ -47,6 +51,18 @@ const cloud = ([x, y, w, speed, op]) => `<div class="cl" data-speed="${speed}" s
 export const SCENE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="wisp" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="4" seed="9"/><feDisplacementMap in="SourceGraphic" scale="28"/><feGaussianBlur stdDeviation="3"/></filter></svg>
 <div class="sky-layer" aria-hidden="true">${CLOUDS.map(cloud).join("")}</div>
 <div class="scene" aria-hidden="true"><div class="sun"></div><div class="lh"><div class="beam"></div></div></div>`;
+
+/* ---------------------------------------------------------------- the views */
+
+// The New page's views: a row of pills on wider screens, and on a phone one button that opens a menu (a row of
+// seven pills runs off an iPhone screen). Labels and counts come from the caller; labels are constants.
+export function viewPicker(views, line) {
+  const on = views.find((v) => v.on) || views[0];
+  const link = (v) => `<a href="/?view=${v.id}#list"${v.on ? ' class="on" aria-current="page"' : ""}>${v.label}<small>${v.count.toLocaleString("en-US")}</small></a>`;
+  return `<nav class="views" aria-label="views">${views.map(link).join("")}</nav>
+    <details class="viewmenu"><summary aria-label="change view">${on.label}<small>${on.count.toLocaleString("en-US")}</small><span class="chev" aria-hidden="true">▾</span></summary><div class="viewmenu-list">${views.map(link).join("")}</div></details>
+    <p class="view-line" aria-live="polite">${line}</p>`;
+}
 
 /* ---------------------------------------------------------------- the job card */
 
@@ -311,4 +327,16 @@ body.themed .alerts h3,body.themed .alerts h3+p{padding-right:0}
 body.themed .auth-wrap{margin-top:24px}
 body.themed .promise{grid-template-columns:1fr}
 body.themed .hero-art{min-height:0}
+/* ---- iPhone ---- */
+/* home-screen app: the page runs under the status bar, so the header steps down by the notch's height */
+body.themed header{padding-top:calc(18px + env(safe-area-inset-top))}
+/* the views: one button and a menu on a phone */
+.viewmenu{display:none;grid-column:1/-1;position:relative;margin:0 0 14px;z-index:8}
+.viewmenu>summary{list-style:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;border-radius:99px;background:var(--tx);color:var(--chip-on);font:600 16px var(--round);cursor:pointer}
+.viewmenu>summary::-webkit-details-marker{display:none}
+.viewmenu>summary small{opacity:.7;font-size:13px}.viewmenu .chev{font-size:12px;transition:transform .2s}.viewmenu[open] .chev{transform:rotate(180deg)}
+.viewmenu-list{position:absolute;left:0;top:calc(100% + 8px);min-width:240px;display:grid;padding:6px;border-radius:18px;background:rgba(248,250,223,.97);border:2px solid #1a1333;box-shadow:0 14px 30px rgba(10,5,40,.3);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.viewmenu-list a{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;padding:0 14px;border-radius:12px;font:600 16px var(--round);color:#1a1333;text-decoration:none}
+.viewmenu-list a small{color:#5b5673;font-size:13px}.viewmenu-list a.on{background:#1a133314}.viewmenu-list a.on::after{content:"✓";margin-left:auto;padding-left:8px}
+@media (max-width:600px){.views{display:none}.viewmenu{display:block}.sub{font-size:16px}}
 `;

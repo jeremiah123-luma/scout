@@ -22,7 +22,7 @@ import { ICONS } from "./icons.js";
 import { routeAccounts } from "./accounts.js";
 import { runStudentAlerts } from "./student.js";
 import { rank, isOpen, usLocation, greeting, localNow } from "./match.js";
-import { ART, THEMED, FONTS_LINK, THEME_HEAD, THEME_BUTTON, THEME_JS, SCENE, THEME_CSS, jobCard, coFont, CO_FONTS_LINK } from "./theme.js";
+import { ART, THEMED, FONTS_LINK, THEME_HEAD, THEME_BUTTON, THEME_JS, SCENE, THEME_CSS, jobCard, coFont, CO_FONTS_LINK, viewPicker } from "./theme.js";
 
 const STATES = ["Found", "Saved", "Prepped", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn", "Passed"];
 const COOKIE = "scout";
@@ -686,7 +686,7 @@ async function newPage(env, viewId) {
       title: esc(cleanTitle(m.title, m.company)), url: esc(safeUrl(m.url)), meta, tags, acts, score: m.score, scoreTitle: esc(`why ${m.score}: ${breakdown(m)}`) });
   };
 
-  const hero = `<p class="sub">${fresh.length ? `<b>${fresh.length} new</b> since your last visit · ` : ""}<span id="open-count">${openCount.toLocaleString("en-US")}</span> open${total > data.matches.length ? ` (showing the top ${data.matches.length})` : ""} · ${programs} freshman friendly · ${queue.length} queued for /prep</p>`;
+  const hero = `<p class="sub">${fresh.length ? `<b>${fresh.length} new</b> · ` : ""}<span id="open-count">${openCount.toLocaleString("en-US")}</span> open · ${queue.length} queued for /prep</p>`;
 
   const passedRows = data.matches.filter((m) => passed[m.key] && !tracker[m.key]);
   const passedCard = (m) => `
@@ -697,8 +697,8 @@ async function newPage(env, viewId) {
       <div class="actions"><button class="btn accent" data-act="unpass">unpass</button><a class="btn ghost" href="${esc(safeUrl(m.url))}" target="_blank" rel="noopener">posting ↗</a></div>
     </article>`;
 
-  const views = `<nav class="views" aria-label="views">${VIEWS.map((v) => `<a href="/?view=${v.id}#list"${v === view ? ' class="on" aria-current="page"' : ""}>${v.label.replace(" for you", "")}<small>${rows.filter(v.pick).length.toLocaleString("en-US")}</small></a>`).join("")}</nav>
-    <p class="view-line" aria-live="polite">${view.note} updated ${esc(when(data.generated_at))}.</p>`;
+  const views = viewPicker(VIEWS.map((v) => ({ id: v.id, label: v.label.replace(" for you", ""), count: rows.filter(v.pick).length, on: v === view })),
+    `${view.note} updated ${esc(when(data.generated_at))}.`);
 
   const body = `
     ${hero}
@@ -821,8 +821,8 @@ function page(body, opts, status = 200) {
   // The app pages wear the themes (theme.js): light, sky, or dark, with art behind the page.
   const themed = THEMED.has(name);
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="${PAGE_COLORS[name] || "#cf6a2e"}">
-<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Scout · ${esc(title)}</title>${themed ? FONTS_LINK + THEME_HEAD : ""}${extraHead}<style>${tokens}${BASE_CSS}${css}${themed ? THEME_CSS : ""}</style></head><body data-page="${esc(name)}"${themed ? ' class="themed"' : ""}>${themed ? SCENE : ""}
+<meta name="theme-color" content="${themed ? "#e2672f" : PAGE_COLORS[name] || "#cf6a2e"}">
+<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="${themed ? "black-translucent" : "default"}"><title>Scout · ${esc(title)}</title>${themed ? FONTS_LINK + THEME_HEAD : ""}${extraHead}<style>${tokens}${BASE_CSS}${css}${themed ? THEME_CSS : ""}</style></head><body data-page="${esc(name)}"${themed ? ' class="themed"' : ""}>${themed ? SCENE : ""}
 <header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${themed ? THEME_BUTTON : ""}${links !== null ? links : name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav && !themed ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
 <main>
   ${lead || head ? `<h1><span class="lead${String(lead).length > 12 ? " long" : ""}">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>` : ""}
