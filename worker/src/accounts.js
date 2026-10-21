@@ -720,18 +720,14 @@ function resumeStep(user) {
 /* ---------------------------------------------------------------- the "you" page */
 
 // The you page's buttons: copy the topic, send a test ping. Same-origin JSON with a custom header, like student.js.
-const STUDENT_YOU_JS = `document.addEventListener("click",function(e){var b=e.target.closest("[data-u]");if(!b||b.disabled)return;
+const STUDENT_YOU_JS = `if(matchMedia("(min-width:900px)").matches){var w=document.querySelector(".answers-wrap");if(w)w.open=true}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-u]");if(!b||b.disabled)return;
 if(b.dataset.u==="copy"){var t=document.getElementById(b.dataset.src);(navigator.clipboard?navigator.clipboard.writeText(t.value):Promise.reject()).then(function(){b.textContent="copied ✓";setTimeout(function(){b.textContent="copy"},1600)},function(){t.select()});return}
 if(b.dataset.u==="test"){b.disabled=true;b.textContent="sending...";fetch("/api/u/test",{method:"POST",headers:{"Content-Type":"application/json","x-scout":"1"},body:"{}"}).then(function(r){return r.json()}).then(function(r){b.textContent=r.ok?"sent. check your phone":"that didn't send. try again";b.disabled=false},function(){b.textContent="that didn't send. try again";b.disabled=false})}});`;
 
 const YOU_CSS = `
 body[data-page="you"]{--page:var(--teal)}
 .you-line{margin:-4px 0 26px;font-weight:700;font-size:18px;color:var(--on-page);max-width:56ch}
-.you-hero{background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;display:grid;grid-template-columns:1fr auto;gap:8px 16px;align-items:center;margin-bottom:26px}
-.you-hero h2{margin:0;font-family:var(--display);font-size:clamp(24px,6vw,34px);line-height:1;text-transform:uppercase;color:var(--ink)}
-.you-hero p{margin:0;grid-column:1} .you-hero .panda{grid-row:1 / span 3;grid-column:2;width:clamp(96px,22vw,140px);height:clamp(96px,22vw,140px)}
-.firstlook{display:grid;gap:12px;margin:10px 0 30px} .look{display:block;text-decoration:none;color:var(--ink);margin:0}
-.look .title{margin-top:6px}
 .ans .edit{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font-weight:700;text-decoration:none}
 .ans .add{color:var(--muted);font-weight:700;display:inline-block;padding:4px 0}
 .alerts .alt{margin-top:10px;font-size:var(--small)}
@@ -749,16 +745,26 @@ body[data-page="you"]{--page:var(--teal)}
 .answers-wrap:not([open])>summary{background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:12px 18px;margin:0 0 26px}
 .answers-wrap:not([open])>summary h2{color:var(--ink);margin:0} .answers-wrap:not([open])>summary .count{color:var(--muted)}
 .answers-wrap:not([open])>summary::after{content:"show ▾";margin-left:auto;font-weight:700}
-.alerts{margin:0 0 26px;position:relative} .alerts-panda{position:absolute;right:12px;top:-30px;width:88px;height:88px} .alerts h3+p{padding-right:84px}
-@media (max-width:600px){.alerts-panda{width:68px;height:68px;top:-38px} .alerts h3+p{padding-right:64px}}
+.alerts{margin:0 0 26px;position:relative} .alerts-panda{position:absolute;right:14px;top:14px;width:76px;height:76px} .alerts h3+p{padding-right:84px}
+@media (max-width:600px){.alerts-panda{width:60px;height:60px} .alerts h3+p{padding-right:64px}}
 .alerts h3{padding-right:80px;font-family:var(--display);text-transform:uppercase;font-size:20px;margin:0 0 6px} .alerts p{margin:0 0 8px} .alerts a{color:var(--ink);font-weight:700}
+.alerts .turn-on{margin:14px 0 0} .alerts .alt{margin:12px 0 0}
 .setup{margin:10px 0;padding-left:22px;display:grid;gap:12px} .setup li::marker{font-weight:700}
 .topic{display:flex;gap:8px;margin-top:8px} .topic input{flex:1;min-width:0;font:600 14px var(--mono);color:var(--ink);background:#fff;border:var(--line) solid var(--ink);border-radius:12px;padding:10px 12px;box-shadow:none}
-.you-links{margin:22px 0 0;font-weight:700;color:var(--on-page)} .you-links a{color:var(--on-page)}
-.danger{margin-top:40px} .danger button{background:none;border:0;padding:12px 0;min-height:44px;color:var(--on-page);font:600 14px var(--font);text-decoration:underline;cursor:pointer}
+.account{margin:0 0 26px} .account h3{font-family:var(--display);text-transform:uppercase;font-size:20px;margin:0 0 4px}
+.account ul{list-style:none;margin:0;padding:0} .account li{border-top:2px solid color-mix(in srgb,var(--ink) 14%,transparent)} .account li:first-child{border-top:0}
+.account a,.account button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;padding:0;background:none;border:0;box-shadow:none;color:var(--ink);font:700 16px var(--font);text-decoration:none;cursor:pointer;text-align:left}
+.account a::after{content:"→"} .account a:hover,.account button:hover{text-decoration:underline}
+.account .danger,.account .danger button{margin:0} .account .danger button{color:var(--red)}
 
-@media (min-width:900px){body[data-page="you"] main{max-width:860px} body[data-page="you"] main{display:block} .firstlook{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .answers{display:block;columns:2;column-gap:16px} .answers .ans{break-inside:avoid;margin-bottom:16px}}
+/* Desktop: settings on the left, every answer open on the right, all lined up with the header and tabs. */
+@media (min-width:900px){
+  body[data-page="you"] main{grid-template-columns:minmax(300px,380px) minmax(0,1fr);column-gap:28px;align-content:start}
+  body[data-page="you"] main>h1,.you-line{grid-column:1 / -1} .alerts{grid-column:1;grid-row:3} .account{grid-column:1;grid-row:4}
+  .answers-wrap{grid-column:2;grid-row:3 / span 3} .answers-wrap>summary{pointer-events:none} .answers-wrap>summary::after{display:none}
+  .answers-wrap>summary h2{color:var(--ink);font-size:28px} .answers-wrap>summary .count{color:var(--on-page)}
+  .answers{display:block;columns:2;column-gap:16px} .answers .ans{break-inside:avoid;margin-bottom:16px}
+  .answers .ans dl{grid-template-columns:1fr;gap:0} .answers .ans dt{font-size:var(--small);margin-top:12px} .answers .ans dt:first-child{margin-top:0} .answers .ans dd{margin:2px 0 0}}
 `;
 
 function shown(f, v) {
@@ -794,7 +800,7 @@ function youPage(user, ui, saved, meta, tracked) {
         <li><button class="btn accent" type="button" data-u="test">send a test ping</button></li>
       </ol>
       <p class="alt">on a computer instead? open <a href="${ui.esc(topicUrl)}" target="_blank" rel="noopener">your topic in the browser</a>.</p>`
-      : `<p>phone alerts are off, so new matches wait for you on the new page.</p><a class="btn accent" href="/start?step=7&from=you">turn them on</a>`}
+      : `<p>phone alerts are off, so new matches wait for you on the new page.</p><p class="turn-on"><a class="btn accent" href="/start?step=7&from=you">turn them on</a></p>`}
     </section>`;
   const body = `
     <p class="you-line">${all ? `that's everything scout needs, ${ui.esc(first.toLowerCase())}.` : `everything you told scout, ${ui.esc(first.toLowerCase())}.`} ${all ? "change any answer whenever you want." : "tap edit to change anything."}</p>
@@ -802,8 +808,11 @@ function youPage(user, ui, saved, meta, tracked) {
     <details class="answers-wrap"${saved && saved !== "all" ? " open" : ""}><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
       <div class="answers">${cards}</div>
     </details>
-    <p class="you-links"><a href="/you/export">download my data</a> · <a href="/privacy">privacy</a></p>
-    <form class="danger" method="post" action="/you/delete" onsubmit="return confirm('delete your account and every answer? this can\\'t be undone.')"><button type="submit">delete my account</button></form>`;
+    <section class="card account"><h3>your account</h3><ul>
+      <li><a href="/you/export">download my data</a></li>
+      <li><a href="/privacy">privacy</a></li>
+      <li><form class="danger" method="post" action="/you/delete" onsubmit="return confirm('delete your account and every answer? this can\\'t be undone.')"><button type="submit">delete my account</button></form></li>
+    </ul></section>`;
   return ui.page(body, { title: "You", page: "you", lead: all ? "nice," : "your", head: all ? "you're set" : "scout", nav: false, links: `<a class="pill-link" href="/logout">log out</a>`, dock: user.done ? studentDock("you", tracked) : "", css: HEAD_CSS + YOU_CSS + STUDENT_CSS, script: STUDENT_YOU_JS });
 }
 
