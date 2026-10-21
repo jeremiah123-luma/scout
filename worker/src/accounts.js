@@ -15,7 +15,7 @@
  */
 
 import { LANDING_CSS, LANDING_JS, landingBody } from "./landing.js";
-import { STUDENT_TABLES, STUDENT_CSS, studentHome, studentTracker, studentApi, studentExport, privacyPage, metaFor, deleteStudentData, studentDock } from "./student.js";
+import { STUDENT_TABLES, STUDENT_CSS, studentHome, studentTracker, studentApi, studentExport, privacyPage, metaFor, deleteStudentData, studentDock, trackedCount, ping } from "./student.js";
 
 const USER_COOKIE = "scout_u";
 const COOKIE_DAYS = 30;
@@ -154,7 +154,7 @@ const STEPS = [
       { name: "digest_time", label: "daily digest time", type: "select", options: HOURS, default: "7:00 PM" },
       { name: "timezone", label: "time zone", type: "select", options: ZONES },
       { name: "quiet", label: "quiet hours", type: "select", options: QUIET },
-      { name: "channel", label: "phone alerts?", type: "radio", options: ["phone (the free ntfy app)", "no alerts for now"], why: "free, through the ntfy app. setup takes a minute, on the you page." },
+      { name: "channel", label: "phone alerts?", type: "radio", options: ["phone (free app, 1-minute setup)", "no alerts for now"], why: "free, through the ntfy app. setup is on the you page." },
     ],
   },
   {
@@ -198,7 +198,20 @@ async function ensureSchema(env) {
 
 async function userById(env, id) {
   const row = await env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(id).first();
-  return row ? { ...row, answers: JSON.parse(row.answers || "{}") } : null;
+  return row ? { ...row, answers: upgradeAnswers(JSON.parse(row.answers || "{}")) } : null;
+}
+
+// Answers saved under an older version of a question, mapped to today's options, so editing a step never silently
+// drops them: alerts used to be a list ("phone (the free ntfy app)", "email"), and the degree and field lists were
+// longer before Scout narrowed to college students in tech.
+function upgradeAnswers(a) {
+  const out = { ...a };
+  if (Array.isArray(out.channel) || /^phone \(the free/.test(out.channel || "")) {
+    out.channel = [].concat(out.channel || []).some((c) => String(c).startsWith("phone")) ? "phone (free app, 1-minute setup)" : "no alerts for now";
+  }
+  if (out.fields) out.fields = [].concat(out.fields).map((f) => (f === "quant and finance" ? "quant" : f)).filter((f) => FIELDS.includes(f));
+  if (out.top_field === "quant and finance") out.top_field = "quant";
+  return out;
 }
 
 /* ---------------------------------------------------------------- passwords and sessions */
@@ -284,6 +297,8 @@ export async function routeAccounts(request, env, url, ui) {
     if (request.method !== "POST") return loginPage(ui, "", "");
     return login(request, env, ui);
   }
+  if (path === "/forgot") return request.method === "POST" ? forgot(request, env, url, ui) : forgotPage(ui, "");
+  if (path === "/reset") return reset(request, env, url, ui);
   if (path === "/signup") {
     if (!env.DB) return ui.page(`<div class="card"><p>sign up isn't open yet.</p></div>`, { title: "Sign up", page: "login", lead: "almost", head: "there", nav: false });
     if (user) return ui.redirect("/you");
@@ -292,7 +307,7 @@ export async function routeAccounts(request, env, url, ui) {
   if (path === "/start" || path === "/you" || path === "/you/delete") {
     if (!user) return ui.redirect(isOwner ? "/" : "/login");
     if (path === "/you/delete") return request.method === "POST" ? deleteAccount(env, user, ui) : ui.redirect("/you");
-    if (path === "/you") return youPage(user, ui, url.searchParams.get("saved"), await ui.fits(user.answers), await metaFor(env, user.id));
+    if (path === "/you") return youPage(user, ui, url.searchParams.get("saved"), await metaFor(env, user.id), await trackedCount(env, user.id));
     if (request.method === "POST") return saveStep(request, env, user, url, ui);
     return stepPage(user, ui, url, url.searchParams.get("missing") ? missing(STEPS[stepIndex(url) - 1], user.answers) : []);
   }
@@ -352,7 +367,7 @@ function loginPage(ui, message, email) {
     <div class="pw"><input id="password" name="password" type="password" autocomplete="current-password" required><button type="button" class="show" aria-pressed="false">show</button></div>
     <button class="btn accent big" type="submit">let me in</button>
     ${message ? `<p class="warn">${ui.esc(message)}</p>` : ""}
-    <p class="swap">new here? <a href="/signup">make an account</a></p>
+    <p class="swap">new here? <a href="/signup">make an account</a> · <a href="/forgot">forgot your password?</a></p>
   </form></div>`, { title: "Log in", page: "login", lead: "who goes", head: "there?", nav: false, links: '<a class="pill-link" href="/hello">what is scout?</a>', css: HEAD_CSS + AUTH_CSS, script: AUTH_JS }, message ? 401 : 200);
 }
 
@@ -417,6 +432,72 @@ async function signup(request, env, ui) {
   return ui.redirect("/start?step=1", [["Set-Cookie", await userCookie(env, result.meta.last_row_id, ui)]]);
 }
 
+/* ---------------------------------------------------------------- forgot password */
+
+// There's no free way to send email, but a student with phone alerts already has a private channel: their ntfy
+// topic. The reset link goes there. It's signed, lasts 30 minutes, and includes a piece of the current password
+// hash, so it stops working the moment the password changes. The page says the same thing whether or not the
+// email has an account.
+const RESET_MINUTES = 30;
+const resetSig = (env, ui, id, exp, pw) => ui.hmac(env.SESSION_SECRET, `reset:${id}.${exp}.${String(pw).slice(-16)}`);
+
+function forgotPage(ui, message) {
+  return ui.page(`<div class="auth-wrap"><form method="post" action="/forgot" class="auth">
+    ${ui.panda("close", "auth-panda")}
+    <label for="email">your email</label>
+    <input id="email" name="email" type="email" autocomplete="username" required autofocus>
+    <button class="btn accent big" type="submit">ping me a reset link</button>
+    ${message ? `<p class="note" role="status">${ui.esc(message)}</p>` : '<p class="note">the link goes to your phone through scout\'s alerts. no alerts set up? there\'s no email reset yet, so make a new account and delete the old one later.</p>'}
+    <p class="swap"><a href="/login">back to log in</a></p>
+  </form></div>`, { title: "Forgot password", page: "login", lead: "it happens.", head: "let's fix it", nav: false, links: '<a class="pill-link" href="/hello">what is scout?</a>', css: HEAD_CSS + AUTH_CSS });
+}
+
+async function forgot(request, env, url, ui) {
+  const form = await request.formData();
+  const email = String(form.get("email") || "").trim().toLowerCase();
+  const sent = "if that email has phone alerts set up, a reset link is on its way to your phone. it works for 30 minutes.";
+  if (!env.DB || !email) return forgotPage(ui, sent);
+  await ensureSchema(env);
+  const ip = request.headers.get("CF-Connecting-IP") || "local";
+  const keys = [[`forgot:${ip}`, 5], [`forgot-e:${email}`, 3]];
+  if (await lockedOut(env, keys)) return forgotPage(ui, "too many tries. give it 15 minutes.");
+  await noteFail(env, keys);
+  const row = await env.DB.prepare("SELECT u.id, u.pw, u.answers, m.topic FROM users u JOIN student_meta m ON m.user_id = u.id WHERE u.email = ?").bind(email).first();
+  if (row && [].concat(safeParse(row.answers).channel || []).some((c) => String(c).startsWith("phone"))) {
+    const exp = Date.now() + RESET_MINUTES * 60e3;
+    const link = `${url.origin}/reset?t=${row.id}.${exp}.${await resetSig(env, ui, row.id, exp, row.pw)}`;
+    await ping(row.topic, { title: "Scout: reset your password", message: "tap to pick a new password. if you didn't ask for this, ignore it; nothing changes.", click: link });
+  }
+  return forgotPage(ui, sent);
+}
+
+async function reset(request, env, url, ui) {
+  const token = String(url.searchParams.get("t") || "");
+  const [id, exp, sig] = token.split(".");
+  const bad = () => forgotPage(ui, "that link has expired or was already used. ask for a new one.");
+  if (!env.DB || !id || !exp || !sig || Number(exp) < Date.now()) return bad();
+  await ensureSchema(env);
+  const row = await env.DB.prepare("SELECT id, email, pw FROM users WHERE id = ?").bind(Number(id)).first();
+  if (!row || !(await ui.sameSecret(sig, await resetSig(env, ui, row.id, exp, row.pw)))) return bad();
+  const form = (message) => ui.page(`<div class="auth-wrap"><form method="post" action="/reset?t=${ui.esc(token)}" class="auth">
+    ${ui.panda("thumbs", "auth-panda")}
+    <label for="password">new password</label>
+    <div class="pw"><input id="password" name="password" type="password" autocomplete="new-password" minlength="10" required autofocus aria-describedby="pw-note"><button type="button" class="show" aria-pressed="false">show</button></div>
+    <p class="note" id="pw-note">10 characters or more.</p>
+    <button class="btn accent big" type="submit">save it and log in</button>
+    ${message ? `<p class="warn">${ui.esc(message)}</p>` : ""}
+  </form></div>`, { title: "New password", page: "login", lead: "new", head: "password", nav: false, links: "", css: HEAD_CSS + AUTH_CSS, script: AUTH_JS }, message ? 400 : 200);
+  if (request.method !== "POST") return form("");
+  const password = String((await request.formData()).get("password") || "");
+  if (password.length < 10) return form("the password needs 10 characters or more.");
+  await env.DB.batch([
+    env.DB.prepare("UPDATE users SET pw = ?, updated_at = ? WHERE id = ?").bind(await hashPassword(password), new Date().toISOString(), row.id),
+    // Clear this email's lockout so the new password works right away. Exact prefixes, not LIKE (an email can hold "_").
+    env.DB.prepare("DELETE FROM login_fails WHERE key = ? OR substr(key, 1, ?) = ?").bind(`e:${row.email}`, `e+ip:${row.email}|`.length, `e+ip:${row.email}|`),
+  ]);
+  return ui.redirect("/", [["Set-Cookie", await userCookie(env, row.id, ui)]]);
+}
+
 async function deleteAccount(env, user, ui) {
   await deleteStudentData(env, user.id);
   await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(user.id).run();
@@ -452,6 +533,7 @@ body[data-page="start"] h1{padding-right:190px;text-wrap:balance} body[data-page
 .opt input{position:absolute;opacity:0;top:0;left:0;width:100%;height:100%;min-width:0;border:0;box-shadow:none;margin:0;padding:0;cursor:pointer;appearance:none;-webkit-appearance:none}
 .opt span{display:inline-block;font-weight:700;font-size:14px;background:#fff;border:var(--line) solid var(--ink);border-radius:999px;padding:8px 14px;box-shadow:3px 3px 0 var(--ink);transition:transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .15s,background-color .15s;user-select:none}
 .opt input:checked+span{background:var(--ink);color:var(--cream)}
+.opt.taken span{opacity:.45;text-decoration:line-through} .opt.taken{cursor:not-allowed}
 .co-opt span{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 5px}
 .co-opt img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid var(--ink);flex:none}
 .opt input:checked+span img{border-color:var(--cream)} .co-opt input:checked+span::before{content:none}
@@ -526,7 +608,8 @@ function fieldHtml(f, answers, bad, ui) {
   return `<div class="${cls}"${gate}><label for="${id}">${ui.esc(f.label)}${need}</label>${why}<input id="${id}" name="${f.name}" type="${f.type === "url" ? "url" : "text"}" value="${ui.esc(shown)}" placeholder="${ui.esc(f.placeholder || "")}"${f.required ? " required" : ""} autocomplete="off"></div>`;
 }
 
-const STEP_JS = `document.addEventListener("change",function(e){document.querySelectorAll("[data-show-if]").forEach(function(q){var p=q.dataset.showIf.split("="),on=document.querySelector('input[name="'+p[0]+'"]:checked');q.hidden=!(on&&on.value===p[1])})});`;
+const STEP_JS = `function syncCos(){var d={};document.querySelectorAll('input[name="dream"]:checked').forEach(function(i){d[i.value]=1});document.querySelectorAll('input[name="excited"]').forEach(function(i){var on=!!d[i.value];i.disabled=on;if(on)i.checked=false;i.closest(".opt").classList.toggle("taken",on)})}syncCos();
+document.addEventListener("change",function(e){syncCos();document.querySelectorAll("[data-show-if]").forEach(function(q){var p=q.dataset.showIf.split("="),on=document.querySelector('input[name="'+p[0]+'"]:checked');q.hidden=!(on&&on.value===p[1])})});`;
 
 async function stepPage(user, ui, url, bad = [], answers = user.answers, status = 200) {
   const n = stepIndex(url);
@@ -548,7 +631,7 @@ async function stepPage(user, ui, url, bad = [], answers = user.answers, status 
     ${payoff}
     <form method="post" action="/start?step=${n}${fromYou ? "&from=you" : ""}" novalidate>
       ${bad.length ? `<p class="qerr" role="alert">${bad.length === 1 ? "one thing still needs an answer." : `${bad.length} things still need an answer.`}</p>` : ""}
-      <div class="qcard">${hasRequired ? '<p class="legend"><b>*</b> needed to find your matches. everything else is optional.</p>' : fromYou ? '<p class="legend">all optional.</p>' : `<p class="legend">all optional. <a href="${n === STEPS.length ? "/you?saved=all" : `/start?step=${n + 1}`}">skip this step</a> if you want.</p>`}${step.fields.map((f) => fieldHtml(f, answers, bad, ui)).join("")}</div>
+      <div class="qcard">${hasRequired ? '<p class="legend"><b>*</b> scout needs these. everything else is optional.</p>' : fromYou ? '<p class="legend">all optional.</p>' : `<p class="legend">all optional. <a href="${n === STEPS.length ? "/?welcome=1" : `/start?step=${n + 1}`}">skip this step</a> if you want.</p>`}${step.fields.map((f) => fieldHtml(f, answers, bad, ui)).join("")}</div>
       <div class="step-actions">
         ${fromYou ? '<a class="back" href="/you">cancel</a>' : n > 1 ? `<a class="back" href="/start?step=${n - 1}">← back</a>` : ""}
         <span class="step-go"><button class="btn accent big" type="submit">${fromYou ? "save" : n === STEPS.length ? "finish" : "next →"}</button></span>
@@ -612,7 +695,7 @@ async function saveStep(request, env, user, url, ui) {
     .bind(JSON.stringify(answers), furthest, done, new Date().toISOString(), user.id).run();
   if (done) await metaFor(env, user.id); // alerts need the student's topic row, even before they open a page
   if (url.searchParams.get("from") === "you") return ui.redirect(`/you?saved=${step.id}`);
-  return ui.redirect(n === STEPS.length ? "/you?saved=all" : `/start?step=${n + 1}`);
+  return ui.redirect(n === STEPS.length ? "/?welcome=1" : `/start?step=${n + 1}`);
 }
 
 const safeParse = (s) => { try { return JSON.parse(s || "{}"); } catch { return {}; } };
@@ -643,7 +726,9 @@ body[data-page="you"]{--page:var(--teal)}
 .you-hero p{margin:0;grid-column:1} .you-hero .panda{grid-row:1 / span 3;grid-column:2;width:clamp(96px,22vw,140px);height:clamp(96px,22vw,140px)}
 .firstlook{display:grid;gap:12px;margin:10px 0 30px} .look{display:block;text-decoration:none;color:var(--ink);margin:0}
 .look .title{margin-top:6px}
-.ans .edit,.ans .add{color:var(--ink);font-weight:700} .ans .add{color:var(--muted)}
+.ans .edit{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font-weight:700;text-decoration:none}
+.ans .add{color:var(--muted);font-weight:700;display:inline-block;padding:4px 0}
+.alerts .alt{margin-top:10px;font-size:var(--small)}
 .answers{display:grid;gap:14px}
 .ans{background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 18px}
 .ans header{all:unset;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
@@ -658,11 +743,12 @@ body[data-page="you"]{--page:var(--teal)}
 .answers-wrap:not([open])>summary{background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:12px 18px;margin:0 0 26px}
 .answers-wrap:not([open])>summary h2{color:var(--ink);margin:0} .answers-wrap:not([open])>summary .count{color:var(--muted)}
 .answers-wrap:not([open])>summary::after{content:"show ▾";margin-left:auto;font-weight:700}
-.alerts{margin:30px 0 0} .alerts h3{font-family:var(--display);text-transform:uppercase;font-size:20px;margin:0 0 6px} .alerts p{margin:0 0 8px} .alerts a{color:var(--ink);font-weight:700}
+.alerts{margin:0 0 26px;position:relative} .alerts-panda{position:absolute;right:12px;top:-30px;width:88px;height:88px} .alerts h3{padding-right:80px;font-family:var(--display);text-transform:uppercase;font-size:20px;margin:0 0 6px} .alerts p{margin:0 0 8px} .alerts a{color:var(--ink);font-weight:700}
 .setup{margin:10px 0;padding-left:22px;display:grid;gap:12px} .setup li::marker{font-weight:700}
 .topic{display:flex;gap:8px;margin-top:8px} .topic input{flex:1;min-width:0;font:600 14px var(--mono);color:var(--ink);background:#fff;border:var(--line) solid var(--ink);border-radius:12px;padding:10px 12px;box-shadow:none}
 .you-links{margin:22px 0 0;font-weight:700;color:var(--on-page)} .you-links a{color:var(--on-page)}
-.danger{margin-top:40px} .danger button{background:none;border:0;padding:0;color:var(--on-page);opacity:.7;font:500 12px var(--font);text-decoration:underline;cursor:pointer}
+.danger{margin-top:40px} .danger button{background:none;border:0;padding:12px 0;min-height:44px;color:var(--on-page);font:600 14px var(--font);text-decoration:underline;cursor:pointer}
+@media (min-width:900px){body[data-page="you"] .dock{max-width:860px}}
 @media (min-width:900px){body[data-page="you"] main,body[data-page="you"] header{max-width:860px} body[data-page="you"] main{display:block} .firstlook{grid-template-columns:repeat(2,minmax(0,1fr))}
   .answers{display:block;columns:2;column-gap:16px} .answers .ans{break-inside:avoid;margin-bottom:16px}}
 `;
@@ -672,7 +758,7 @@ function shown(f, v) {
   return v || "";
 }
 
-function youPage(user, ui, saved, fit, meta) {
+function youPage(user, ui, saved, meta, tracked) {
   const a = user.answers;
   const first = (a.name || "").split(" ")[0] || "you";
   const all = saved === "all";
@@ -686,20 +772,11 @@ function youPage(user, ui, saved, fit, meta) {
       }).join("")}</dl>
     </section>`).join("");
   // Peak-end: the page ends the sign-up on real postings, not a thank-you note.
-  const matches = fit.top.length ? `
-    <h2>a first look</h2>
-    <p class="note">${fit.count} open ${fit.count === 1 ? "posting fits" : "postings fit"} your fields right now. here are ${fit.top.length} of them.</p>
-    <div class="firstlook">${fit.top.map((m) => `
-      <a class="card look" href="${ui.esc(m.url)}" target="_blank" rel="noopener">
-        <div class="row">${ui.coHead(m.company, m.logo, m.company)}<span class="score">${m.score}</span></div>
-        <div class="title">${ui.esc(m.title)}</div>
-        <div class="meta">${ui.esc(m.where)} · posting ↗</div>
-      </a>`).join("")}</div>`
-    : `<h2>a first look</h2><p class="note">${fit.tech ? "nothing open fits your fields this hour. scout checks again every hour." : "nothing open fits your fields yet. scout checks the lists every hour."}</p>`;
   const phone = [].concat(a.channel || []).some((c) => String(c).startsWith("phone"));
   const topicUrl = `https://ntfy.sh/${meta.topic}`;
   const alerts = `
     <section class="card alerts" id="alerts">
+      ${ui.panda(phone ? "close" : "nap", "alerts-panda")}
       <h3>phone alerts</h3>
       ${phone ? `<p>${a.speed === "tell me right away" ? "strong matches ping you within the hour they post" : a.speed === "once a week" ? "a digest every Monday" : "one digest a day"}${a.speed !== "tell me right away" && a.digest_time ? ` at ${ui.esc(a.digest_time)}` : ""}${a.quiet && a.quiet !== "no quiet hours" ? `, never ${ui.esc(a.quiet.replace(/^during class /, "during class, "))}` : ""}.</p>
       <ol class="setup">
@@ -708,19 +785,18 @@ function youPage(user, ui, saved, fit, meta) {
           <div class="topic"><input id="topic" readonly value="${ui.esc(meta.topic)}" aria-label="your alert topic"><button class="btn" type="button" data-u="copy" data-src="topic" data-label="copy">copy</button></div></li>
         <li><button class="btn accent" type="button" data-u="test">send a test ping</button></li>
       </ol>
-      <p class="note">on a computer instead? open <a href="${ui.esc(topicUrl)}" target="_blank" rel="noopener">your topic in the browser</a>.</p>`
-      : `<p>alerts are off. turn them on under <a href="/start?step=7&from=you">alerts</a> by picking "phone".</p>`}
+      <p class="alt">on a computer instead? open <a href="${ui.esc(topicUrl)}" target="_blank" rel="noopener">your topic in the browser</a>.</p>`
+      : `<p>phone alerts are off, so new matches wait for you on the new page.</p><a class="btn accent" href="/start?step=7&from=you">turn them on</a>`}
     </section>`;
   const body = `
     <p class="you-line">${all ? `that's everything scout needs, ${ui.esc(first)}.` : `everything you told scout, ${ui.esc(first)}.`} ${all ? "change any answer whenever you want." : "tap edit to change anything."}</p>
-    <details class="answers-wrap"${all ? "" : " open"}><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
+    ${alerts}
+    <details class="answers-wrap" open><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
       <div class="answers">${cards}</div>
     </details>
-    ${matches}
-    ${alerts}
     <p class="you-links"><a href="/you/export">download my data</a> · <a href="/privacy">privacy</a></p>
     <form class="danger" method="post" action="/you/delete" onsubmit="return confirm('delete your account and every answer? this can\\'t be undone.')"><button type="submit">delete my account</button></form>`;
-  return ui.page(body, { title: "You", page: "you", lead: all ? "nice," : "your", head: all ? "you're set" : "scout", mood: all ? "celebrate" : "proud", nav: false, links: `<a class="pill-link" href="/logout">log out</a>`, dock: user.done ? studentDock("you") : "", css: HEAD_CSS + YOU_CSS + STUDENT_CSS, script: STUDENT_YOU_JS });
+  return ui.page(body, { title: "You", page: "you", lead: all ? "nice," : "your", head: all ? "you're set" : "scout", nav: false, links: `<a class="pill-link" href="/logout">log out</a>`, dock: user.done ? studentDock("you", tracked) : "", css: HEAD_CSS + YOU_CSS + STUDENT_CSS, script: STUDENT_YOU_JS });
 }
 
 /* ---------------------------------------------------------------- the landing page */

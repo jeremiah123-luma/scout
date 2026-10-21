@@ -69,6 +69,13 @@ test("rank marks verdicts and keeps the open ones first by score", () => {
   assert.deepEqual(r.filter(isOpen).map((m) => m.key), ["b"]);
 });
 
+test("only postings in their fields, plus programs if they asked", () => {
+  const ms = [{ key: "swe", role: "swe" }, { key: "pm", role: "pm" }, { key: "prog", role: "program" }];
+  assert.deepEqual(rank(ms, { fields: ["software engineering"] }).map((m) => m.key).sort(), ["swe"]);
+  assert.deepEqual(rank(ms, { fields: ["software engineering"], early: ["fellowships"] }).map((m) => m.key).sort(), ["prog", "swe"]);
+  assert.equal(rank(ms, {}).length, 3, "no fields picked yet: show everything");
+});
+
 test("alert timing", () => {
   assert.equal(hourOf("7:00 PM"), 19); assert.equal(hourOf("12:00 PM"), 12); assert.equal(hourOf("12:00 AM"), 0); assert.equal(hourOf("junk"), 19);
   assert.ok(isQuiet("10:00 PM to 7:00 AM", 23)); assert.ok(isQuiet("10:00 PM to 7:00 AM", 3)); assert.ok(!isQuiet("10:00 PM to 7:00 AM", 12));

@@ -7,7 +7,7 @@
  * tracker, queue, or kits.
  */
 
-import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation } from "./match.js";
+import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf } from "./match.js";
 
 const TRACK_STATES = ["Saved", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn"];
 const SHOWN = 60;
@@ -78,8 +78,16 @@ function age(epoch) {
   return days <= 0 ? "today" : days === 1 ? "1 day ago" : `${days} days ago`;
 }
 
-export const studentDock = (on) => `<nav class="dock">${[["/", "new"], ["/tracker", "tracker"], ["/you", "you"]]
-  .map(([href, label]) => `<a href="${href}"${label === on ? ' class="on"' : ""}>${label}</a>`).join("")}</nav>`;
+export const studentDock = (on, saved = 0) => `<nav class="dock">${[["/", "new"], ["/tracker", "tracker"], ["/you", "you"]]
+  .map(([href, label]) => `<a href="${href}"${label === on ? ' class="on" aria-current="page"' : ""}>${label}${label === "tracker" && saved ? ` <b class="count" id="tracker-count">${saved}</b>` : ""}</a>`).join("")}</nav>`;
+
+export async function trackedCount(env, userId) {
+  const row = await env.DB.prepare("SELECT COUNT(*) AS n FROM tracks WHERE user_id = ?").bind(userId).first();
+  return (row && row.n) || 0;
+}
+
+// "Oct 20", in the student's own time zone.
+const dayIn = (iso, tz) => { const d = new Date(iso); return isNaN(d) ? "" : new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: zoneOf(tz) }).format(d); };
 
 const STUDENT_LINKS = '<a class="pill-link" href="/logout">log out</a>';
 
@@ -87,16 +95,18 @@ const STUDENT_LINKS = '<a class="pill-link" href="/logout">log out</a>';
 // Every request is same-origin JSON with a custom header, which a form on another site can't send.
 const STUDENT_JS = `(function(){
 function post(url,body){return fetch(url,{method:"POST",headers:{"Content-Type":"application/json","x-scout":"1"},body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
-function oops(b,t){b.disabled=false;b.textContent=t||"try again"}
+function oops(b,t){b.disabled=false;b.textContent="didn't save. check your connection and tap again";b.setAttribute("role","status");setTimeout(function(){b.textContent=t||"try again";b.removeAttribute("role")},3500)}
+function bump(d){var c=document.getElementById("tracker-count");if(c){c.textContent=Math.max(0,(+c.textContent||0)+d);return}var a=document.querySelector('.dock a[href="/tracker"]');if(a&&d>0){var b=document.createElement("b");b.className="count";b.id="tracker-count";b.textContent=d;a.appendChild(document.createTextNode(" "));a.appendChild(b)}}
+document.addEventListener("input",function(e){var c=e.target.closest(".track");if(c){var u=c.querySelector("[data-u=track]");if(u){u.classList.add("accent");u.textContent="update"}}});
 document.addEventListener("click",function(e){var b=e.target.closest("[data-u]");if(!b||b.disabled)return;var card=b.closest("[data-key]");var key=card&&card.dataset.key;var act=b.dataset.u;
  if(act==="copy"){var t=document.getElementById(b.dataset.src);if(!t)return;var text=t.value||t.textContent;(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){b.textContent="copied ✓";setTimeout(function(){b.textContent=b.dataset.label||"copy"},1800)},function(){t.select&&t.select();b.textContent="select and copy"});return}
  b.disabled=true;
  if(act==="test"){post("/api/u/test",{}).then(function(r){b.textContent=r.ok?"sent. check your phone":"that didn't send. try again";b.disabled=false},function(){oops(b)});return}
- if(act==="save"){post("/api/u/save",{key:key}).then(function(){b.textContent="saved ✓"},function(){oops(b,"save")});return}
+ if(act==="save"){post("/api/u/save",{key:key}).then(function(){var a=document.createElement("a");a.className="btn saved";a.href="/tracker";a.textContent="saved ✓ · open tracker";b.replaceWith(a);bump(1)},function(){oops(b,"save")});return}
  if(act==="pass"){post("/api/u/pass",{key:key}).then(function(){card.classList.add("dim");b.textContent="undo";b.dataset.u="unpass";b.disabled=false},function(){oops(b,"pass")});return}
  if(act==="unpass"){post("/api/u/pass",{key:key,undo:true}).then(function(){card.classList.remove("dim");b.textContent="pass";b.dataset.u="pass";b.disabled=false},function(){oops(b,"undo")});return}
- if(act==="track"){var state=card.querySelector("[data-field=state]").value,next=card.querySelector("[data-field=next]").value;post("/api/u/track",{key:key,state:state,next:next}).then(function(){b.textContent="saved ✓";setTimeout(function(){b.textContent="save";b.disabled=false},1400)},function(){oops(b,"save")});return}
- if(act==="remove"){if(!confirm("take this off your tracker?")){b.disabled=false;return}post("/api/u/remove",{key:key}).then(function(){card.style.transition="opacity .25s";card.style.opacity="0";setTimeout(function(){card.remove()},260)},function(){oops(b,"×")});return}
+ if(act==="track"){var state=card.querySelector("[data-field=state]").value,next=card.querySelector("[data-field=next]").value;post("/api/u/track",{key:key,state:state,next:next}).then(function(){b.textContent="updated ✓";b.classList.remove("accent");var tag=card.querySelector(".state-tag");if(tag)tag.textContent=state;setTimeout(function(){b.textContent="update";b.disabled=false},1400)},function(){oops(b,"update")});return}
+ if(act==="remove"){var bar=document.createElement("div");bar.className="removed";bar.setAttribute("role","status");bar.innerHTML='taken off your tracker. <button class="btn" type="button">undo</button>';card.hidden=true;card.after(bar);var gone=setTimeout(function(){post("/api/u/remove",{key:key}).then(function(){bar.remove();card.remove();bump(-1)},function(){bar.remove();card.hidden=false;b.disabled=false})},5000);bar.querySelector("button").onclick=function(){clearTimeout(gone);bar.remove();card.hidden=false;b.disabled=false};return}
 });
 var pick=document.getElementById("view");if(pick)pick.addEventListener("change",function(){pick.form.submit()});
 })();`;
@@ -107,7 +117,8 @@ const VIEWS = [
   { id: "best", group: "for you", label: "best fit for you", note: "everything still open for you, highest score first.", pick: (m) => isOpen(m) },
   { id: "today", group: "fresh", label: "new today", note: "posted or first spotted in the last 24 hours.", pick: (m) => isOpen(m) && within(m, 1), sort: newest },
   { id: "week", group: "fresh", label: "new this week", note: "posted in the last 7 days, newest first.", pick: (m) => isOpen(m) && within(m, 7, false), sort: newest },
-  { id: "big", group: "for you", label: "big hitters", note: "your dream companies, the ones you're excited about, and big tech.", pick: (m) => isOpen(m) && (m.my.parts.company || 0) >= 12 },
+  { id: "big", group: "for you", label: "big hitters", note: "your dream companies first, then the ones you're excited about, then big tech.", pick: (m) => isOpen(m) && (m.my.parts.company || 0) >= 12 && m.my.score >= 30,
+    sort: (a, b) => (b.my.parts.company || 0) - (a.my.parts.company || 0) || b.my.score - a.my.score },
   { id: "freshman", group: "for you", label: "freshman friendly", note: "programs and roles that say they want first- and second-year students.", pick: (m) => isOpen(m) && (m.early_career === "strong" || m.role === "ambassador") },
   { id: "near", group: "for you", label: "near you", note: "the places you picked, plus remote.", pick: (m) => isOpen(m) && (m.my.parts.location || 0) >= 6 },
   { id: "out", group: "the rest", label: "ruled out", note: "left out because of your answers or the posting's own rules. here so you can double check.", pick: (m) => !isOpen(m) },
@@ -126,8 +137,10 @@ export async function studentHome(env, user, url, ui) {
   const tracked = new Set(tracks.map((t) => t.key));
   const ranked = rank(data.matches || [], user.answers).filter((m) => !tracked.has(m.key) && !passed.has(m.key));
   const view = VIEWS.find((v) => v.id === url.searchParams.get("view")) || VIEWS[0];
-  const inView = ranked.filter(view.pick);
+  let inView = ranked.filter(view.pick);
   if (view.sort) inView.sort(view.sort);
+  // On best fit, at most two cards per company, so five fellowships from one lab don't fill the first screen.
+  if (view.id === "best") { const per = {}; inView = inView.filter((m) => (per[m.company] = (per[m.company] || 0) + 1) <= 2); }
   const open = ranked.filter(isOpen);
   const fresh = meta.last_visit ? open.filter((m) => seenMs(m) > Date.parse(meta.last_visit)).length : 0;
   const freshman = open.filter((m) => m.early_career === "strong" || m.role === "ambassador").length;
@@ -141,7 +154,7 @@ export async function studentHome(env, user, url, ui) {
     return `
     <article class="card${out ? " is-out" : ""}" data-key="${ui.esc(m.key)}">
       <div class="tags"><span class="tag">${roleWord(m)}</span>${dream ? '<span class="tag ink">dream</span>' : ""}${m.early_career === "strong" ? '<span class="tag accent">freshman friendly</span>' : ""}${out ? `<span class="tag red">${ui.esc(m.my.out || (m.my.eligibility === "closed" ? "closed" : "not eligible"))}</span>` : ""}</div>
-      <div class="row">${ui.coHead(m.company, m.logo, m.company)}<span class="score">${m.my.score}</span></div>
+      <div class="row">${ui.coHead(m.company, m.logo, m.company)}<span class="score" aria-label="score ${m.my.score} out of 100">${m.my.score}<small>/100</small></span></div>
       <div class="title">${ui.esc(ui.cleanTitle(m.title, m.company))}</div>
       <div class="meta">${ui.esc(placesFor(m, user.answers) || "location not listed")} · ${age(m.latest_posted || m.date_posted)}${m.term_unknown ? " · term not listed" : ""}${m.my.eligibility !== "unknown" ? " · " + ui.esc(m.my.note) : ""}</div>
       <details class="why"><summary>why ${m.my.score}?</summary><div class="meta mono">${ui.esc(why(m.my.parts))}</div></details>
@@ -176,7 +189,7 @@ export async function studentHome(env, user, url, ui) {
         <div class="stat-sub">open ${open.length === 1 ? "match" : "matches"}</div>
       </div>
       <div class="stat-tiles">
-        <div class="tile${fresh ? " hot" : ""}"><b>${fresh}</b><span>new since your last visit</span></div>
+        ${fresh ? `<div class="tile hot"><b>${fresh}</b><span>new since your last visit</span></div>` : `<div class="tile"><b>${ranked.filter((m) => isOpen(m) && (m.my.parts.company || 0) >= 18).length}</b><span>at companies on your lists</span></div>`}
         <div class="tile"><b>${freshman}</b><span>freshman friendly</span></div>
         <div class="tile"><b>${tracks.length}</b><span>on your tracker</span></div>
       </div>
@@ -184,11 +197,12 @@ export async function studentHome(env, user, url, ui) {
     </div>`;
 
   const empty = `<div class="empty">${ui.panda("bamboo")}<p class="note">${view.id === "best" ? "nothing open fits yet. scout checks the lists every hour, and you can widen your answers on the you page." : "nothing here right now. pick another view above."}</p></div>`;
-  const body = `${hero}<div id="list"></div>${picker}
+  const welcome = url.searchParams.get("welcome") ? `<div class="welcome" role="status">${ui.panda("celebrate", "welcome-panda")}<p><b>you're in${first ? `, ${ui.esc(first.toLowerCase())}` : ""}.</b> this is your list, ranked for you and checked every hour. tap <b>save</b> on anything good and it goes to your tracker with a prep prompt. phone alerts are one minute of setup on the <a href="/you#alerts">you</a> page.</p></div>` : "";
+  const body = `${welcome}${hero}<div id="list"></div>${picker}
     ${inView.slice(0, SHOWN).map(card).join("") || empty}
     ${inView.length > SHOWN ? `<p class="note">showing the top ${SHOWN} of ${inView.length.toLocaleString("en-US")}.</p>` : ""}`;
   return ui.page(body, { title: "New", page: "new", lead: first ? `fresh for` : "fresh", head: first ? first.toLowerCase() : "for you", nav: false,
-    links: STUDENT_LINKS, dock: studentDock("new"), css: STUDENT_CSS, script: STUDENT_JS });
+    links: STUDENT_LINKS, dock: studentDock("new", tracks.length), css: STUDENT_CSS, script: STUDENT_JS });
 }
 
 /* ---------------------------------------------------------------- the tracker */
@@ -225,11 +239,12 @@ export async function studentTracker(env, user, ui) {
   const goal = { "1 or 2": 2, "3 to 5": 5, "6 to 10": 10, "more than 10": 12 }[user.answers.weekly_goal] || 0;
   const weekAgo = Date.now() - 7 * 86400000;
   const appliedThisWeek = tracks.filter((t) => t.history.some((h) => h.state === "Applied" && Date.parse(h.date) >= weekAgo)).length;
+  const firstSaved = tracks.findIndex((t) => t.state === "Saved");
   const rows = tracks.map((t, i) => `
     <article class="card track" data-key="${ui.esc(t.key)}">
       <button class="xbtn" data-u="remove" aria-label="take ${ui.esc(t.company)} off your tracker" title="remove">×</button>
-      <div class="tags"><span class="tag ${t.state === "Applied" || t.state === "Offer" ? "green" : t.state === "Rejected" || t.state === "Withdrawn" ? "red" : "ink"}">${ui.esc(t.state)}</span><span class="tag">${ui.esc(String(t.updated).slice(0, 10))}</span></div>
-      <div class="row">${ui.coHead(t.company, ui.logoFor(logos, t.company), t.company)}${t.score != null ? `<span class="score">${t.score}</span>` : ""}</div>
+      <div class="tags"><span class="tag state-tag ${t.state === "Applied" || t.state === "Offer" ? "green" : t.state === "Rejected" || t.state === "Withdrawn" ? "red" : "ink"}">${ui.esc(t.state)}</span><span class="when-tag">${ui.esc(dayIn(t.updated, user.answers.timezone))}</span></div>
+      <div class="row">${ui.coHead(t.company, ui.logoFor(logos, t.company), t.company)}${t.score != null ? `<span class="score" aria-label="score ${t.score} out of 100">${t.score}<small>/100</small></span>` : ""}</div>
       <div class="title">${ui.esc(ui.cleanTitle(t.title, t.company))}</div>
       <div class="track-edit">
         <label class="sr" for="state-${i}">status</label>
@@ -238,10 +253,10 @@ export async function studentTracker(env, user, ui) {
         <input id="next-${i}" data-field="next" type="text" maxlength="200" value="${ui.esc(t.next || "")}" placeholder="next step, like &quot;finish the cover letter&quot;">
       </div>
       <div class="actions">
-        <button class="btn accent" data-u="track">save</button>
+        <button class="btn" data-u="track">update</button>
         <a class="btn ghost" href="${ui.esc(ui.safeUrl(t.url))}" target="_blank" rel="noopener">posting ↗</a>
       </div>
-      <details class="prep"><summary>prep it with Claude</summary>
+      <details class="prep"${i === firstSaved ? " open" : ""}><summary>prep your resume with Claude Code</summary>
         <p class="note">copy this into your own Claude Code (or Claude), then give it your resume. your resume never comes to scout.</p>
         <textarea id="prompt-${i}" readonly rows="9">${ui.esc(prepPrompt(t, user.answers))}</textarea>
         <button class="btn" data-u="copy" data-src="prompt-${i}" data-label="copy the prompt">copy the prompt</button>
@@ -251,9 +266,9 @@ export async function studentTracker(env, user, ui) {
   const body = `
     <div class="pipeline">${pipeline}</div>
     ${goal ? `<p class="note goal"><b>${appliedThisWeek} of ${goal}</b> applications this week.${appliedThisWeek >= goal ? " goal hit. nice." : ""}</p>` : ""}
-    ${rows || `<div class="emptybox">${ui.panda("bamboo")}<p>nothing saved yet. tap <b>save</b> on any posting in <a href="/">new</a> and it lands here, with a prep prompt for your own Claude Code.</p></div>`}`;
+    ${rows || `<div class="emptybox">${ui.panda("bamboo")}<p>save a posting on <a href="/">new</a>. it shows up here with a prompt you paste into Claude Code to tailor your resume, then you apply on the company's site.</p></div>`}`;
   return ui.page(body, { title: "Tracker", page: "tracker", lead: "where things", head: "stand", mood: tracks.some((t) => ["OA", "Interview", "Offer"].includes(t.state)) ? "celebrate" : tracks.length ? "walking" : "bamboo",
-    nav: false, links: STUDENT_LINKS, dock: studentDock("tracker"), css: STUDENT_CSS, script: STUDENT_JS });
+    nav: false, links: STUDENT_LINKS, dock: studentDock("tracker", tracks.length), css: STUDENT_CSS, script: STUDENT_JS });
 }
 
 /* ---------------------------------------------------------------- JSON endpoints */
@@ -312,7 +327,7 @@ export async function studentExport(env, user) {
 
 /* ---------------------------------------------------------------- alerts */
 
-async function ping(topic, { title, message, click }) {
+export async function ping(topic, { title, message, click }) {
   const r = await fetch("https://ntfy.sh/", { method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ topic, title: title.slice(0, 200), message: message.slice(0, 1000), click, tags: ["mag"] }) }).catch(() => null);
   return !!(r && r.ok);
@@ -379,7 +394,7 @@ export function privacyPage(ui, signedIn) {
     <article class="card legal">
       <h3>what scout keeps</h3>
       <ul>
-        <li>your email and a scrambled version of your password (PBKDF2, never the password itself)</li>
+        <li>your email and your password, hashed, so not even scout can read it</li>
         <li>your answers to the sign-up questions</li>
         <li>the postings you save or pass, and your tracker</li>
         <li>which postings already pinged your phone, so none pings twice</li>
@@ -404,6 +419,20 @@ export function privacyPage(ui, signedIn) {
 
 export const STUDENT_CSS = `
 .card.is-out{opacity:.75}
+.score small{font-size:.6em;opacity:.7;margin-left:1px}
+.btn.saved{background:var(--cream)}
+.dock .count{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;margin-left:4px;border-radius:999px;background:var(--ink);color:var(--cream);font-size:11px}
+.dock a.on .count{background:var(--cream);color:var(--ink)}
+.when-tag{font-weight:700;font-size:12px;color:var(--muted);align-self:center}
+.welcome{grid-column:1/-1;display:flex;gap:14px;align-items:center;background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 18px;margin:0 0 18px}
+.welcome p{margin:0;font-weight:600} .welcome a{color:var(--ink);font-weight:700} .welcome-panda{width:84px;height:84px;flex:none}
+.removed{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cream);border:var(--line) dashed var(--ink);border-radius:var(--radius);padding:10px 16px;margin:0 0 16px;font-weight:700}
+.track .xbtn{width:44px;height:44px;top:4px;right:4px;padding:6px;background-clip:content-box;box-shadow:none;border-width:0} .track .xbtn::before{content:"";position:absolute;inset:6px;border:2.5px solid var(--ink);border-radius:50%;box-shadow:2px 2px 0 var(--ink);z-index:-1}
+@media (max-width:560px){
+  body[data-page="new"] .stat{padding:14px;gap:10px} body[data-page="new"] .stat-big{font-size:clamp(44px,12vw,56px)}
+  body[data-page="new"] .stat-tiles{gap:8px} body[data-page="new"] .tile{padding:8px 10px} body[data-page="new"] .tile b{font-size:26px} body[data-page="new"] .tile span{font-size:11px}
+  body[data-page="new"] .stat-panda{width:90px}
+}
 .track{position:relative}
 .track-edit{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:10px}
 .track-edit select,.track-edit input{font:600 15px var(--font);color:var(--ink);background:#fff;border:var(--line) solid var(--ink);border-radius:12px;padding:10px 12px;width:100%;min-width:0;max-width:100%;box-shadow:none}

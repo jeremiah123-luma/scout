@@ -140,7 +140,8 @@ export function score(m, a, p, now = Date.now()) {
   // Fresh postings first; the good ones close fast.
   const posted = (m.latest_posted || m.date_posted || 0) * 1000;
   const days = posted ? (now - posted) / 86400000 : 999;
-  parts.fresh = days < 1 ? 10 : days < 7 ? 5 : days > 90 && (m.tier || 3) > 2 ? -10 : 0;
+  // Old postings sink whoever posted them: a 180-day-old fellowship shouldn't top a freshman's list.
+  parts.fresh = days < 1 ? 10 : days < 7 ? 5 : days > 150 ? -20 : days > 90 ? -10 : 0;
   // Roles and skills they wrote down, found in the title.
   const title = String(m.title || "").toLowerCase();
   const hits = [...words(a.roles), ...words(a.skills)].filter((w) => w.length > 2 && title.includes(w));
@@ -154,7 +155,7 @@ export const why = (parts) => Object.entries(parts).filter(([, n]) => n).map(([k
 // Every shared posting judged and scored for one student, best first. Left-out postings come back marked.
 export function rank(matches, answers, now = Date.now()) {
   const a = answers || {}, p = profileFrom(a, new Date(now));
-  return matches.map((m) => {
+  return matches.filter((m) => inTheirFields(m, a)).map((m) => {
     const [elig, note] = m.eligibility === "closed" ? ["closed", m.eligibility_note || "closed"] : verdict(m.posting_facts, p);
     const out = exclusion(m, a, p);
     const s = score(m, a, p, now);
@@ -163,6 +164,15 @@ export function rank(matches, answers, now = Date.now()) {
 }
 
 export const isOpen = (m) => !m.my.out && m.my.eligibility !== "ineligible" && m.my.eligibility !== "closed";
+
+// Whether a posting is in a field they picked, or a program and they asked for programs. Postings outside their
+// fields aren't shown at all (not even as "ruled out"), so every count on every page means the same thing.
+export function inTheirFields(m, a) {
+  const roles = new Set(((a || {}).fields || []).flatMap((f) => FIELD_ROLES[f] || []));
+  if (!roles.size) return true;
+  if (roles.has(m.role)) return true;
+  return (((a || {}).early || []).length > 0) && (m.role === "program" || m.role === "ambassador" || m.early_career === "strong");
+}
 
 /* ---------------------------------------------------------------- alert timing */
 

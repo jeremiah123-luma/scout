@@ -848,10 +848,10 @@ ${nav && dock === null ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS
 
 const FAVICON = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#ffc93c" stroke="#1a1333" stroke-width="7"/><circle cx="32" cy="32" r="12" fill="#f6f9dc" stroke="#1a1333" stroke-width="5"/><circle cx="32" cy="32" r="4.5" fill="#1a1333"/></svg>');
 
-// The headline decoration: one of zigzag, highlighter, circle, or loops, picked at random. It draws in once when
-// the page opens and stays.
-const CYCLE_JS = `(function(){var h=document.querySelector("h1 .head");if(!h)return;var s=["u-zig","u-highlight","u-circle","u-loops"];
-h.classList.add(s[Math.floor(Math.random()*s.length)],"draw")})();`;
+// The headline decoration: each page has its own (zigzag, loops, or highlighter), the same every visit. It draws in
+// once when the page opens and stays.
+const CYCLE_JS = `(function(){var h=document.querySelector("h1 .head");if(!h)return;var by={new:"u-zig",programs:"u-loops",review:"u-highlight",tracker:"u-zig",about:"u-loops",settings:"u-highlight"};
+h.classList.add(by[document.body.dataset.page]||"u-highlight","draw")})();`;
 
 const PAGE_COLORS = { about: "#3fa9b5", new: "#cf6a2e", programs: "#9b84d8", review: "#cf6a2e", tracker: "#3fa9b5", settings: "#e7c98f", login: "#9b84d8" };
 
@@ -875,7 +875,7 @@ body[data-page="about"] main{display:block} @media (min-width:900px){body[data-p
 .card p{margin:6px 0 0} .change{background:#fff;border:2px solid var(--ink);border-radius:12px;padding:10px 12px;margin:8px 0 6px;font-size:var(--small);font-weight:500;overflow-wrap:anywhere} .change b{display:block;margin-bottom:4px} .card ul{margin:8px 0 0;padding-left:18px} .card li+li{margin-top:4px} .login a,.card a.inline{color:var(--ink);font-weight:700}
 .pill-link{font-size:var(--small);font-weight:700;color:var(--ink);background:var(--cream);border:var(--line) solid var(--ink);border-radius:var(--radius-pill);padding:6px 14px;text-decoration:none;box-shadow:var(--shadow-sm)}
 h1{font-family:var(--display);font-size:var(--h1);line-height:.92;text-transform:uppercase;margin:14px 0 20px;letter-spacing:0}
-h1 .lead{display:block;color:var(--on-page)} h1 .head{display:inline-block;color:var(--ink);padding-bottom:22px;position:relative;isolation:isolate}
+h1 .lead{display:block;color:var(--lead)} h1 .head{display:inline-block;color:var(--ink);padding-bottom:22px;position:relative;isolation:isolate}
 /* The headline decoration lives in its own layer (::after) so swapping styles never moves the text. */
 h1 .head::after{content:"";position:absolute;z-index:-1;pointer-events:none;left:0;right:0;bottom:0;height:30px;background:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%2038%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M3.0%206.9%20Q%203.0%206.9%208.0%2018.6%20Q%2012.9%2030.2%2017.6%2019.2%20Q%2022.3%208.2%2027.9%2016.8%20Q%2033.5%2025.5%2039.6%2015.3%20Q%2045.6%205.2%2051.4%2015.4%20Q%2057.2%2025.6%2062.0%2016.6%20Q%2066.7%207.5%2073.7%2016.8%20Q%2080.7%2026.0%2085.9%2017.4%20Q%2091.0%208.8%2098.4%2019.2%20Q%20105.7%2029.6%20111.4%2020.2%20Q%20117.1%2010.9%20121.7%2021.4%20Q%20126.4%2031.9%20131.7%2018.9%20Q%20137.1%205.9%20142.0%2016.7%20Q%20146.8%2027.5%20153.8%2016.8%20Q%20160.7%206.1%20167.0%2018.1%20Q%20173.2%2030.1%20178.8%2019.2%20Q%20184.4%208.3%20189.1%2016.9%20Q%20193.8%2025.5%20198.9%2017.3%20Q%20204.0%209.1%20209.8%2018.3%20Q%20215.6%2027.5%20221.9%2017.6%20Q%20228.1%207.7%20233.5%2019.5%20Q%20238.9%2031.4%20245.5%2018.9%20Q%20252.1%206.5%20258.3%2017.8%20Q%20264.6%2029.2%20271.7%2019.3%20Q%20278.8%209.4%20284.2%2021.1%20Q%20289.5%2032.8%20294.4%2020.2%20Q%20299.3%207.5%20306.0%2016.9%20Q%20312.8%2026.2%20318.8%2015.7%20Q%20324.7%205.2%20331.2%2018.2%20Q%20337.7%2031.1%20344.0%2020.7%20Q%20350.2%2010.3%20355.6%2020.4%20Q%20361.1%2030.6%20367.3%2019.5%20Q%20373.6%208.5%20379.5%2020.1%20T%20385.4%2031.7%27%20fill%3D%27none%27%20stroke%3D%27%23ffc93c%27%20stroke-width%3D%274.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3C%2Fsvg%3E') no-repeat center/100% 100%}
 h1 .head.u-loops::after{background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%2038%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M4%2026%20C%2021.1%2026%2C%2024.9%207.5%2C%2015.4%207.5%20C%205.9%207.5%2C%209.7%2030%2C%2028.7%2027%20C%2041.3%2026%2C%2045.4%206.3%2C%2035.2%206.3%20C%2025.0%206.3%2C%2029.1%2030%2C%2049.5%2027%20C%2061.3%2026%2C%2065.3%206.5%2C%2055.3%206.5%20C%2045.3%206.5%2C%2049.3%2030%2C%2069.2%2027%20C%2076.1%2026%2C%2078.9%209.2%2C%2071.8%209.2%20C%2064.7%209.2%2C%2067.5%2030%2C%2081.8%2027%20C%2096.9%2026%2C%20101.2%208.1%2C%2090.4%208.1%20C%2079.7%208.1%2C%2084.0%2030%2C%20105.5%2027%20C%20118.1%2026%2C%20122.4%2011.3%2C%20111.8%2011.3%20C%20101.2%2011.3%2C%20105.4%2030%2C%20126.6%2027%20C%20136.2%2026%2C%20139.8%2010.5%2C%20130.9%2010.5%20C%20122.0%2010.5%2C%20125.6%2030%2C%20143.3%2027%20C%20154.5%2026%2C%20158.2%208.6%2C%20149.0%208.6%20C%20139.8%208.6%2C%20143.5%2030%2C%20161.9%2027%20C%20169.0%2026%2C%20171.9%2010.7%2C%20164.8%2010.7%20C%20157.8%2010.7%2C%20160.6%2030%2C%20174.7%2027%20C%20185.1%2026%2C%20188.3%206.5%2C%20180.2%206.5%20C%20172.1%206.5%2C%20175.3%2030%2C%20191.6%2027%20C%20204.8%2026%2C%20208.8%2011.0%2C%20198.8%2011.0%20C%20188.7%2011.0%2C%20192.7%2030%2C%20212.9%2027%20C%20225.2%2026%2C%20229.2%2011.2%2C%20219.0%2011.2%20C%20208.9%2011.2%2C%20212.9%2030%2C%20233.3%2027%20C%20244.2%2026%2C%20248.0%2011.2%2C%20238.6%2011.2%20C%20229.1%2011.2%2C%20232.9%2030%2C%20251.8%2027%20C%20258.7%2026%2C%20261.6%206.8%2C%20254.5%206.8%20C%20247.5%206.8%2C%20250.3%2030%2C%20264.4%2027%20C%20274.3%2026%2C%20277.4%2010.7%2C%20269.6%2010.7%20C%20261.7%2010.7%2C%20264.9%2030%2C%20280.5%2027%20C%20295.5%2026%2C%20299.9%206.8%2C%20288.9%206.8%20C%20278.0%206.8%2C%20282.4%2030%2C%20304.2%2027%20C%20312.4%2026%2C%20315.6%206.2%2C%20307.5%206.2%20C%20299.3%206.2%2C%20302.6%2030%2C%20318.9%2027%20C%20330.5%2026%2C%20334.1%207.9%2C%20325.0%207.9%20C%20315.8%207.9%2C%20319.5%2030%2C%20337.8%2027%20C%20346.4%2026%2C%20349.5%206.4%2C%20341.7%206.4%20C%20333.9%206.4%2C%20337.0%2030%2C%20352.6%2027%20C%20365.5%2026%2C%20369.4%206.2%2C%20359.7%206.2%20C%20349.9%206.2%2C%20353.8%2030%2C%20373.3%2027%20C%20386.5%2026%2C%20390.7%2010.2%2C%20380.2%2010.2%20C%20369.6%2010.2%2C%20373.8%2030%2C%20395.0%2027%20C%20388%2025%2C%20392%2024%2C%20396%2022%27%20fill%3D%27none%27%20stroke%3D%27%23ffc93c%27%20stroke-width%3D%274.5%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E')}
@@ -955,7 +955,7 @@ body[data-page="login"] main,body[data-page="login"] header{max-width:420px} bod
 body{--page-hi:color-mix(in srgb,var(--page) 62%,#fff);--page-lo:color-mix(in srgb,var(--page) 72%,#1a1333);--page-pop:color-mix(in srgb,var(--page) 55%,var(--accent))}
 body::before{content:"";position:fixed;inset:-25%;z-index:-1;pointer-events:none;
   background:radial-gradient(circle at 18% 12%,var(--page-hi) 0,transparent 38%),radial-gradient(circle at 85% 30%,var(--page-pop) 0,transparent 34%),radial-gradient(circle at 70% 90%,var(--page-lo) 0,transparent 45%),var(--page);
-  animation:drift 22s ease-in-out infinite alternate}
+}
 @keyframes drift{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(3%,-2%) rotate(4deg)}100%{transform:translate(-3%,2%) rotate(-3deg)}}
 /* cards rise in one after another on load */
 main > *{animation:rise .5s cubic-bezier(.2,.9,.3,1.2) both}
@@ -1079,6 +1079,14 @@ h1{position:relative} .hero-panda{position:absolute;right:0;top:-6px;width:170px
 @media (max-width:560px){h1:has(.hero-panda){padding-right:78px} .hero-panda{width:72px;top:2px}}
 .about-panda{float:right;width:110px;margin:-6px -6px 4px 10px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important}}
+/* Contrast. Cream on the page colors fails for small text everywhere (3.56:1 on orange, 2.58 on teal, 1.87 on
+   green), and navy passes on all of them (4.63 to 11.1). So text that sits on the page color is navy, and the big
+   cream headline words keep their cream with the brand's navy outline around each letter. Sand pages keep navy. */
+body{--on-page:var(--ink);--lead:var(--cream)}
+body[data-page="settings"],body[data-color="sand"]{--lead:var(--ink)}
+h1 .lead,.hero-h1 .lead,.end-h,.sec-h{paint-order:stroke fill}
+h1 .lead,.hero-h1 .lead{-webkit-text-stroke:.14em var(--ink);color:var(--lead)}
+body[data-page="settings"] h1 .lead,body[data-color="sand"] h1 .lead{-webkit-text-stroke:0}
 `;
 
 // The only JavaScript the pages need: send a tap to the API and update the card in place.
