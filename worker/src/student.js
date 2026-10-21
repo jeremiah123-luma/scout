@@ -7,7 +7,7 @@
  * tracker, queue, or kits.
  */
 
-import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf } from "./match.js";
+import { rank, isOpen, why, digestDue, instantPicks, isQuiet, localNow, usLocation, zoneOf, arrivedMs } from "./match.js";
 
 const TRACK_STATES = ["Saved", "Applied", "OA", "Interview", "Offer", "Rejected", "Withdrawn"];
 const SHOWN = 60;
@@ -124,7 +124,7 @@ const VIEWS = [
   { id: "out", group: "the rest", label: "ruled out", note: "left out because of your answers or the posting's own rules. here so you can double check.", pick: (m) => !isOpen(m) },
 ];
 const postedMs = (m) => (m.latest_posted || m.date_posted || 0) * 1000;
-const seenMs = (m) => Date.parse(m.first_seen || "") || 0;
+const seenMs = (m) => arrivedMs(m);
 function within(m, days, sighted = true) {
   const ms = days * 86400000;
   return Date.now() - postedMs(m) < ms || (sighted && seenMs(m) && Date.now() - seenMs(m) < ms);
@@ -335,54 +335,62 @@ export async function ping(topic, { title, message, click }) {
 
 const line = (m) => `${m.company}: ${m.title} (${(m.locations || [])[0] || "location not listed"}, scores ${m.my.score})`;
 
-// Runs from the Worker's hourly cron. For each student who finished sign-up and wants phone alerts: instant pings
-// for strong new matches (their own rule, outside their quiet hours), and the daily or weekly digest at their hour.
-// Sends are capped per run; whoever is left waits for the next hour.
+const safeLink = (u) => (/^https?:\/\//i.test(String(u || "")) ? String(u) : SCOUT_URL);
+const SCOUT_URL = "https://scout-dashboard.jeremysleman.workers.dev/";
+
+// Runs every 10 minutes from the Worker's cron (wrangler.toml). Only students with phone alerts are read (the
+// channel check is in the SQL, so students with alerts off never take a slot), oldest-checked first, a few per
+// run to stay inside the free CPU limit. For each: instant pings for strong postings that arrived after they joined
+// and haven't pinged them (held, not dropped, during quiet hours), and the daily or weekly digest at or after
+// their hour. A student who is neither instant nor due for a digest isn't ranked at all.
 export async function runStudentAlerts(env, getKV, now = new Date()) {
   if (!env.DB) return { sent: 0 };
   const data = await getKV("matches", { matches: [] });
   if (!(data.matches || []).length) return { sent: 0 };
-  const { results } = await env.DB.prepare(`SELECT u.id, u.answers, m.topic, m.last_check, m.last_digest FROM users u
-    JOIN student_meta m ON m.user_id = u.id WHERE u.done = 1 ORDER BY m.last_check ASC LIMIT ?`).bind(STUDENTS_PER_RUN).all()
+  const { results } = await env.DB.prepare(`SELECT u.id, u.answers, u.created_at, m.topic, m.last_digest FROM users u
+    JOIN student_meta m ON m.user_id = u.id
+    WHERE u.done = 1 AND u.answers LIKE '%"channel":%"phone%'
+    ORDER BY m.last_check ASC LIMIT ?`).bind(STUDENTS_PER_RUN).all()
     .catch((err) => { console.log("student alerts: query failed:", err && err.message); return { results: [] }; });
   let sent = 0;
+  const stamp = now.toISOString();
   for (const row of results || []) {
-    if (sent >= ALERT_SENDS_PER_RUN) break;
     const a = safeJson(row.answers, {});
-    if (![].concat(a.channel || []).some((c) => String(c).startsWith("phone"))) continue; // older answers saved a list
-    const [passedRes, sentRes] = await Promise.all([
-      env.DB.prepare("SELECT key FROM marks WHERE user_id = ? AND kind = 'pass'").bind(row.id).all(),
-      env.DB.prepare("SELECT key FROM pinged WHERE user_id = ?").bind(row.id).all()]);
-    const skip = new Set((passedRes.results || []).map((r) => r.key));
-    const already = new Set((sentRes.results || []).map((r) => r.key));
-    const ranked = rank(data.matches, a, now.getTime()).filter((m) => !skip.has(m.key));
+    // The SQL match is loose (it could catch "phone" further along in the answers), so check exactly. A student
+    // with alerts off still gets last_check moved, so they never hold a slot.
+    const phone = [].concat(a.channel || []).some((c) => String(c).startsWith("phone"));
     const local = localNow(a.timezone, now);
-    const marks = [];
-    const since = Date.parse(row.last_check) || now.getTime() - 3600000;
-    if (!isQuiet(a.quiet, local.hour)) {
-      const picks = instantPicks(ranked, a, already, since).slice(0, 3);
-      if (picks.length) {
-        const ok = await ping(row.topic, picks.length === 1
-          ? { title: `Scout: ${picks[0].company}`, message: line(picks[0]), click: picks[0].url }
-          : { title: `Scout: ${picks.length} new matches`, message: picks.map(line).join("\n"), click: "https://scout-dashboard.jeremysleman.workers.dev/" });
-        sent++;
-        if (ok) marks.push(...picks.map((m) => m.key));
-      }
-      if (digestDue(a, row.last_digest, now) && sent < ALERT_SENDS_PER_RUN) {
-        const top = ranked.filter((m) => isOpen(m) && !already.has(m.key) && !marks.includes(m.key)).slice(0, 10);
-        if (top.length) {
-          const ok = await ping(row.topic, { title: `Scout: your ${a.speed === "once a week" ? "week" : "day"}, ${top.length} to look at`, message: top.map(line).join("\n"), click: "https://scout-dashboard.jeremysleman.workers.dev/" });
+    const instant = phone && a.speed === "tell me right away" && !isQuiet(a.quiet, local.hour);
+    const digest = phone && digestDue(a, row.last_digest, now);
+    const writes = [env.DB.prepare("UPDATE student_meta SET last_check = ? WHERE user_id = ?").bind(stamp, row.id)];
+    if ((instant || digest) && sent < ALERT_SENDS_PER_RUN) {
+      const [passedRes, sentRes] = await Promise.all([
+        env.DB.prepare("SELECT key FROM marks WHERE user_id = ? AND kind = 'pass'").bind(row.id).all(),
+        env.DB.prepare("SELECT key FROM pinged WHERE user_id = ?").bind(row.id).all()]);
+      const skip = new Set((passedRes.results || []).map((r) => r.key));
+      const already = new Set((sentRes.results || []).map((r) => r.key));
+      const ranked = rank(data.matches, a, now.getTime()).filter((m) => !skip.has(m.key));
+      const pinged = [];
+      if (instant) {
+        const picks = instantPicks(ranked, a, already, Date.parse(row.created_at) || 0).slice(0, 3);
+        if (picks.length) {
+          const ok = await ping(row.topic, picks.length === 1
+            ? { title: `Scout: ${picks[0].company}`, message: line(picks[0]), click: safeLink(picks[0].url) }
+            : { title: `Scout: ${picks.length} new matches`, message: picks.map(line).join("\n"), click: SCOUT_URL });
           sent++;
-          if (ok) marks.push(...top.map((m) => m.key));
+          if (ok) pinged.push(...picks.map((m) => m.key));
         }
-        await env.DB.prepare("UPDATE student_meta SET last_digest = ? WHERE user_id = ?").bind(local.date, row.id).run();
       }
+      if (digest && sent < ALERT_SENDS_PER_RUN) {
+        const top = ranked.filter((m) => isOpen(m) && !already.has(m.key) && !pinged.includes(m.key)).slice(0, 10);
+        const ok = !top.length || await ping(row.topic, { title: `Scout: your ${a.speed === "once a week" ? "week" : "day"}, ${top.length} to look at`, message: top.map(line).join("\n"), click: SCOUT_URL });
+        if (top.length) sent++;
+        // A failed send leaves last_digest alone, so the next run tries again the same day.
+        if (ok) { pinged.push(...top.map((m) => m.key)); writes.push(env.DB.prepare("UPDATE student_meta SET last_digest = ? WHERE user_id = ?").bind(local.date, row.id)); }
+      }
+      writes.push(...pinged.map((k) => env.DB.prepare("INSERT OR IGNORE INTO pinged (user_id, key, at) VALUES (?, ?, ?)").bind(row.id, k, stamp)));
     }
-    const stamp = now.toISOString();
-    await env.DB.batch([
-      env.DB.prepare("UPDATE student_meta SET last_check = ? WHERE user_id = ?").bind(stamp, row.id),
-      ...marks.map((k) => env.DB.prepare("INSERT OR IGNORE INTO pinged (user_id, key, at) VALUES (?, ?, ?)").bind(row.id, k, stamp)),
-    ]);
+    await env.DB.batch(writes);
   }
   return { sent };
 }

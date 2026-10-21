@@ -96,7 +96,22 @@ const ROLE_POINTS = { swe: 30, pm: 24, it: 18, design: 15, program: 20, ambassad
 const BIG_TECH = ["google", "apple", "meta", "amazon", "microsoft", "netflix", "nvidia"];
 
 export const norm = (s) => String(s || "").toLowerCase().replace(/[,.]?\s+(inc|llc|ltd|corp|corporation|co|company|plc|group|holdings|technologies)\.?$/g, "").replace(/\s+/g, " ").trim();
-const listed = (list, company) => (list || []).some((c) => norm(c) && (norm(company) === norm(c) || norm(company).startsWith(norm(c) + " ")));
+// A company is on a list when its name matches an entry or starts with it ("Google" covers "Google DeepMind").
+// Lists are normalized once per student (prepare), not once per posting: ranking stays under a millisecond.
+const onList = (normed, company) => { const c = norm(company); return normed.some((n) => c === n || c.startsWith(n + " ")); };
+const listed = (list, company) => onList((list || []).map(norm).filter(Boolean), company);
+
+// The parts of a student's answers the scorer reads for every posting, worked out once.
+export function prepare(a) {
+  a = a || {};
+  return {
+    a, roles: new Set((a.fields || []).flatMap((f) => FIELD_ROLES[f] || [])), top: new Set(FIELD_ROLES[a.top_field] || []),
+    dream: (a.dream || []).map(norm).filter(Boolean), excited: (a.excited || []).map(norm).filter(Boolean),
+    hidden: (a.never_companies || []).map(norm).filter(Boolean), places: words(a.places).filter((w) => w.length > 1),
+    never: words(a.never_words), keys: [...words(a.roles), ...words(a.skills)].filter((w) => w.length > 2),
+    wantsPrograms: (a.early || []).length > 0,
+  };
+}
 const words = (list) => (list || []).map((w) => String(w).toLowerCase().trim()).filter(Boolean);
 
 // A location is in the US when it says so ("Remote in USA or Canada") or names nowhere else. Two-letter codes only
@@ -107,34 +122,32 @@ export const usLocation = (loc) => US_NAMED.test(String(loc)) || !ABROAD.test(St
 export const inUS = (m) => !(m.locations || []).length || (m.locations || []).some(usLocation);
 
 // Why a posting is left out for this student, or "" when it stays. These are their own hard answers.
-export function exclusion(m, a, p) {
+export function exclusion(m, a, p, pre = prepare(a)) {
   if (a.abroad !== "yes" && !inUS(m)) return "outside the US";
   if (m.citizens_only && (a.citizen === "no" || p.authorized === "no")) return "US citizens only";
   if ((a.sponsorship || "").startsWith("yes") && /does not offer/i.test(m.sponsorship || "")) return "no visa sponsorship";
   const title = String(m.title || "").toLowerCase();
-  const bad = words(a.never_words).find((w) => title.includes(w));
+  const bad = pre.never.find((w) => title.includes(w));
   if (bad) return `has "${bad}"`;
-  if (listed(a.never_companies, m.company)) return "a company you hid";
+  if (onList(pre.hidden, m.company)) return "a company you hid";
   return "";
 }
 
 // A score out of 100 for this student, with the parts that add up to it.
-export function score(m, a, p, now = Date.now()) {
-  const roles = new Set((a.fields || []).flatMap((f) => FIELD_ROLES[f] || []));
-  const top = new Set(FIELD_ROLES[a.top_field] || []);
-  const wantsPrograms = (a.early || []).length > 0;
+export function score(m, a, p, now = Date.now(), pre = prepare(a)) {
+  const { roles, top, wantsPrograms } = pre;
   const parts = {};
   // Role: a field they picked, a little more for their top one. Programs count for anyone who asked for them.
   if (roles.has(m.role)) parts.role = (ROLE_POINTS[m.role] || 15) + (top.has(m.role) ? 5 : 0);
   else if (m.role === "program" || m.role === "ambassador") parts.role = wantsPrograms ? ROLE_POINTS[m.role] : 8;
   else parts.role = roles.size ? 0 : 15;
   // Company: their dream list first, then the ones they're excited about, then big tech.
-  parts.company = listed(a.dream, m.company) ? 25 : listed(a.excited, m.company) ? 18 : BIG_TECH.includes(norm(m.company)) ? 12 : m.tier === 2 ? 8 : 0;
+  parts.company = onList(pre.dream, m.company) ? 25 : onList(pre.excited, m.company) ? 18 : BIG_TECH.includes(norm(m.company)) ? 12 : m.tier === 2 ? 8 : 0;
   // Built for first and second years: worth a lot to them, nothing extra to a senior.
   parts.early = m.early_career === "strong" ? (p.yearInSchool <= 2 ? 30 : 5) : m.early_career === "weak" ? 3 : 0;
   // Places they named rank higher; remote follows their answer.
   const locs = (m.locations || []).join(" | ").toLowerCase();
-  const places = words(a.places).filter((w) => w.length > 1);
+  const places = pre.places;
   const remote = /remote/.test(locs);
   parts.location = places.some((w) => locs.includes(w)) ? 12 : remote ? (a.remote === "love them" ? 12 : a.remote === "rather not" ? -6 : 6) : inUS(m) ? 4 : 0;
   // Fresh postings first; the good ones close fast.
@@ -144,7 +157,7 @@ export function score(m, a, p, now = Date.now()) {
   parts.fresh = days < 1 ? 10 : days < 7 ? 5 : days > 150 ? -20 : days > 90 ? -10 : 0;
   // Roles and skills they wrote down, found in the title.
   const title = String(m.title || "").toLowerCase();
-  const hits = [...words(a.roles), ...words(a.skills)].filter((w) => w.length > 2 && title.includes(w));
+  const hits = pre.keys.filter((w) => title.includes(w));
   parts.keywords = Math.min(9, hits.length * 3);
   const total = Object.values(parts).reduce((s, n) => s + n, 0);
   return { score: Math.max(0, Math.min(100, Math.round(total))), parts };
@@ -154,11 +167,11 @@ export const why = (parts) => Object.entries(parts).filter(([, n]) => n).map(([k
 
 // Every shared posting judged and scored for one student, best first. Left-out postings come back marked.
 export function rank(matches, answers, now = Date.now()) {
-  const a = answers || {}, p = profileFrom(a, new Date(now));
+  const a = answers || {}, p = profileFrom(a, new Date(now)), pre = prepare(a);
   return matches.filter((m) => inTheirFields(m, a)).map((m) => {
     const [elig, note] = m.eligibility === "closed" ? ["closed", m.eligibility_note || "closed"] : verdict(m.posting_facts, p);
-    const out = exclusion(m, a, p);
-    const s = score(m, a, p, now);
+    const out = exclusion(m, a, p, pre);
+    const s = score(m, a, p, now, pre);
     return { ...m, my: { eligibility: elig, note, out, score: s.score, parts: s.parts } };
   }).sort((x, y) => y.my.score - x.my.score);
 }
@@ -205,19 +218,26 @@ export function isQuiet(label, hour) {
   return start < end ? hour >= start && hour < end : hour >= start || hour < end;
 }
 
-// Whether this hour is the student's digest hour (daily), or Monday's (weekly), and it hasn't gone out yet today.
+// Whether the digest should go out now: at or after the student's digest hour, once that day (weekly: Mondays).
+// "At or after", so a busy run that reaches them late still sends. Quiet hours don't apply: they picked the time.
 export function digestDue(a, lastDigestDate, now = new Date()) {
   if (a.speed !== "once a day" && a.speed !== "once a week") return false;
   const local = localNow(a.timezone, now);
-  if (local.hour !== hourOf(a.digest_time || "7:00 PM")) return false;
+  if (local.hour < hourOf(a.digest_time || "7:00 PM")) return false;
   if (a.speed === "once a week" && local.weekday !== 1) return false;
   return lastDigestDate !== local.date;
 }
 
-// Postings that deserve an instant ping: new since the last check, open for them, and strong by their own rule.
-export function instantPicks(ranked, a, alreadySent, sinceMs) {
+// When a posting reached the dashboard (index.js ingest sets "arrived"); older uploads fall back to first_seen, then
+// the posted date. Date.parse("") is NaN, so each fallback really falls back.
+export const arrivedMs = (m) => Date.parse(m.arrived || "") || Date.parse(m.first_seen || "") || (m.latest_posted || m.date_posted || 0) * 1000;
+
+// Postings that deserve an instant ping: arrived after the student joined, not pinged yet, open for them, and
+// strong by their own rule. There's no time window, so a ping held back by quiet hours or a failed send goes out
+// on the next run instead of being lost; the pinged list is what stops repeats.
+export function instantPicks(ranked, a, alreadySent, joinedMs) {
   if (a.speed !== "tell me right away") return [];
-  return ranked.filter((m) => isOpen(m) && !alreadySent.has(m.key)
-    && (Date.parse(m.first_seen || 0) || (m.latest_posted || 0) * 1000) >= sinceMs
-    && (a.strong === "dream companies only" ? listed(a.dream, m.company) : m.my.score >= 60));
+  const dream = (a.dream || []).map(norm).filter(Boolean);
+  return ranked.filter((m) => isOpen(m) && !alreadySent.has(m.key) && arrivedMs(m) >= joinedMs
+    && (a.strong === "dream companies only" ? onList(dream, m.company) : m.my.score >= 60));
 }

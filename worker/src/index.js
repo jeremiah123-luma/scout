@@ -237,9 +237,18 @@ const put = (env, key, value) => env.SCOUT.put(key, JSON.stringify(value));
 async function ingest(request, env) {
   const body = await request.json().catch(() => null);
   if (!body || !Array.isArray(body.matches)) return json({ error: "expected { matches: [...] }" }, 400);
+  // When each posting first reached the dashboard, kept from run to run. Student alerts and "new today" use it:
+  // the cron's own first_seen only exists for postings the owner was alerted about. On the first run with no
+  // arrival times at all, existing postings get their posted date, so nobody is pinged about the whole list at once.
+  const before = await get(env, "matches", { matches: [] });
+  const arrivedAt = new Map((before.matches || []).filter((m) => m.arrived).map((m) => [m.key, m.arrived]));
+  const now = new Date().toISOString();
+  const firstRun = arrivedAt.size === 0;
+  const posted = (m) => new Date(((m.latest_posted || m.date_posted || 0) * 1000) || Date.now()).toISOString();
+  const matches = body.matches.map((m) => ({ ...m, arrived: arrivedAt.get(m.key) || (firstRun ? m.first_seen || posted(m) : now) }));
   await Promise.all([
     put(env, "matches", {
-      generated_at: body.generated_at || new Date().toISOString(), counts: body.counts || {}, matches: body.matches,
+      generated_at: body.generated_at || now, counts: body.counts || {}, matches,
       total_matches: Number.isInteger(body.total_matches) ? body.total_matches : body.matches.length,
       open_total: Number.isInteger(body.open_total) ? body.open_total : null,
     }),

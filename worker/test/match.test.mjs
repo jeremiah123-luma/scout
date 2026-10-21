@@ -57,6 +57,15 @@ test("scores follow the student, not the owner", () => {
   assert.ok(a.score <= 100 && b.score >= 0);
 });
 
+test("scoring is fast enough for the free CPU limit", () => {
+  const m = Array.from({ length: 300 }, (_, i) => ({ key: "k" + i, company: "Company " + (i % 40), title: "Software Engineer Intern", role: "swe", locations: ["New York, NY"], latest_posted: 1.79e9 }));
+  const heavy = { fields: ["software engineering"], dream: Array.from({ length: 10 }, (_, i) => "Dream " + i), excited: Array.from({ length: 10 }, (_, i) => "Excited " + i),
+    never_companies: Array.from({ length: 10 }, (_, i) => "Hidden " + i), places: ["nyc", "new jersey"], roles: ["front end", "ios"], skills: ["python", "swift"] };
+  for (let i = 0; i < 30; i++) rank(m, heavy);
+  const t0 = performance.now(); for (let i = 0; i < 100; i++) rank(m, heavy);
+  assert.ok((performance.now() - t0) / 100 < 1.5, "ms per student: " + ((performance.now() - t0) / 100).toFixed(2));
+});
+
 test("rank marks verdicts and keeps the open ones first by score", () => {
   const ms = [
     { key: "a", company: "X", title: "SWE Intern", role: "swe", locations: ["NYC"], posting_facts: { grad_ranges: [[2028, 2028]] } },
@@ -84,6 +93,8 @@ test("alert timing", () => {
   assert.equal(localNow("Eastern (New York)", at7pmNY).hour, 19);
   assert.ok(digestDue({ speed: "once a day", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "2026-10-20", at7pmNY));
   assert.ok(!digestDue({ speed: "once a day", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "2026-10-21", at7pmNY), "once a day");
+  assert.ok(digestDue({ speed: "once a day", digest_time: "6:00 PM", timezone: "Eastern (New York)" }, "2026-10-20", at7pmNY), "late is still today");
+  assert.ok(!digestDue({ speed: "once a day", digest_time: "8:00 PM", timezone: "Eastern (New York)" }, "2026-10-20", at7pmNY), "not before the hour");
   assert.ok(!digestDue({ speed: "once a week", digest_time: "7:00 PM", timezone: "Eastern (New York)" }, "", at7pmNY), "weekly is Mondays");
   assert.ok(!digestDue({ speed: "tell me right away" }, "", at7pmNY));
 });
@@ -91,13 +102,14 @@ test("alert timing", () => {
 test("instant picks respect their rule and never repeat", () => {
   const since = Date.UTC(2026, 9, 21, 0);
   const ranked = [
-    { key: "dream", company: "Apple", first_seen: "2026-10-21T01:00:00Z", my: { score: 40, eligibility: "unknown", out: "" } },
-    { key: "high", company: "Acme", first_seen: "2026-10-21T01:00:00Z", my: { score: 80, eligibility: "unknown", out: "" } },
-    { key: "old", company: "Acme", first_seen: "2026-10-19T01:00:00Z", my: { score: 90, eligibility: "unknown", out: "" } },
-    { key: "out", company: "Acme", first_seen: "2026-10-21T01:00:00Z", my: { score: 90, eligibility: "ineligible", out: "" } },
+    { key: "dream", company: "Apple", arrived: "2026-10-21T01:00:00Z", my: { score: 40, eligibility: "unknown", out: "" } },
+    { key: "high", company: "Acme", arrived: "2026-10-21T01:00:00Z", my: { score: 80, eligibility: "unknown", out: "" } },
+    { key: "old", company: "Acme", arrived: "2026-10-19T01:00:00Z", my: { score: 90, eligibility: "unknown", out: "" } },
+    { key: "out", company: "Acme", arrived: "2026-10-21T01:00:00Z", my: { score: 90, eligibility: "ineligible", out: "" } },
+    { key: "nostamp", company: "Acme", first_seen: "", latest_posted: since / 1000 + 600, my: { score: 85, eligibility: "unknown", out: "" } },
   ];
   assert.deepEqual(instantPicks(ranked, { speed: "tell me right away", dream: ["Apple"], strong: "dream companies only" }, new Set(), since).map((m) => m.key), ["dream"]);
-  assert.deepEqual(instantPicks(ranked, { speed: "tell me right away" }, new Set(), since).map((m) => m.key), ["high"]);
-  assert.deepEqual(instantPicks(ranked, { speed: "tell me right away" }, new Set(["high"]), since), []);
+  assert.deepEqual(instantPicks(ranked, { speed: "tell me right away" }, new Set(), since).map((m) => m.key), ["high", "nostamp"]);
+  assert.deepEqual(instantPicks(ranked, { speed: "tell me right away" }, new Set(["high", "nostamp"]), since), []);
   assert.deepEqual(instantPicks(ranked, { speed: "once a day" }, new Set(), since), []);
 });
