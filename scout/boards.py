@@ -1,9 +1,10 @@
 """Read target companies' own job boards, for internships the public lists never carry.
 
 The Simplify and vanshb03 lists are built around software engineering, so a posting like Figma's
-"Product Design Intern (2027)" never reaches them. Greenhouse, Ashby, and Lever publish every company's
-open jobs as public JSON, with no login, so Scout reads the boards named in config/targets.yaml (boards:)
-and keeps only internship, co-op, and fellowship titles (Anthropic has no internships, only a Fellows Program).
+"Product Design Intern (2027)" never reaches them. Greenhouse, Ashby, Lever, and SmartRecruiters publish
+every company's open jobs as public JSON, with no login, so Scout reads the boards named in config/targets.yaml
+(boards:), plus the boards scout/discover.py finds in the lists' own links, and keeps only internship, co-op,
+and fellowship titles (Anthropic has no internships, only a Fellows Program).
 
 Each kept job becomes a row in the same shape listings.py produces, with source "boards". The URL is the
 one the lists use for the same posting (boards.greenhouse.io/<board>/jobs/<id>, or the company's own
@@ -101,7 +102,41 @@ def lever(org: str, company: str, now: datetime | None = None, fetch=_get) -> li
     return rows
 
 
-READERS = {"greenhouse": greenhouse, "ashby": ashby, "lever": lever}
+SMARTRECRUITERS_PAGE = 100  # the API's largest page
+SMARTRECRUITERS_MAX_PAGES = 10  # Bosch alone has 5,000 postings worldwide; 1,000 US ones is plenty to scan
+
+
+def _sr_places(location: dict) -> list[str]:
+    """{'city': 'Plymouth', 'region': 'MI', 'remote': True} -> ['Plymouth, MI', 'Remote']."""
+    place = ", ".join(p for p in (location.get("city"), location.get("region")) if p)
+    return [p for p in (place, "Remote" if location.get("remote") else "") if p]
+
+
+def smartrecruiters(company_id: str, company: str, now: datetime | None = None, fetch=_get) -> list[dict]:
+    """SmartRecruiters' public postings API, one page of 100 at a time.
+
+    Only US postings are asked for (country=us): Scout drops postings outside the US anyway, and it cuts
+    Bosch from 52 pages to 4. The URL is the jobs.smartrecruiters.com/<Company>/<id> form the lists use,
+    so dedupe.py merges a posting both carry."""
+    rows = []
+    for page in range(SMARTRECRUITERS_MAX_PAGES):
+        offset = page * SMARTRECRUITERS_PAGE
+        answer = fetch(f"https://api.smartrecruiters.com/v1/companies/{company_id}/postings"
+                       f"?country=us&limit={SMARTRECRUITERS_PAGE}&offset={offset}")
+        postings = answer.get("content") or []
+        for job in postings:
+            title = job.get("name") or ""
+            if not INTERN.search(title):
+                continue
+            rows.append(_row(company, company_id, str(job["id"]), title,
+                             f"https://jobs.smartrecruiters.com/{company_id}/{job['id']}",
+                             _sr_places(job.get("location") or {}), _iso_seconds(job.get("releasedDate", "")), now))
+        if len(postings) < SMARTRECRUITERS_PAGE or offset + len(postings) >= int(answer.get("totalFound") or 0):
+            break
+    return rows
+
+
+READERS = {"greenhouse": greenhouse, "ashby": ashby, "lever": lever, "smartrecruiters": smartrecruiters}
 
 
 def fetch_boards(config: dict, now: datetime | None = None) -> tuple[list[dict], list[str]]:

@@ -25,7 +25,8 @@ It costs $0 to run: GitHub Actions (free for public repos), Cloudflare Workers, 
 
 ```
 GitHub Actions, every hour (Python)
-  fetch the lists (Simplify, vanshb03, Jobright) and company boards -> normalize -> dedupe -> filter -> score
+  fetch the lists (Simplify, vanshb03, Jobright), hand-picked company boards, and a rotating batch of the
+  ~1,100 Greenhouse, Lever, Ashby, and SmartRecruiters boards the lists link to -> normalize -> dedupe -> filter -> score
   -> read each posting page once and save its facts (graduation windows, degree level, class standing, closed)
   -> upload to the Worker
             |
@@ -45,7 +46,7 @@ Cloudflare Worker (JavaScript, free tier)
 ## Tech
 - **Python 3.12** watcher in `scout/`: listings, matching, scoring, dedupe, eligibility, page watchers, alerts, sync. Standard library plus PyYAML.
 - **Cloudflare Worker** in `worker/src/`: server-rendered pages, no framework, no build step. `index.js` (routing, the owner's pages), `accounts.js` (sign-up, log in, the questions), `student.js` (the student app and alerts), `match.js` (pure matching logic), `landing.js`. Every color and size lives in `tokens.css`.
-- **Tests:** 270 Python tests on saved fixtures (`.venv/bin/python -m unittest discover -s tests`) and JavaScript tests for matching, scoring, and alert timing (`cd worker && npm test`), plus end-to-end runs against `wrangler dev`.
+- **Tests:** 289 Python tests on saved fixtures (`.venv/bin/python -m unittest discover -s tests`) and JavaScript tests for matching, scoring, and alert timing (`cd worker && npm test`), plus end-to-end runs against `wrangler dev`.
 - **Claude Code** for the owner's own prep kits (`.claude/commands/`).
 
 ## What changed in this release

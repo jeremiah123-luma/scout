@@ -80,6 +80,38 @@ class Boards(unittest.TestCase):
         row = boards.lever("spotify", "Spotify", NOW, fetch=lambda url: lev)[0]
         self.assertEqual((row["locations"], row["date_posted"]), (["New York, NY"], 1790000000))
 
+    def test_smartrecruiters_keeps_interns_and_pages_with_offset(self):
+        def posting(i, title, remote=False):
+            return {"id": str(744000110000000 + i), "name": title, "releasedDate": "2026-10-01T15:05:36.671Z",
+                    "location": {"city": "Plymouth", "region": "MI", "country": "us", "remote": remote}}
+        pages = {0: [posting(i, "Warehouse Clerk") for i in range(99)] + [posting(99, "Software Engineering Intern ")],
+                 100: [posting(100, "IT Co-op, Spring 2027", remote=True), posting(101, "Plant Manager")]}
+        asked = []
+
+        def fetch(url):
+            asked.append(url)
+            offset = int(url.rsplit("offset=", 1)[1])
+            return {"offset": offset, "limit": 100, "totalFound": 102, "content": pages[offset]}
+
+        rows = boards.smartrecruiters("BoschGroup", "Bosch", NOW, fetch=fetch)
+        self.assertEqual(len(asked), 2)  # stopped after the short second page
+        self.assertTrue(all("country=us" in url and "limit=100" in url for url in asked))
+        self.assertEqual([r["title"] for r in rows], ["Software Engineering Intern", "IT Co-op, Spring 2027"])
+        self.assertEqual(rows[0]["url"], "https://jobs.smartrecruiters.com/BoschGroup/744000110000099")
+        self.assertEqual(rows[0]["locations"], ["Plymouth, MI"])
+        self.assertEqual(rows[1]["locations"], ["Plymouth, MI", "Remote"])
+        self.assertEqual(rows[1]["terms"], ["Spring 2027"])
+        self.assertEqual((rows[0]["source"], rows[0]["date_posted"]), ("boards", 1790867136))
+        # The lists link the same posting this way, so dedupe merges the two copies.
+        self.assertEqual(dedupe.normalize_url("https://jobs.smartrecruiters.com/BoschGroup/744000110000099/"),
+                         dedupe.normalize_url(rows[0]["url"]))
+
+    def test_smartrecruiters_stops_at_the_page_limit(self):
+        calls = []
+        full = {"totalFound": 100_000, "content": [{"id": "1", "name": "Driver", "location": {}}] * 100}
+        boards.smartrecruiters("Big", "Big", NOW, fetch=lambda url: calls.append(url) or full)
+        self.assertEqual(len(calls), boards.SMARTRECRUITERS_MAX_PAGES)
+
     def test_one_broken_board_is_reported_not_fatal(self):
         original = boards.READERS["greenhouse"]
         boards.READERS["greenhouse"] = lambda board, company, now=None: (_ for _ in ()).throw(OSError("404"))

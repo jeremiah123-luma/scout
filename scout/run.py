@@ -50,7 +50,7 @@ class Sender:
 def score_everything(sender: Sender, now: float, allow_network: bool = True):
     targets = matching.load_targets()
     weights = scoring.load_weights()
-    raw, errors = listings.fetch_all()
+    raw, errors = listings.fetch_all(save_boards=not sender.dry_run)
     for err in errors:
         print(f"SOURCE ERROR: {err}", file=sys.stderr)
         sender.send(notify.failure_push("source fetch", err))

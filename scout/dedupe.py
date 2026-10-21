@@ -66,15 +66,34 @@ def normalize_url(url: str) -> str:
 _WORKDAY_JOB = re.compile(r"^https?://([a-z0-9-]+)\.wd\d+\.myworkdayjobs\.com/.*_([a-z]*-?[0-9][a-z0-9-]*?)(?:-\d)?/?(?:[?#].*)?$", re.I)
 
 
+# Board links that name one job by its id. The lists write the same job several ways: Greenhouse under
+# boards.greenhouse.io, job-boards.greenhouse.io, or a company page with ?gh_jid=; Lever with and without "/apply".
+_BOARD_JOBS = (
+    ("greenhouse", re.compile(r"^https?://(?:job-)?boards(?:\.eu)?\.greenhouse\.io/[^/?#]+/jobs/(\d+)", re.I)),
+    ("greenhouse", re.compile(r"[?&]gh_jid=(\d+)", re.I)),
+    ("lever", re.compile(r"^https?://jobs(?:\.eu)?\.lever\.co/[^/?#]+/([0-9a-f-]{36})", re.I)),
+    ("ashby", re.compile(r"^https?://jobs\.ashbyhq\.com/[^/?#]+/([0-9a-f-]{36})", re.I)),
+    ("smartrecruiters", re.compile(r"^https?://(?:jobs|careers)\.smartrecruiters\.com/([^/?#]+/\d+)", re.I)),
+)
+
+
 def posting_id(url: str) -> str:
-    """'workday:<tenant>:<requisition>' for a Workday link, else ''.
+    """'workday:<tenant>:<requisition>' for a Workday link, '<board>:<job id>' for a Greenhouse, Lever, Ashby,
+    or SmartRecruiters link, else ''.
 
     Workday serves one requisition under several links: with and without "/en-US/", under two career sites
     (Salesforce's External_Career_Site and Futureforce_Internships), with "-1" and "-2" suffixes (Kensho and S&P Global
     share the spgi tenant), and with different letter case (Booz Allen). The lists carry each link as its own row,
-    often under a different title or company name, so five postings showed up twice on the New page."""
+    often under a different title or company name, so five postings showed up twice on the New page. The board ids
+    let a company board's copy of a posting merge with the lists' copy whichever link form each one uses."""
     m = _WORKDAY_JOB.match((url or "").strip())
-    return f"workday:{m.group(1).lower()}:{m.group(2).upper()}" if m else ""
+    if m:
+        return f"workday:{m.group(1).lower()}:{m.group(2).upper()}"
+    for board, pattern in _BOARD_JOBS:
+        m = pattern.search((url or "").strip())
+        if m:
+            return f"{board}:{m.group(1).lower()}"
+    return ""
 
 
 SOURCE_RANK = {"boards": 1, "jobright": 0}  # anything else is one of the lists: 2
