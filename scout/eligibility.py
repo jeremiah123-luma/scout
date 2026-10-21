@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE_PATH = ROOT / "data" / "eligibility_cache.json"
 CACHE_DAYS = 14
 CLOSED = "\0closed"  # fetch_text's answer for a posting the board says is gone
-CACHE_VERSION = 6  # bump when the verdict rules change, so old verdicts are re-read
+CACHE_VERSION = 7  # bump when the fact rules change, so old pages are re-read (7: the cache holds facts, not verdicts)
 TITLE_PREFIX = "Title: "  # fetch_text puts the page's own title on the first line, so title rules can see it
 
 _TAGS = re.compile(r"<script.*?</script>|<style.*?</style>|<[^>]+>", re.S | re.I)
@@ -306,55 +306,115 @@ def _describe(low: int, high: int) -> str:
     return f"{low}" + (f" to {high}" if high != low else "")
 
 
-def verdict_from_text(text: str, graduation_year: int, this_year: int | None = None) -> tuple[str, str]:
-    """('ok' | 'ineligible' | 'unknown', short reason).
+# Posting facts vs. a person's verdict (multi-user plan, milestone U0). Reading a page yields facts about the
+# posting ("asks for 2028 graduates", "PhD only", "completed sophomore year"), which are the same for everyone and
+# are what the cache keeps. A verdict is those facts held up against one profile, so a page is read once and judged
+# for any number of people.
+FACTS_VERSION = 1
 
-    Stated graduation years decide first. A page can say "sophomore" and still ask for 2029 graduates,
-    so freshman words only count when no year is stated.
-    """
+
+def standing_min_year(phrase: str) -> int:
+    """The year in school a class-standing rule needs at application time (1 = first year ... 4 = senior).
+    "At least a sophomore" and "current sophomores" need year 2; "completed sophomore year", "two years of college",
+    and anything junior need year 3; senior or four years needs year 4."""
+    low = phrase.lower()
+    if re.search(r"\b(senior|four|4|three|3)\b", low) and not re.search(r"junior or senior|junior/senior|juniors and seniors|third[- ]year or fourth|third or fourth", low):
+        return 4 if re.search(r"\b(senior|four|4)\b", low) else 4 if "complet" in low else 3
+    if re.search(r"\bat least an? sophomore|\bcurrent(?:ly)?\s+(?:an?\s+)?sophomore", low):
+        return 2
+    return 3
+
+
+def facts_from_text(text: str, this_year: int | None = None) -> dict:
+    """Everything a posting page says about who may apply, with no reference to any one person."""
     flat = _flat(text)
-    if _GONE.search(flat):
-        return "closed", "the page says the job is no longer available"
-    if _NOT_ENROLLED.search(flat):
-        return "ineligible", "page requires not being enrolled in college"
-    if _FULLTIME_JOB.search(flat):
-        return "ineligible", "page is a full-time job, not an internship"
-    if _RETURNING_ONLY.search(flat):
-        return "ineligible", "page is only for the company's past interns"
-    if matching.graduate_title(page_title(text)):
-        return "ineligible", "page title is for graduate students"
-    level = graduate_only(text)
-    if level:
-        return "ineligible", f"page asks for {level} students"
-    prior = _first_hard(_PRIOR_INTERNSHIP, text)
-    if prior:
-        return "ineligible", "page requires a previous internship"
-    fulltime = fulltime_ranges(text, this_year)
-    if fulltime and not any(r[0] <= graduation_year <= r[1] for r in fulltime):
-        return "ineligible", "page wants a full-time start " + _describe(*fulltime[0])
-    if _first_hard(_RELATIVE_GRAD, text):
-        return "ineligible", "page requires graduating within a year of the internship"
     standing = _first_hard(_STANDING, text)
-    ranges = grad_ranges(text, this_year)
+    upper = _first_hard(_UPPERCLASS, text)
+    return {
+        "v": FACTS_VERSION,
+        "gone": bool(_GONE.search(flat)),
+        "not_enrolled": bool(_NOT_ENROLLED.search(flat)),
+        "fulltime_job": bool(_FULLTIME_JOB.search(flat)),
+        "returning_only": bool(_RETURNING_ONLY.search(flat)),
+        "graduate_title": bool(matching.graduate_title(page_title(text))),
+        "graduate_only": graduate_only(text),
+        "prior_internship": bool(_first_hard(_PRIOR_INTERNSHIP, text)),
+        "fulltime_ranges": fulltime_ranges(text, this_year),
+        "relative_grad": bool(_first_hard(_RELATIVE_GRAD, text)),
+        "standing": standing.group(0).strip() if standing else "",
+        "grad_ranges": grad_ranges(text, this_year),
+        "underclass": bool(_UNDERCLASS.search(text)),
+        "upperclass": upper.group(1).lower() if upper else "",
+    }
+
+
+def year_in_school(graduation_year: int, today: date | None = None) -> int:
+    """1 for a first-year ... 4 for a senior, from the graduation year, assuming four years. The school year
+    turns over in August: in October 2026 a May 2030 graduate is a first-year."""
+    today = today or date.today()
+    school_year_ends = today.year + 1 if today.month >= 8 else today.year
+    return max(1, min(4, 4 - (graduation_year - school_year_ends)))
+
+
+def verdict_from_facts(facts: dict, profile: dict) -> tuple[str, str]:
+    """('ok' | 'ineligible' | 'closed' | 'unknown', short reason) for one profile.
+
+    profile: graduation_year (required), and optionally year_in_school (else worked out from the graduation year),
+    degree ("bachelor's" by default; "master's" or "PhD" opens graduate-only pages), enrolled (default True),
+    past_internship (default False), and cycle_year (the summer the internships are for).
+    Stated graduation years decide first. A page can say "sophomore" and still ask for 2029 graduates,
+    so freshman words only count when no year is stated."""
+    grad = int(profile["graduation_year"])
+    year = int(profile.get("year_in_school") or year_in_school(grad))
+    degree = (profile.get("degree") or "bachelor's").lower()
+    cycle = int(profile.get("cycle_year") or date.today().year + 1)
+    if facts.get("gone"):
+        return "closed", "the page says the job is no longer available"
+    if facts.get("not_enrolled") and profile.get("enrolled", True):
+        return "ineligible", "page requires not being enrolled in college"
+    if facts.get("fulltime_job"):
+        return "ineligible", "page is a full-time job, not an internship"
+    if facts.get("returning_only"):
+        return "ineligible", "page is only for the company's past interns"
+    graduate = degree.startswith(("master", "phd", "doctor", "mba"))
+    if facts.get("graduate_title") and not graduate:
+        return "ineligible", "page title is for graduate students"
+    level = facts.get("graduate_only")
+    if level and not (graduate and (level != "PhD" or degree.startswith(("phd", "doctor")))):
+        return "ineligible", f"page asks for {level} students"
+    if facts.get("prior_internship") and not profile.get("past_internship"):
+        return "ineligible", "page requires a previous internship"
+    fulltime = [tuple(r) for r in facts.get("fulltime_ranges", [])]
+    if fulltime and not any(r[0] <= grad <= r[1] for r in fulltime):
+        return "ineligible", "page wants a full-time start " + _describe(*fulltime[0])
+    if facts.get("relative_grad") and grad > cycle + 1:
+        return "ineligible", "page requires graduating within a year of the internship"
+    standing = facts.get("standing", "")
+    short = bool(standing) and year < standing_min_year(standing)
+    ranges = [tuple(r) for r in facts.get("grad_ranges", [])]
     if ranges:
-        fits = [r for r in ranges if r[0] <= graduation_year <= r[1]]
-        # A window that names his year outright wins; an open floor ("Dec 2027 or later") still loses to a standing rule.
+        fits = [r for r in ranges if r[0] <= grad <= r[1]]
+        # A window that names the year outright wins; an open floor ("Dec 2027 or later") still loses to a standing rule.
         named = [r for r in fits if r[0] > 0 and r[1] < 9999]
         if named:
             return "ok", "page names graduation " + _describe(*named[0])
-        if standing:
-            return "ineligible", f"page requires \"{standing.group(0).strip()}\""
+        if short:
+            return "ineligible", f"page requires \"{standing}\""
         if fits:
             return "ok", "page names graduation " + _describe(*fits[0])
         return "ineligible", "page requires graduation " + _describe(*ranges[0])
-    if standing:
-        return "ineligible", f"page requires \"{standing.group(0).strip()}\""
-    if _UNDERCLASS.search(text):
+    if short:
+        return "ineligible", f"page requires \"{standing}\""
+    if facts.get("underclass") and year <= 2:
         return "ok", "page mentions freshman/sophomore/underclassmen"
-    upper = _first_hard(_UPPERCLASS, text)
-    if upper:
-        return "ineligible", f"page asks for {upper.group(1).lower()} students"
+    if facts.get("upperclass") and year < 3:
+        return "ineligible", f"page asks for {facts['upperclass']} students"
     return "unknown", "page says nothing about graduation year"
+
+
+def verdict_from_text(text: str, graduation_year: int, this_year: int | None = None) -> tuple[str, str]:
+    """The verdict for a profile that has only a graduation year (the shape every older caller and test uses)."""
+    return verdict_from_facts(facts_from_text(text, this_year), {"graduation_year": graduation_year})
 
 
 def load_cache(path: Path = CACHE_PATH) -> dict:
@@ -369,16 +429,19 @@ def save_cache(cache: dict, path: Path = CACHE_PATH) -> None:
     Path(path).write_text(json.dumps(cache, indent=1, sort_keys=True), encoding="utf-8")
 
 
-def check(listing: dict, graduation_year: int, cache: dict, allow_network: bool = True, today: date | None = None) -> dict:
+def check(listing: dict, graduation_year: int | dict, cache: dict, allow_network: bool = True, today: date | None = None) -> dict:
     """Attach 'eligibility' and 'eligibility_note' to a listing. Uses the cache first, then the network.
 
+    The second argument is a profile dict (see verdict_from_facts) or, for older callers, just a graduation year.
+    The cache keeps the page's facts, not a verdict, so changing the profile never needs a page re-read.
     A stated deadline is kept in the cache and compared with today on every run, so a page read before its
     deadline still turns "closed" the day after, without waiting two weeks for the cache to expire."""
     today = today or date.today()
+    profile = graduation_year if isinstance(graduation_year, dict) else {"graduation_year": graduation_year}
     url = listing.get("url", "")
     cached = cache.get(url)
     if cached and cached.get("v") == CACHE_VERSION and time.time() - cached.get("checked_at", 0) < CACHE_DAYS * 24 * 3600:
-        listing["eligibility"], listing["eligibility_note"] = cached["verdict"], cached["note"]
+        _apply_facts(listing, cached, profile)
         _apply_deadline(listing, cached.get("deadline"), today)
         return listing
     if not allow_network or not is_readable_board(url):
@@ -389,18 +452,26 @@ def check(listing: dict, graduation_year: int, cache: dict, allow_network: bool 
         # Not cached: one timeout should not lock a Tier 1 posting at "unknown" for two weeks.
         listing["eligibility"], listing["eligibility_note"] = "unknown", "page could not be read"
         return listing
-    due = None
+    entry = {"checked_at": int(time.time()), "v": CACHE_VERSION}
     if text == CLOSED:
-        verdict, note = "closed", "the posting has been taken down"
+        entry["taken_down"] = True
     else:
-        verdict, note = verdict_from_text(text, graduation_year)
+        entry["facts"] = facts_from_text(text)
         due = deadline(text, today)
-    cache[url] = {"verdict": verdict, "note": note, "checked_at": int(time.time()), "v": CACHE_VERSION}
-    if due:
-        cache[url]["deadline"] = due.isoformat()
-    listing["eligibility"], listing["eligibility_note"] = verdict, note
-    _apply_deadline(listing, cache[url].get("deadline"), today)
+        if due:
+            entry["deadline"] = due.isoformat()
+    cache[url] = entry
+    _apply_facts(listing, entry, profile)
+    _apply_deadline(listing, entry.get("deadline"), today)
     return listing
+
+
+def _apply_facts(listing: dict, entry: dict, profile: dict) -> None:
+    if entry.get("taken_down"):
+        listing["eligibility"], listing["eligibility_note"] = "closed", "the posting has been taken down"
+    else:
+        listing["eligibility"], listing["eligibility_note"] = verdict_from_facts(entry.get("facts", {}), profile)
+        listing["posting_facts"] = entry.get("facts", {})
 
 
 def _apply_deadline(listing: dict, due: str | None, today: date) -> None:

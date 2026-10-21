@@ -66,10 +66,11 @@ def run(raw_by_source: dict[str, list], targets: dict, weights: dict, *, check_p
     # into view: on October 20, 70 of the 300 cards on the New page were never read (Workday's "graduation between
     # December 2027 and June 2028" interns among them).
     cache = eligibility.load_cache()
+    profile = eligibility_profile(targets)
     shown = 0
     for item in kept:
         if shown < check_pages or could_push(item) or on_board(item):
-            eligibility.check(item, int(targets.get("graduation_year", 2030)), cache, allow_network)
+            eligibility.check(item, profile, cache, allow_network)
         else:
             item["eligibility"], item["eligibility_note"] = "unknown", "not checked (below top rows)"
         if item.get("eligibility") not in ("ineligible", "closed"):
@@ -81,6 +82,16 @@ def run(raw_by_source: dict[str, list], targets: dict, weights: dict, *, check_p
     kept.sort(key=lambda x: (x.get("eligibility") not in ("ineligible", "closed"), x["score"], x.get("date_posted", 0)), reverse=True)
     counts["kept"] = len(kept)
     return kept, counts
+
+
+def eligibility_profile(targets: dict) -> dict:
+    """Who the page check judges for. Only graduation_year is required; the rest have defaults in
+    eligibility.verdict_from_facts (a bachelor's student, enrolled, no past internship, year worked out from the
+    graduation year). Each comes from targets.yaml today and from the sign-up questions later."""
+    keys = ("graduation_year", "year_in_school", "degree", "enrolled", "past_internship", "cycle_year")
+    profile = {k: targets[k] for k in keys if targets.get(k) is not None}
+    profile.setdefault("graduation_year", 2030)
+    return profile
 
 
 def share_degrees(items: list[dict]) -> None:
