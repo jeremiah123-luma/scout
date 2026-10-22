@@ -5,8 +5,8 @@ An internship radar for college students in tech, freshman year and up. Sign up 
 <img src="docs/screens/landing-desktop.png" alt="Scout's landing page: the good internships close in days, scout finds them first, next to a phone getting a Scout notification">
 
 <p align="center">
-  <img src="docs/screens/new-phone.png" width="30%" alt="A student's New page on a phone in the light theme: a handwritten greeting, view pills, and framed postings with scores">
-  <img src="docs/screens/tracker-phone.png" width="30%" alt="The tracker on a phone: saved and applied postings with a prep prompt for Claude Code">
+  <img src="docs/screens/new-phone.png" width="30%" alt="My own New page on a phone in the light theme: real postings with scores, the top one queued for a prep kit">
+  <img src="docs/screens/tracker-phone.png" width="30%" alt="My own tracker on a phone: 9 prepped and 4 applied, each with its next step">
   <img src="docs/screens/companies-phone.png" width="30%" alt="Sign-up question: pick dream companies from real logos">
 </p>
 
