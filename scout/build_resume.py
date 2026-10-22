@@ -66,7 +66,8 @@ def ats_check(pdf_path: Path, data: dict) -> list[str]:
 
     if data["name"] not in text:
         problems.append("name not found in extracted text")
-    for item in data["contact"]:
+    # contact2 is an optional second contact line, for when one line would wrap and strand an item.
+    for item in data["contact"] + data.get("contact2", []):
         # Compare digits only for the phone, so "(555) 123-4567" matches however it wraps.
         needle = re.sub(r"\D", "", item) if re.search(r"\d{3}.*\d{4}", item) else item
         haystack = re.sub(r"\D", "", text) if needle.isdigit() else text
