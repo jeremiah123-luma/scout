@@ -40,7 +40,14 @@ tier2:
 # Checked 2026-10-16; the other Tier 1 and 2 companies use Workday or their own sites, which the lists cover.
 boards:
   greenhouse: {figma: Figma, pinterest: Pinterest, airbnb: Airbnb, duolingo: Duolingo, anthropic: Anthropic}
-  ashby: {notion: Notion}
+  # Verified from each company's official site, 2026-10-23. Read every run, even when
+  # no internships are open yet; future intern/co-op/fellowship postings enter the usual filters.
+  ashby:
+    notion: Notion
+    mecka.ai: Mecka
+    typesafe-ai: TypeSafe AI
+    general-medicine: General Medicine
+    supabase: Supabase
   lever: {spotify: Spotify, palantir: Palantir}
 
 # Named programs for freshmen and sophomores. A title or company+title hit here is the strongest signal Scout has.
