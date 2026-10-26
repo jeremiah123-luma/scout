@@ -39,7 +39,8 @@ tier2:
 # Palantir is Tier 3 but read for its fellowships (Meritocracy, Neurodivergent), which no list carries.
 # Checked 2026-10-16; the other Tier 1 and 2 companies use Workday or their own sites, which the lists cover.
 boards:
-  greenhouse: {figma: Figma, pinterest: Pinterest, airbnb: Airbnb, duolingo: Duolingo, anthropic: Anthropic}
+  # DoorDash (added 2026-10-26): its Product Design intern never reached the lists, which carry only its SWE roles.
+  greenhouse: {figma: Figma, pinterest: Pinterest, airbnb: Airbnb, duolingo: Duolingo, anthropic: Anthropic, doordashusa: DoorDash}
   # Verified from each company's official site, 2026-10-23. Read every run, even when
   # no internships are open yet; future intern/co-op/fellowship postings enter the usual filters.
   ashby:
@@ -48,6 +49,7 @@ boards:
     typesafe-ai: TypeSafe AI
     general-medicine: General Medicine
     supabase: Supabase
+    harvey: Harvey
   lever: {spotify: Spotify, palantir: Palantir}
 
 # Named programs for freshmen and sophomores. A title or company+title hit here is the strongest signal Scout has.
@@ -132,6 +134,10 @@ us_citizen: true
 
 # Your expected graduation year, for the page check that reads "graduating in 2027 or 2028" off the posting.
 graduation_year: 2030
+
+# Postings that require a previous internship ("Previous internship experience is required.", Harvey) are only
+# ruled out without one. Four summers at Lumasoft (2023 to 2026) and Rutgers Athletics count.
+past_internship: true
 
 # Listings posted more than this many days ago are dropped even if the list still says "active".
 # (The Simplify list only hides rows after about 2 months in its README, but the JSON keeps them active.)
