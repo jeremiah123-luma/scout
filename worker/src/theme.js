@@ -19,7 +19,7 @@ import LIGHTHOUSE from "./art/lighthouse.webp";
 export const ART = { "/art/sun.webp": SUN, "/art/lighthouse.webp": LIGHTHOUSE };
 
 // Pages that wear the themes: the app, plus the landing page, log in, sign up, and the questions.
-export const THEMED = new Set(["new", "tracker", "you", "programs", "review", "settings", "about", "login", "signup", "landing", "start"]);
+export const THEMED = new Set(["new", "tracker", "you", "programs", "review", "resume", "settings", "about", "login", "signup", "landing", "start"]);
 
 export const FONTS_LINK = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Patrick+Hand&family=Coming+Soon&display=swap" rel="stylesheet">';
 

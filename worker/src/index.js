@@ -5,11 +5,12 @@
  * Where the data goes: tracker changes, "Prep this" taps, and "Pass" taps are stored in KV and pulled
  * back into data/ by the next cron run (scout/sync.py pull), so the repo stays the long-term record.
  *
- * Pages (all behind the password):   /  New   /programs   /review   /tracker   /settings
+ * Pages (all behind the password):   /  New   /programs   /review   /tracker   /resume   /settings
+ * /resume (resume.js) is the owner's "Let's Add to Your Resume": hackathons and certifications, and a list of resume lines.
  * Review: prep kits uploaded from the Mac (scout.sync push --kits), to read, edit, copy, download, and mark
  * submitted. Kits hold the candidate's phone, email, and answers, so they live only here in KV, never in git.
  * JSON (cookie):                     POST /api/tracker  POST /api/queue  POST /api/pass  POST /api/kit-answer  POST /api/remove
- * JSON (secret header):              POST /api/ingest   POST /api/ingest-tracker   POST /api/ingest-kits   POST /api/ingest-mascot   GET /api/export
+ * JSON (secret header):              POST /api/ingest   POST /api/ingest-tracker   POST /api/ingest-kits   POST /api/ingest-mascot   POST /api/ingest-resume   POST /api/ingest-mail   GET /api/export
  * Open:                              GET /login  POST /login  GET /logout  GET /api/health  GET /panda/<name>.png
  *
  * Cron (wrangler.toml [triggers]): GitHub skips most of its scheduled runs (4 of 22 on October 15, 2026),
@@ -21,6 +22,7 @@ import tokens from "./tokens.css";
 import { ICONS } from "./icons.js";
 import { routeAccounts } from "./accounts.js";
 import { runStudentAlerts } from "./student.js";
+import { resumePage, resumeApi, mailPage, ingestResume, ingestMail, handleEmail } from "./resume.js";
 import { rank, isOpen, usLocation, greeting, localNow } from "./match.js";
 import { ART, THEMED, FONTS_LINK, THEME_HEAD, THEME_BUTTON, THEME_JS, SCENE, THEME_CSS, jobCard, coFont, CO_FONTS_LINK, viewPicker } from "./theme.js";
 
@@ -43,6 +45,10 @@ export default {
     const out = new Response(response.body, response);
     for (const [k, v] of Object.entries(SECURITY_HEADERS)) if (!out.headers.has(k)) out.headers.set(k, v);
     return out;
+  },
+  // Cloudflare Email Routing: forwarded hackathon announcements (resume.js handleEmail checks who sent them).
+  async email(message, env) {
+    await handleEmail(message, env);
   },
   async scheduled(event, env, ctx) {
     // Two schedules (wrangler.toml): the hourly :47 check that keeps the cron alive, and every 10 minutes for
@@ -72,11 +78,13 @@ async function route(request, env, ctx) {
   if (path === "/about") return aboutPage(await validCookie(request, env));
 
   // Cron endpoints: a shared secret, no cookie.
-  if (path === "/api/ingest" || path === "/api/ingest-tracker" || path === "/api/ingest-kits" || path === "/api/ingest-mascot" || path === "/api/export") {
+  if (path === "/api/ingest" || path === "/api/ingest-tracker" || path === "/api/ingest-kits" || path === "/api/ingest-mascot" || path === "/api/ingest-resume" || path === "/api/ingest-mail" || path === "/api/export") {
     if (!env.INGEST_SECRET || !(await sameSecret(request.headers.get("x-scout-secret") || "", env.INGEST_SECRET))) return json({ error: "unauthorized" }, 401);
     if (path === "/api/ingest-tracker") return ingestTracker(request, env);
     if (path === "/api/ingest-kits") return ingestKits(request, env);
     if (path === "/api/ingest-mascot") return ingestMascot(request, env);
+    if (path === "/api/ingest-resume") return ingestResume(request, env, accountUi(env, ctx));
+    if (path === "/api/ingest-mail") return ingestMail(request, env, accountUi(env, ctx));
     return path === "/api/ingest" ? ingest(request, env) : exportState(env);
   }
 
@@ -95,6 +103,7 @@ async function route(request, env, ctx) {
     if (path === "/api/pass") return setPassed(request, env);
     if (path === "/api/kit-answer") return setKitAnswer(request, env);
     if (path === "/api/remove") return removeCard(request, env);
+    if (path.startsWith("/api/resume-")) return resumeApi(request, env, accountUi(env, ctx), path);
     return json({ error: "not found" }, 404);
   }
   if (path === "/") return newPage(env, url.searchParams.get("view"));
@@ -102,6 +111,9 @@ async function route(request, env, ctx) {
   if (path === "/tracker") return trackerPage(env);
   if (path === "/settings") return settingsPage(env);
   if (path === "/review") return reviewList(env);
+  if (path === "/resume") return resumePage(env, accountUi(env, ctx), url);
+  const mailView = path.match(/^\/resume\/mail\/([A-Za-z0-9_.%-]+)$/);
+  if (mailView) return mailPage(env, accountUi(env, ctx), decodeURIComponent(mailView[1]));
   const kitFile = path.match(/^\/review\/([a-z0-9-]+)\/(resume|letter)\.pdf$/);
   if (kitFile) return kitPdf(env, kitFile[1], kitFile[2]);
   const kitPage = path.match(/^\/review\/([a-z0-9-]+)$/);
@@ -843,7 +855,7 @@ h.classList.add(by[document.body.dataset.page]||"u-highlight","draw")})();`;
 const PAGE_COLORS = { about: "#3fa9b5", new: "#cf6a2e", programs: "#9b84d8", review: "#cf6a2e", tracker: "#3fa9b5", settings: "#e7c98f", login: "#9b84d8" };
 
 // Settings stays at /settings (linked from the about page) but leaves the dock to make room for Review.
-const NAV = `<nav class="dock"><a href="/">new</a><a href="/programs">programs</a><a href="/review">review</a><a href="/tracker">tracker</a></nav>`;
+const NAV = `<nav class="dock"><a href="/">new</a><a href="/programs">programs</a><a href="/review">review</a><a href="/tracker">tracker</a><a href="/resume">resume</a></nav>`;
 
 // Layout only. Colors, sizes, and fonts come from tokens.css.
 const BASE_CSS = `

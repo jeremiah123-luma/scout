@@ -68,6 +68,15 @@ jobs:
           MODE: ${{ steps.mode.outputs.mode }}
         run: python -m scout.run --mode "$MODE"
 
+      # Hackathons about daily and certifications about weekly (scout/feed.py decides what is due). It can never
+      # fail the run: a source that can't be read keeps its last good copy.
+      - name: Refresh the resume feed
+        continue-on-error: true
+        env:
+          SCOUT_URL: ${{ secrets.SCOUT_URL }}
+          SCOUT_INGEST_SECRET: ${{ secrets.SCOUT_INGEST_SECRET }}
+        run: python -m scout.feed
+
       - name: Push this run to the dashboard
         if: always()
         env:

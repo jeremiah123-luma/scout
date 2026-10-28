@@ -1,0 +1,39 @@
+# Let's Add to Your Resume: hackathon sources. Edit this file, not code. The verdict for each source comes from
+# docs/resume-feed.md (robots.txt and terms read on 2026-10-28); a source set to off stays off until that doc says
+# otherwise. Unclear counts as off.
+home_radius_miles: 50          # default; the page lets the owner change it
+
+sources:
+  mlh:
+    enabled: true              # personal, non-commercial, owner-only use of the public season listing
+    url: "https://www.mlh.com/seasons/{season}/events"
+  pinned:
+    enabled: true
+
+# MLH lists events worldwide; only these states are looked up (the page's radius does the final cut).
+nearby_states: [NJ, NY, PA, CT, DE, MD, MA, RI, "New Jersey", "New York", "Pennsylvania", "Connecticut"]
+
+# Events written by hand, each checked against its own site. verify_text must still appear on the site's page
+# or script for the card to say "checked"; if not, the card says to check the site. A blank field stays blank.
+pinned:
+  - key: pinned:hacknjit-2026
+    name: HackNJIT 2026
+    host: NJIT
+    start: "2026-11-21"
+    end: "2026-11-22"
+    location: "NJIT Campus Center, Newark, NJ"
+    place: NJIT
+    url: "https://hacknjit.org/"
+    registration_url: "https://hacknjit.org/registration"
+    verify_url: "https://hacknjit.org/"
+    verify_text: "November 21-22, 2026"
+    deadline: null
+    travel: null
+
+# Email senders that count as hackathon announcements (lowercase). Mail from anyone else is ignored everywhere.
+mail_senders:
+  - ywcc@njit.edu
+  - ywcc-advising@njit.edu
+  - danello@njit.edu
+# Gmail label to read as well (create it in Gmail and let a filter apply it to the senders above).
+gmail_label: scout-hackathons

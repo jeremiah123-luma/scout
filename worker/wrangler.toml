@@ -7,6 +7,8 @@
 #   GH_DISPATCH_TOKEN  optional: a fine-grained GitHub token for this repo only, Actions read and write.
 #                      Lets the hourly check below start a run when GitHub skipped its own.
 #   NTFY_TOPIC         optional: the same topic the cron pushes to, for the "no run in 4 hours" alert
+#   MAIL_FORWARDER     the address forwarded hackathon mail arrives from (the email route in src/resume.js); without it
+#                      every forwarded message is rejected. MAIL_SENDERS (optional) overrides the allowed From list.
 name = "scout-dashboard"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
