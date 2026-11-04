@@ -15,7 +15,8 @@
  */
 
 import { LANDING_CSS, LANDING_JS, landingBody } from "./landing.js";
-import { STUDENT_TABLES, STUDENT_CSS, studentHome, studentTracker, studentApi, studentExport, privacyPage, metaFor, deleteStudentData, studentDock, trackedCount, ping } from "./student.js";
+import { STUDENT_TABLES, STUDENT_CSS, studentHome, studentTracker, studentApi, studentExport, privacyPage, metaFor, deleteStudentData, studentDock, trackedCount, ping, studentPages } from "./student.js";
+import { connectApi, connectDoc, connectCard, keyInfo, CONNECT_JS, CONNECT_CSS } from "./connect.js";
 
 const USER_COOKIE = "scout_u";
 const COOKIE_DAYS = 30;
@@ -279,6 +280,13 @@ async function noteFail(env, keys) {
 // Returns a Response for the paths this module owns, or null to let index.js carry on (the owner's pages).
 export async function routeAccounts(request, env, url, ui) {
   const path = url.pathname;
+  // Claude Code connections (connect.js): a key, no cookie.
+  if (path === "/connect.md") return connectDoc();
+  if (path.startsWith("/api/c/")) {
+    if (!env.DB) return ui.json({ error: "not found" }, 404);
+    await ensureSchema(env);
+    return connectApi(request, env, path, ui, (id) => userById(env, id));
+  }
   const isOwner = await ui.isOwner(request);
   const user = isOwner ? null : await currentUser(request, env, ui);
 
@@ -294,6 +302,9 @@ export async function routeAccounts(request, env, url, ui) {
     if (path === "/tracker") return user.done ? studentTracker(env, user, ui) : ui.redirect(`/start?step=${resumeStep(user)}`);
     if (path.startsWith("/api/u/")) return studentApi(request, env, user, path, ui);
     if (path === "/you/export") return studentExport(env, user);
+    if (path === "/programs" || path === "/review" || path === "/resume" || path.startsWith("/review/") || path.startsWith("/resume/mail/")) {
+      return user.done ? studentPages(env, user, url, ui) : ui.redirect(`/start?step=${resumeStep(user)}`);
+    }
   }
   if (path === "/hello") return landing(ui, isOwner || !!user);
   if (path === "/login") {
@@ -310,7 +321,7 @@ export async function routeAccounts(request, env, url, ui) {
   if (path === "/start" || path === "/you" || path === "/you/delete") {
     if (!user) return ui.redirect(isOwner ? "/" : "/login");
     if (path === "/you/delete") return request.method === "POST" ? deleteAccount(env, user, ui) : ui.redirect("/you");
-    if (path === "/you") return youPage(user, ui, url.searchParams.get("saved"), await metaFor(env, user.id), await trackedCount(env, user.id));
+    if (path === "/you") return youPage(user, ui, url.searchParams.get("saved"), await metaFor(env, user.id), await trackedCount(env, user.id), await keyInfo(env, user.id));
     if (request.method === "POST") return saveStep(request, env, user, url, ui);
     return stepPage(user, ui, url, url.searchParams.get("missing") ? missing(STEPS[stepIndex(url) - 1], user.answers) : []);
   }
@@ -772,7 +783,7 @@ function shown(f, v) {
   return v || "";
 }
 
-function youPage(user, ui, saved, meta, tracked) {
+function youPage(user, ui, saved, meta, tracked, connected) {
   const a = user.answers;
   const first = (a.name || "").split(" ")[0] || "you";
   const all = saved === "all";
@@ -805,6 +816,7 @@ function youPage(user, ui, saved, meta, tracked) {
   const body = `
     <p class="you-line">${all ? `that's everything scout needs, ${ui.esc(first.toLowerCase())}.` : `everything you told scout, ${ui.esc(first.toLowerCase())}.`} ${all ? "change any answer whenever you want." : "tap edit to change anything."}</p>
     ${alerts}
+    ${user.done ? connectCard(ui, connected) : ""}
     <details class="answers-wrap"${saved && saved !== "all" ? " open" : ""}><summary><h2>your answers</h2><span class="count">9 groups · edit anytime</span></summary>
       <div class="answers">${cards}</div>
     </details>
@@ -813,7 +825,7 @@ function youPage(user, ui, saved, meta, tracked) {
       <li><a href="/privacy">privacy</a></li>
       <li><form class="danger" method="post" action="/you/delete" onsubmit="return confirm('delete your account and every answer? this can\\'t be undone.')"><button type="submit">delete my account</button></form></li>
     </ul></section>`;
-  return ui.page(body, { title: "You", page: "you", lead: all ? "nice," : "your", head: all ? "you're set" : "scout", nav: false, links: `<a class="pill-link" href="/logout">log out</a>`, dock: user.done ? studentDock("you", tracked) : "", css: HEAD_CSS + YOU_CSS + STUDENT_CSS, script: STUDENT_YOU_JS });
+  return ui.page(body, { title: "You", page: "you", lead: all ? "nice," : "your", head: all ? "you're set" : "scout", nav: false, links: `<a class="pill-link" href="/logout">log out</a>`, dock: user.done ? studentDock("you", tracked) : "", css: HEAD_CSS + YOU_CSS + STUDENT_CSS + CONNECT_CSS, script: STUDENT_YOU_JS + CONNECT_JS });
 }
 
 /* ---------------------------------------------------------------- the landing page */

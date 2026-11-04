@@ -9,10 +9,9 @@
  *                               POST /api/ingest-mail     forwarded or Gmail-read announcements (scout/mailfeed.py)
  * Email Worker (index.js email()): mail forwarded to the Cloudflare address lands in handleEmail below.
  *
- * Everything is gated on the owner's cookie in index.js, after the student accounts have had their turn, so a
- * signed-in student on /resume is sent to their own home page like on any other owner page. State is in KV
- * (resume:state, resume:settings), like the owner's tracker. When this opens to students it moves to a D1 table
- * shaped like `tracks`; the pure rules in resumelogic.js don't change.
+ * The feeds (hackathons, certifications) are shared. What one person marked and their radius live in a store:
+ * the owner's is KV (resume:state, resume:settings); a student's is one D1 row (student.js resumeStore), reached
+ * through /api/u/resume-*. The pure rules in resumelogic.js are the same for both.
  *
  * Page text and email text are untrusted: everything printed is escaped, every link goes through safeUrl.
  */
@@ -27,6 +26,12 @@ const MAX_MAIL = 200;
 const MAX_TEXT = 12000;
 const get = (env, key, fallback) => env.SCOUT.get(key, "json").then((v) => v ?? fallback);
 const put = (env, key, value) => env.SCOUT.put(key, JSON.stringify(value));
+
+// The owner's store. A student's has the same four functions (student.js).
+export const ownerStore = (env) => ({
+  state: () => get(env, "resume:state", {}), saveState: (v) => put(env, "resume:state", v),
+  settings: () => get(env, "resume:settings", {}), saveSettings: (v) => put(env, "resume:settings", v),
+});
 
 const senderAddress = (from) => {
   const m = /<([^>]+)>/.exec(String(from || ""));
@@ -98,7 +103,7 @@ export async function handleEmail(message, env) {
 
 /* ---------------------------------------------------------------- state API */
 
-export async function resumeApi(request, env, ui, path) {
+export async function resumeApi(request, env, ui, path, store = ownerStore(env)) {
   if (request.method !== "POST") return ui.json({ error: "bad request" }, 400);
   const body = await request.json().catch(() => ({}));
   const now = new Date().toISOString();
@@ -106,23 +111,23 @@ export async function resumeApi(request, env, ui, path) {
   if (path === "/api/resume-settings") {
     const radius = Math.round(Number(body.radius));
     if (!(radius >= 5 && radius <= 500)) return ui.json({ error: "radius must be 5 to 500 miles" }, 400);
-    await put(env, "resume:settings", { radius });
+    await store.saveSettings({ radius });
     return ui.json({ ok: true, radius });
   }
   const key = typeof body.key === "string" && body.key.length <= 200 ? body.key : "";
   if (!key) return ui.json({ error: "need key" }, 400);
-  const state = await get(env, "resume:state", {});
+  const state = await store.state();
 
   if (path === "/api/resume-line") {
     if (!state[key] || state[key].state !== "Done") return ui.json({ error: "not done yet" }, 404);
     state[key].line = String(body.line || "").slice(0, 400);
     state[key].line_edited = true;  // a later "Done" tap must not overwrite what was typed
     state[key].updated = now;
-    await put(env, "resume:state", state);
+    await store.saveState(state);
     return ui.json({ ok: true });
   }
   if (path === "/api/resume-status") {
-    if (body.state === "" || body.state === null) { delete state[key]; await put(env, "resume:state", state); return ui.json({ ok: true }); }
+    if (body.state === "" || body.state === null) { delete state[key]; await store.saveState(state); return ui.json({ ok: true }); }
     if (!STATES.includes(body.state)) return ui.json({ error: "unknown state" }, 400);
     const found = await findItem(env, key, state);
     if (!found) return ui.json({ error: "that item isn't in the feed anymore" }, 404);
@@ -135,7 +140,7 @@ export async function resumeApi(request, env, ui, path) {
       if (!row.line_edited) row.line = found.kind === "hack" ? hackathonLine(found.item, row.project, row.done_at) : certLine(found.item, row.done_at);
     }
     state[key] = row;
-    await put(env, "resume:state", state);
+    await store.saveState(state);
     return ui.json({ ok: true, line: row.line || "" });
   }
   return ui.json({ error: "not found" }, 404);
@@ -177,14 +182,20 @@ const ago = (iso) => {
   return !iso ? "never" : h < 1 ? "just now" : h < 48 ? `${h} hours ago` : `${Math.round(h / 24)} days ago`;
 };
 
-export async function resumePage(env, ui, url) {
+// who: left out for the owner. A student passes { store, home: {lat, lon}, homeLabel, schoolAliases, mail: whether the
+// forwarded school emails apply to them, opts: their page options }.
+export async function resumePage(env, ui, url, who) {
+  const store = who ? who.store : ownerStore(env);
+  const home = who ? who.home : places.home;
+  const homeLabel = who ? who.homeLabel : "NJIT";
+  const aliases = who ? who.schoolAliases : SCHOOL_ALIASES;
   const tab = url.searchParams.get("tab") === "certs" ? "certs" : "hacks";
   const chip = url.searchParams.get("chip") === "mine" ? "mine" : "nearby";
   const [hack, certs, mail, state, settings] = await Promise.all([get(env, "resume:hackathons", {}), get(env, "resume:certs", {}),
-    get(env, "resume:mail", {}), get(env, "resume:state", {}), get(env, "resume:settings", {})]);
+    who && !who.mail ? {} : get(env, "resume:mail", {}), store.state(), store.settings()]);
   const radius = settings.radius || DEFAULT_RADIUS;
   const today = todayET();
-  const all = decorate(mergeEvents(hack.events || [], mailEvents(mail)), { home: places.home, today, schoolAliases: SCHOOL_ALIASES });
+  const all = decorate(mergeEvents(hack.events || [], mailEvents(mail)), { home, today, schoolAliases: aliases });
   const counts = { mine: visible(all, { chip: "mine", radius }).length, nearby: visible(all, { chip: "nearby", radius }).length };
   const events = sortEvents(visible(all, { chip, radius }));
 
@@ -207,7 +218,7 @@ export async function resumePage(env, ui, url) {
       <dl class="facts">
         <div><dt>host</dt><dd>${e.host ? ui.esc(e.host) : '<i>not listed</i>'}</dd></div>
         <div><dt>date</dt><dd>${ui.esc(rangeText(e))}${e.location ? ` · ${ui.esc(e.location)}` : ""}</dd></div>
-        <div><dt>distance</dt><dd>${e.distance != null ? `about ${e.distance} mi from NJIT` : "<i>unknown</i>"}</dd></div>
+        <div><dt>distance</dt><dd>${e.distance != null ? `about ${e.distance} mi from ${ui.esc(homeLabel)}` : "<i>unknown</i>"}</dd></div>
         <div><dt>register by</dt><dd>${e.deadline ? ui.esc(rangeText({ start: e.deadline })) : e.deadline_text ? ui.esc(e.deadline_text) : "<i>not listed</i>"}</dd></div>
         <div><dt>travel</dt><dd>${e.travel ? ui.esc(e.travel) : "<i>not listed</i>"}</dd></div>
       </dl>
@@ -243,10 +254,10 @@ export async function resumePage(env, ui, url) {
     <div class="chips" role="group" aria-label="filter">
       <a class="chipbtn${chip === "nearby" ? " on" : ""}" href="/resume?tab=hacks&chip=nearby" aria-pressed="${chip === "nearby"}">Nearby <small>${counts.nearby}</small></a>
       <a class="chipbtn${chip === "mine" ? " on" : ""}" href="/resume?tab=hacks&chip=mine" aria-pressed="${chip === "mine"}">My school <small>${counts.mine}</small></a>
-      <label class="radius">within <input id="radius" type="number" min="5" max="500" step="5" value="${radius}" inputmode="numeric" aria-label="radius in miles"> mi of Newark</label>
+      <label class="radius">within <input id="radius" type="number" min="5" max="500" step="5" value="${radius}" inputmode="numeric" aria-label="radius in miles"> mi of ${ui.esc(homeLabel)}</label>
     </div>
     <p class="note">soonest registration deadline first. a deadline within 7 days is flagged. in-person events only. blank means the source didn't say. updated ${ago(hack.generated_at)}.</p>
-    ${events.map(hackCard).join("") || `<div class="emptybox"><p>no ${chip === "mine" ? "NJIT" : `in-person hackathons within ${radius} miles`} listed right now. the feed refreshes daily, and forwarded emails show up as they arrive.</p></div>`}
+    ${events.map(hackCard).join("") || `<div class="emptybox"><p>no ${chip === "mine" ? `${ui.esc(homeLabel)}` : `in-person hackathons within ${radius} miles`} listed right now. the feed refreshes daily, and forwarded emails show up as they arrive.</p></div>`}
     <details class="srcs"><summary>where these come from</summary><p class="note">${srcs || "no feed yet"}. every source was checked against its robots.txt and terms; the record is docs/resume-feed.md.</p></details>`;
   const certBody = `<p class="note">free first, then by price. cost and hours come from each provider's own page; where a page didn't say, the card says to check. ${certs.generated_at ? `updated ${ago(certs.generated_at)}.` : "no feed yet."}</p>
     ${(certs.items || []).map(certCard).join("") || '<div class="emptybox"><p>no certifications loaded yet. the weekly feed fills this in.</p></div>'}`;
@@ -257,10 +268,10 @@ export async function resumePage(env, ui, url) {
       <a role="tab" class="${tab === "certs" ? "on" : ""}" aria-selected="${tab === "certs"}" href="/resume?tab=certs">Certifications</a>
     </nav>
     ${tab === "hacks" ? hackBody : certBody}`;
-  return ui.page(body, { title: "Resume", page: "resume", lead: "let's add to", head: "your resume", css: RESUME_CSS, script: RESUME_JS });
+  return ui.page(body, { title: "Resume", page: "resume", lead: "let's add to", head: "your resume", script: RESUME_JS, ...(who ? who.opts : {}), css: RESUME_CSS + (who?.opts.css || "") });
 }
 
-export async function mailPage(env, ui, id) {
+export async function mailPage(env, ui, id, opts = {}) {
   const mail = await get(env, "resume:mail", {});
   const m = mail[id];
   if (!m) return new Response("not found", { status: 404 });
@@ -268,7 +279,7 @@ export async function mailPage(env, ui, id) {
     <div class="title">${ui.esc(m.subject)}</div><p class="meta">from ${ui.esc(m.from)} · ${ui.esc(m.date)}</p>
     <pre class="mailtext">${ui.esc(m.text)}</pre>
     <div class="actions"><a class="btn" href="/resume">back to resume</a>${m.link ? `<a class="btn ghost" href="${ui.esc(ui.safeUrl(m.link))}" target="_blank" rel="noopener">open in Gmail ↗</a>` : ""}</div></article>`;
-  return ui.page(body, { title: "Email", page: "resume", lead: "from your", head: "inbox", css: RESUME_CSS });
+  return ui.page(body, { title: "Email", page: "resume", lead: "from your", head: "inbox", ...opts, css: RESUME_CSS + (opts.css || "") });
 }
 
 const RESUME_CSS = `
@@ -289,7 +300,8 @@ body[data-page="resume"] main>:not(.rcard):not(h1){grid-column:1/-1}
 `;
 
 const RESUME_JS = `(function(){
-function post(u,b){return fetch(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+var API=document.body.dataset.api||"/api/";
+function post(u,b){u=API+u.slice(5);return fetch(u,{method:"POST",headers:{"Content-Type":"application/json","x-scout":"1"},body:JSON.stringify(b)}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 document.addEventListener("change",async function(e){
  var s=e.target.closest('select[data-r="state"]');
  if(s){var card=s.closest(".rcard"),body={key:card.dataset.key,state:s.value};

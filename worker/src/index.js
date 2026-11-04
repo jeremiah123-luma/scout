@@ -6,6 +6,7 @@
  * back into data/ by the next cron run (scout/sync.py pull), so the repo stays the long-term record.
  *
  * Pages (all behind the password):   /  New   /programs   /review   /tracker   /resume   /settings
+ * Students get their own /programs, /review, and /resume from this same page code (student.js passes their data in).
  * /resume (resume.js) is the owner's "Let's Add to Your Resume": hackathons and certifications, and a list of resume lines.
  * Review: prep kits uploaded from the Mac (scout.sync push --kits), to read, edit, copy, download, and mark
  * submitted. Kits hold the candidate's phone, email, and answers, so they live only here in KV, never in git.
@@ -163,7 +164,8 @@ async function startRun(env, ageMin) {
 // What accounts.js needs from this file, passed in so the two never import each other.
 function accountUi(env, ctx) {
   return {
-    page, panda, esc, json, redirect, hmac, sameSecret, coHead, logo, safeUrl, when, cleanTitle, logoFor,
+    page, panda, esc, json, redirect, hmac, sameSecret, coHead, logo, safeUrl, when, cleanTitle, logoFor, kitPage, kitPdfFrom,
+    programsPage: (who) => programsPage(env, who), reviewList: (who) => reviewList(env, who),
     getKV: (key, fallback) => get(env, key, fallback),
     waitUntil: (promise) => (ctx && ctx.waitUntil ? ctx.waitUntil(promise) : promise),
     isOwner: (request) => validCookie(request, env),
@@ -359,7 +361,10 @@ async function setKitAnswer(request, env) {
 }
 
 async function kitPdf(env, slug, which) {
-  const kit = await get(env, `kit:${slug}`, null);
+  return kitPdfFrom(await get(env, `kit:${slug}`, null), slug, which);
+}
+
+function kitPdfFrom(kit, slug, which) {
   const b64 = kit && (which === "resume" ? kit.resume_pdf : kit.letter_pdf);
   if (!b64) return new Response("not found", { status: 404 });
   const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
@@ -434,10 +439,11 @@ function coHead(company, url, label) {
 // For cards that only know a company name (tracker, Review): the logo map the cron uploads.
 const logoFor = (logos, company) => logos[normName(company)] || "";
 
-async function reviewList(env) {
-  const [allKits, tracker, logos, hidden] = await Promise.all([get(env, "kits", []), get(env, "tracker", {}), get(env, "logos", {}), get(env, "hidden_kits", [])]);
+// who: left out for the owner. A student passes { kits: their kit index, states: Map of key to tracker state, opts }.
+async function reviewList(env, who) {
+  const [allKits, tracker, logos, hidden] = await Promise.all([who ? who.kits : get(env, "kits", []), who ? {} : get(env, "tracker", {}), get(env, "logos", {}), who ? [] : get(env, "hidden_kits", [])]);
   const index = allKits.filter((k) => !hidden.includes(k.slug));
-  const state = (k) => tracker[k.key]?.state || "Prepped";
+  const state = (k) => (who ? who.states.get(k.key) : tracker[k.key]?.state) || "Prepped";
   const order = (k) => (state(k) === "Applied" ? 1 : 0);
   const cards = [...index].sort((a, b) => order(a) - order(b)).map((k) => `
     <a class="card kitcard" href="/review/${esc(k.slug)}" data-slug="${esc(k.slug)}">
@@ -448,9 +454,11 @@ async function reviewList(env) {
       <div class="meta">${kitDates(k)}</div>
     </a>`).join("");
   const ready = index.filter((k) => state(k) !== "Applied").length;
-  const body = `<div class="intro"><p class="note">every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from scout.</p></div>
-    ${cards ? `<div class="kitgrid">${cards}</div>` : '<article class="card emptybox"><h3>no kits yet</h3><p>run /prep on the Mac and each kit it builds shows up here to read and send.</p><div class="actions"><a class="btn" href="/">find one to prep</a></div></article>'}`;
-  return page(body, { title: "Review", page: "review", lead: "read it,", head: "send it", mood: ready ? "thumbs" : "nap" });
+  const intro = who ? who.intro : "every kit /prep built. read it, fix anything you wouldn't say and save, open the application, then mark it submitted. you still click submit on their site. saved edits go back into the kit the next time the Mac pulls from scout.";
+  const empty = who ? who.empty : '<article class="card emptybox"><h3>no kits yet</h3><p>run /prep on the Mac and each kit it builds shows up here to read and send.</p><div class="actions"><a class="btn" href="/">find one to prep</a></div></article>';
+  const body = `<div class="intro"><p class="note">${intro}</p></div>
+    ${cards ? `<div class="kitgrid">${cards}</div>` : empty}`;
+  return page(body, { title: "Review", page: "review", lead: "read it,", head: "send it", mood: ready ? "thumbs" : "nap", ...(who ? who.opts : {}) });
 }
 
 // The length a question asks for, read from its wording: "(about 120 words)", "max 150 words", "(3-4 sentences)",
@@ -493,8 +501,12 @@ function fieldRows(t) {
 
 async function reviewKit(env, slug) {
   const [kit, tracker] = await Promise.all([get(env, `kit:${slug}`, null), get(env, "tracker", {})]);
-  if (!kit) return page('<p class="note">that kit isn\'t here. <a class="inline" href="/review">back to review</a></p>', { title: "Review", page: "review", lead: "kit", head: "not found" }, 404);
-  const st = tracker[kit.key]?.state || "Prepped";
+  return kitPage(kit, kit ? tracker[kit.key]?.state || "Prepped" : "");
+}
+
+// One kit, read and edited. opts are the page options for a student's version (their dock, header, API prefix).
+function kitPage(kit, st, opts = {}) {
+  if (!kit) return page('<p class="note">that kit isn\'t here. <a class="inline" href="/review">back to review</a></p>', { title: "Review", page: "review", lead: "kit", head: "not found", ...opts }, 404);
 
   // The bar under each answer: live count against the asked-for length, saved or unsaved, and save.
   const bar = (text, q, edited, act) => {
@@ -547,7 +559,7 @@ async function reviewKit(env, slug) {
         ${kit.letter ? `<h2>cover letter</h2><section class="sheet"><article class="answer letter"><textarea class="ans" data-act="letter" rows="8" spellcheck="true">${esc(kit.letter)}</textarea>${bar(kit.letter, "", kit.letter_edited, "save-letter")}</article></section>` : ""}
       </div>
     </div>`;
-  return page(body, { title: kit.company || "Review", page: "review", lead: "read it,", head: "send it" });
+  return page(body, { title: kit.company || "Review", page: "review", lead: "read it,", head: "send it", ...opts });
 }
 
 function mdToHtml(md) {
@@ -726,8 +738,14 @@ async function newPage(env, viewId) {
     css: "body[data-page=new] main>.sub,body[data-page=new] main>.empty,body[data-page=new] main>.note{grid-column:1/-1}" });
 }
 
-async function programsPage(env) {
-  const [pages, data, tracker, passed, logos] = await Promise.all([get(env, "pages", {}), get(env, "matches", { matches: [] }), get(env, "tracker", {}), get(env, "passed", {}), get(env, "logos", {})]);
+// who: left out for the owner. A student passes { answers, states: Map of key to tracker state, passed: Set, opts }:
+// the watched pages are shared, and the finds are the shared list judged for them (match.js).
+async function programsPage(env, who) {
+  const [pages, data, ownTracker, ownPassed, logos] = await Promise.all([get(env, "pages", {}), get(env, "matches", { matches: [] }),
+    who ? {} : get(env, "tracker", {}), who ? {} : get(env, "passed", {}), get(env, "logos", {})]);
+  const stateOf = (k) => (who ? who.states.get(k) : ownTracker[k]?.state) || "";
+  const isPassed = (k) => (who ? who.passed.has(k) : !!ownPassed[k]);
+  const pool = who ? rank(data.matches || [], who.answers).filter(isOpen).map((m) => ({ ...m, score: m.my.score })) : data.matches;
   // A watched page has a name ("Microsoft Explore"), not a company: use the longest known company name it starts with.
   const known = Object.keys(logos).sort((a, b) => b.length - a.length);
   const pageCompany = (p) => { const n = normName(p.name || ""); return known.find((k) => n === k || n.startsWith(k + " ")) || ""; };
@@ -739,9 +757,9 @@ async function programsPage(env) {
       ${p.last_change ? `<div class="change"><b>what changed:</b>${esc(p.last_change).replace(/\n/g, "<br>")}</div><div class="meta">a change means go look. it does not mean applications are open.</div>` : ""}<div class="meta">checked ${age(p.checked_at)}</div>
       <div class="actions"><a class="btn ghost" href="${esc(safeUrl(url))}" target="_blank" rel="noopener">open page ↗</a></div>
     </article>`).join("");
-  const finds = data.matches.filter((m) => (m.early_career === "strong" || m.role === "ambassador") && !passed[m.key]).map((m) => `
+  const finds = pool.filter((m) => (m.early_career === "strong" || m.role === "ambassador") && !isPassed(m.key)).map((m) => `
     <article class="card">
-      <div class="tags"><span class="tag accent">${m.role === "ambassador" ? "ambassador" : "freshman friendly"}</span>${tracker[m.key] ? `<span class="tag ink">${esc(tracker[m.key].state)}</span>` : ""}</div>
+      <div class="tags"><span class="tag accent">${m.role === "ambassador" ? "ambassador" : "freshman friendly"}</span>${stateOf(m.key) ? `<span class="tag ink">${esc(stateOf(m.key))}</span>` : ""}</div>
       <div class="row">${coHead(m.company, m.logo, m.company)}<span class="score tscore" aria-label="score ${m.score} out of 100"><b>${m.score}</b></span></div>
       <div class="title">${esc(cleanTitle(m.title, m.company))}</div>
       <div class="meta">${esc((m.locations || []).slice(0, 2).join(", "))} · ${age(m.date_posted)}</div>
@@ -749,9 +767,9 @@ async function programsPage(env) {
     </article>`).join("");
   const body = `
     <div class="intro"><p class="note">${recent ? "a watched page changed today. go look. " : ""}these pages are where freshman programs show up first. scout reads them every hour and pings you when the words change.</p></div>
-    <h2>watched pages</h2>${watched || `<div class="emptybox">${panda("bamboo")}<p>no pages yet. add program pages to config/watch-pages.yaml and the next hourly run starts watching them.</p></div>`}
+    <h2>watched pages</h2>${watched || `<div class="emptybox">${panda("bamboo")}<p>${who ? "no pages yet." : "no pages yet. add program pages to config/watch-pages.yaml and the next hourly run starts watching them."}</p></div>`}
     <h2>found in the lists</h2>${finds || '<p class="note">none in the lists right now. the pages above are the early warning.</p>'}`;
-  return page(body, { title: "Programs", page: "programs", lead: "built for", head: "freshmen", mood: recent ? "close" : "sunglasses" });
+  return page(body, { title: "Programs", page: "programs", lead: "built for", head: who ? "early careers" : "freshmen", mood: recent ? "close" : "sunglasses", ...(who ? who.opts : {}) });
 }
 
 async function trackerPage(env) {
@@ -829,19 +847,19 @@ function aboutPage(loggedIn) {
 
 function page(body, opts, status = 200) {
   // links, dock, and css let the account pages (accounts.js) use this shell with their own header and nav.
-  const { title, page: name, lead, head, nav = true, mood = "", links = null, dock = null, css = "", script = "", extraHead = "" } = opts;
+  const { title, page: name, lead, head, nav = true, mood = "", links = null, dock = null, css = "", script = "", extraHead = "", api = "", client = false } = opts;
   // The app pages wear the themes (theme.js): light, sky, or dark, with art behind the page.
   const themed = THEMED.has(name);
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="${themed ? "#e2672f" : PAGE_COLORS[name] || "#cf6a2e"}">
-<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="${themed ? "black-translucent" : "default"}"><title>Scout · ${esc(title)}</title>${themed ? FONTS_LINK + THEME_HEAD : ""}${extraHead}<style>${tokens}${BASE_CSS}${css}${themed ? THEME_CSS : ""}</style></head><body data-page="${esc(name)}"${themed ? ' class="themed"' : ""}>${themed ? SCENE : ""}
+<link rel="icon" href="${FAVICON}"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Scout"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="${themed ? "black-translucent" : "default"}"><title>Scout · ${esc(title)}</title>${themed ? FONTS_LINK + THEME_HEAD : ""}${extraHead}<style>${tokens}${BASE_CSS}${css}${themed ? THEME_CSS : ""}</style></head><body data-page="${esc(name)}"${api ? ` data-api="${esc(api)}"` : ""}${themed ? ' class="themed"' : ""}>${themed ? SCENE : ""}
 <header><a class="brand" href="/" aria-label="scout">sc<svg class="o" viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="26.5" fill="#ffc93c" stroke="#1a1333" stroke-width="9"/><circle cx="31" cy="31" r="11" fill="#f6f9dc" stroke="#1a1333" stroke-width="6"/><circle cx="31" cy="31" r="4" fill="#1a1333"/></svg>ut</a><span class="head-links">${themed ? THEME_BUTTON : ""}${links !== null ? links : name === "about" ? (nav ? "" : '<a class="pill-link" href="/login">log in</a>') : nav && !themed ? '<a class="pill-link q" href="/about" aria-label="what is scout?"><span class="long">what is scout?</span><span class="short">?</span></a>' : ""}${nav ? '<a class="pill-link" href="/logout">log out</a>' : ""}</span></header>
 <main>
   ${lead || head ? `<h1><span class="lead${String(lead).length > 12 ? " long" : ""}">${esc(lead)}</span><span class="head">${esc(head)}</span>${mood ? panda(mood, "hero-panda") : ""}</h1>` : ""}
   ${body}
 </main>
 ${dock !== null ? dock : nav ? NAV.replace(`href="/${name === "new" ? "" : name}"`, `href="/${name === "new" ? "" : name}" class="on"`) : ""}
-${nav && dock === null ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS}</script>${themed ? `<script>${THEME_JS}</script>` : ""}${script ? `<script>${script}</script>` : ""}</body></html>`;
+${(nav && dock === null) || client ? `<script>${CLIENT_JS}</script>` : ""}<script>${CYCLE_JS}</script>${themed ? `<script>${THEME_JS}</script>` : ""}${script ? `<script>${script}</script>` : ""}</body></html>`;
   return new Response(html, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
 }
 
@@ -1097,7 +1115,9 @@ document.querySelectorAll('textarea[data-act="next"],textarea.ans').forEach(func
 // The hero numbers count up from zero on load. bump() moves the target too, so a pass mid-count still lands right.
 (function(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;document.querySelectorAll(".stat-big,.tile b").forEach(function(el,n){const end=parseInt(el.textContent.replace(/,/g,""),10);if(!(end>0))return;el.dataset.end=end;const t0=performance.now()+150+n*120,dur=end>20?1100:600;el.textContent="0";requestAnimationFrame(function tick(t){const k=Math.min(1,Math.max(0,(t-t0)/dur)),goal=+el.dataset.end;el.textContent=Math.round(goal*(1-Math.pow(1-k,3))).toLocaleString("en-US");if(k<1)requestAnimationFrame(tick);else delete el.dataset.end})})})();
 document.addEventListener("click",async(e)=>{const x=e.target.closest("button[data-remove]");if(!x)return;e.preventDefault();e.stopPropagation();const card=x.closest(".card");if(!card)return;const kind=x.dataset.remove;const label=(card.querySelector("h3")||{}).textContent||"this";if(!confirm("remove "+label.trim()+"?"))return;x.disabled=true;await post("/api/remove",kind==="kit"?{kind,slug:card.dataset.slug}:{kind,key:card.dataset.key});card.style.transition="opacity .25s,transform .25s";card.style.opacity="0";card.style.transform="scale(.96)";setTimeout(()=>card.remove(),260)},true);
-async function post(url, body){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok){alert("that didn't save. try again.");throw new Error(r.status)}return r.json()}
+// Student pages set data-api="/api/u/" on the body, so the same Review code saves to their own endpoints.
+const API=document.body.dataset.api||"/api/";
+async function post(url, body){if(url.startsWith("/api/"))url=API+url.slice(5);const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","x-scout":"1"},body:JSON.stringify(body)});if(!r.ok){alert("that didn't save. try again.");throw new Error(r.status)}return r.json()}
 function bump(id,d){const el=document.getElementById(id);if(!el)return;if(el.dataset.end)el.dataset.end=Math.max(0,+el.dataset.end+d);el.textContent=Math.max(0,(parseInt(el.textContent.replace(/,/g,""),10)||0)+d).toLocaleString("en-US")}
 function syncPassed(){const box=document.getElementById("passed");const n=parseInt((document.getElementById("passed-count")||{}).textContent,10)||0;if(box){box.hidden=n===0;if(n===0)box.open=false}}
 function passedClone(card,key){const a=document.createElement("article");a.className="card passed";a.dataset.key=key;a.dataset.origin="main";
