@@ -46,7 +46,15 @@ def load_variant(path: Path) -> dict:
 
 def render_html(data: dict) -> str:
     from jinja2 import Environment, FileSystemLoader, select_autoescape
+    from markupsafe import Markup, escape
     env = Environment(loader=FileSystemLoader(TEMPLATE_DIR), autoescape=select_autoescape(["html"]))
+
+    # **word** in a bullet renders bold, so a recruiter's ten-second scan lands on numbers and tools.
+    # The text is escaped first, so only the bold tags are real HTML.
+    def boldmd(text: str) -> Markup:
+        return Markup(re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", str(escape(text))))
+
+    env.filters["boldmd"] = boldmd
     return env.get_template("resume.html").render(**data)
 
 

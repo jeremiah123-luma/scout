@@ -58,7 +58,7 @@
     {% endif %}
     {% if e.bullets %}
     <ul>
-      {% for b in e.bullets %}<li>{{ b }}</li>{% endfor %}
+      {% for b in e.bullets %}<li>{{ b | boldmd }}</li>{% endfor %}
     </ul>
     {% endif %}
   </div>
