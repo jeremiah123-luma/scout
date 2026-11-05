@@ -16,7 +16,7 @@
 
 import { LANDING_CSS, LANDING_JS, landingBody } from "./landing.js";
 import { STUDENT_TABLES, STUDENT_CSS, studentHome, studentTracker, studentApi, studentExport, privacyPage, metaFor, deleteStudentData, studentDock, trackedCount, ping, studentPages } from "./student.js";
-import { connectApi, connectDoc, connectCard, keyInfo, CONNECT_JS, CONNECT_CSS } from "./connect.js";
+import { connectApi, connectDoc, skillDoc, connectCard, keyInfo, CONNECT_JS, CONNECT_CSS } from "./connect.js";
 
 const USER_COOKIE = "scout_u";
 const COOKIE_DAYS = 30;
@@ -282,6 +282,7 @@ export async function routeAccounts(request, env, url, ui) {
   const path = url.pathname;
   // Claude Code connections (connect.js): a key, no cookie.
   if (path === "/connect.md") return connectDoc();
+  if (path === "/connect/skill.md") return skillDoc();
   if (path.startsWith("/api/c/")) {
     if (!env.DB) return ui.json({ error: "not found" }, 404);
     await ensureSchema(env);

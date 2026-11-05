@@ -217,7 +217,7 @@ export function prepPrompt(t, a, connected = false) {
     ``,
     `Please:`,
     `1. Read the posting and tell me first whether I'm eligible (graduation year, degree, work authorization). Stop there if I'm not.`,
-    `2. Ask me for my resume, then tailor it to one page, ATS-safe, single column.`,
+    connected ? `2. Use my resume facts in ~/.scout/profile.md (ask me for my resume only if it's missing), then tailor it to one page, ATS-safe, single column.` : `2. Ask me for my resume, then tailor it to one page, ATS-safe, single column.`,
     (a.help_with || []).includes("cover letters") ? `3. Draft a cover letter if the posting asks for one.` : "",
     (a.help_with || []).includes("short answers") ? `4. Draft answers to the application's short questions.` : "",
     ``,
@@ -254,7 +254,7 @@ export async function studentTracker(env, user, ui) {
         ${kitOf.has(t.key) ? `<a class="btn" href="/review/${ui.esc(kitOf.get(t.key))}">kit ✓</a>` : ""}
       </div>
       <details class="prep"${i === firstSaved ? " open" : ""}><summary>prep your resume with Claude Code</summary>
-        <p class="note">${key ? "copy this into your Claude Code, then give it your resume. when you OK the kit, it lands on your review tab." : 'copy this into your own Claude Code (or Claude), then give it your resume. <a href="/you#connect">connect Claude Code</a> and finished kits land on your review tab.'}</p>
+        <p class="note">${key ? "type <b>/scout</b> in Claude Code and it picks this up on its own, or copy this in. when you OK the kit, it lands on your review tab." : 'copy this into your own Claude Code (or Claude), then give it your resume. <a href="/you#connect">connect Claude Code</a> and finished kits land on your review tab.'}</p>
         <textarea id="prompt-${i}" readonly rows="9">${ui.esc(prepPrompt(t, user.answers, !!key))}</textarea>
         <button class="btn" data-u="copy" data-src="prompt-${i}" data-label="copy the prompt">copy the prompt</button>
       </details>
@@ -357,9 +357,12 @@ export async function upsertKit(env, user, body, ui) {
   const prev = await kitFor(env, user.id, slug);
   let key = clip(body.key, 200);
   const row = key ? await env.DB.prepare("SELECT key, url FROM tracks WHERE user_id = ? AND key = ?").bind(user.id, key).first() : null;
-  if (!row) key = prev?.key || `kit:${slug}`;  // a key that isn't theirs never touches anything
+  // A key from their matches (/api/c/matches) is a real posting, so it goes on the tracker under that key and leaves
+  // the New page; any other key that isn't on their tracker never touches anything.
+  const posting = !row && key ? ((await ui.getKV("matches", { matches: [] })).matches || []).find((m) => m.key === key) : null;
+  if (!row && !posting) key = prev?.key || `kit:${slug}`;
   const kit = {
-    slug, key, company, title, url: ui.safeUrl(clip(body.url, 600) || row?.url || ""), updated: now, opened: clip(body.opened, 40),
+    slug, key, company, title, url: ui.safeUrl(clip(body.url, 600) || row?.url || posting?.url || ""), updated: now, opened: clip(body.opened, 40),
     notes: clip(body.notes, 20000),
     answers: (Array.isArray(body.answers) ? body.answers : []).slice(0, 40).filter((a) => a && typeof a.q === "string")
       .map((a) => ({ q: a.q.slice(0, 1000), a: clip(a.a, 20000) })),
@@ -397,6 +400,22 @@ export async function setTrack(env, userId, key, state, next) {
   await env.DB.prepare("UPDATE tracks SET state = ?, next = ?, updated = ?, history = ? WHERE user_id = ? AND key = ?")
     .bind(state, typeof next === "string" ? next.slice(0, 200) : row.next || "", now, JSON.stringify(history.slice(-50)), userId, key).run();
   return true;
+}
+
+// The student's New page as data, for their own Claude Code (GET /api/c/matches): open postings ranked for them,
+// minus what's on their tracker or passed, best first. Ineligible and closed rows stay off, as on the page.
+export async function matchesFor(env, user, ui, limit = 30) {
+  const [data, passed, tracks] = await Promise.all([ui.getKV("matches", { matches: [], generated_at: "" }), marksFor(env, user.id), tracksFor(env, user.id)]);
+  const skip = new Set([...tracks.map((t) => t.key), ...passed]);
+  const list = rank(data.matches || [], user.answers).filter((m) => !skip.has(m.key) && isOpen(m));
+  return {
+    updated: data.generated_at || "", open: list.length,
+    matches: list.slice(0, Math.max(1, Math.min(100, limit))).map((m) => ({
+      key: m.key, company: m.company, title: ui.cleanTitle(m.title, m.company), url: ui.safeUrl(m.url),
+      where: placesFor(m, user.answers) || "", posted: age(m.latest_posted || m.date_posted), score: m.my.score,
+      eligibility: m.my.eligibility, note: m.my.eligibility !== "unknown" ? m.my.note || "" : "", tag: frameFor(m)[1] || "",
+    })),
+  };
 }
 
 /* ---------------------------------------------------------------- JSON endpoints */
