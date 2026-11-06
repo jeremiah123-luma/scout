@@ -1,19 +1,19 @@
 {
- "generated_at": "2026-11-06T22:48:55+00:00",
+ "generated_at": "2026-11-06T23:48:36+00:00",
  "counts": {
-  "rows": 21939,
-  "dropped: inactive": 13198,
-  "dropped: not a 2027 term": 1225,
+  "rows": 21615,
+  "dropped: inactive": 13187,
+  "dropped: not a 2027 term": 1215,
   "dropped: no term listed, posted over 120 days ago": 53,
-  "dropped: not a target role": 2425,
-  "dropped: graduate students only": 821,
-  "dropped: outside the US": 917,
-  "dropped: older than 240 days": 163,
-  "dropped: duplicate": 850,
-  "kept": 2287
+  "dropped: not a target role": 2248,
+  "dropped: graduate students only": 823,
+  "dropped: outside the US": 939,
+  "dropped: older than 240 days": 50,
+  "dropped: duplicate": 874,
+  "kept": 2226
  },
- "total_matches": 2287,
- "open_total": 2139,
+ "total_matches": 2226,
+ "open_total": 2084,
  "matches": [
   {
    "id": "09939e91-4c36-4e3b-ace2-9d0117e05b68",
@@ -416,78 +416,6 @@
    "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/0bc3d2c1-74ec-4e94-b532-76d1f7880d1f/logo.png",
    "logo_slug": "Point72"
-  },
-  {
-   "id": "AugsburgUniversity-MinneapolisMN:744000159257894",
-   "source": "boards",
-   "company": "Augsburg University",
-   "title": "Student: AI Fellowship",
-   "url": "https://jobs.smartrecruiters.com/AugsburgUniversity-MinneapolisMN/744000159257894",
-   "locations": [
-    "Minneapolis, MN"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1793658825,
-   "date_updated": 1793658825,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "program",
-   "early_career": "strong",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "augsburg-university_student-ai-fellowship",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.smartrecruiters.com/AugsburgUniversity-MinneapolisMN/744000159257894"
-   ],
-   "latest_posted": 1793658825,
-   "breakdown": {
-    "role": 20,
-    "tier": 0,
-    "early_career": 45,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 3
-   },
-   "score": 84,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/5bfdda35-6458-40d6-a519-c3f134ae2545/logo.png",
-   "logo_slug": "Augsburg-University"
   },
   {
    "id": "8032c2c5-6470-46b7-8645-8d54a125dd0e",
@@ -1716,6 +1644,83 @@
    "logo_slug": "Microsoft"
   },
   {
+   "id": "2db81630-834e-4417-80c9-b873195cb9e0",
+   "source": "simplify",
+   "company": "SharkNinja",
+   "title": "Applied AI & Analytics Co-op",
+   "url": "https://job-boards.greenhouse.io/sharkninjaoperatingllc/jobs/4725275006",
+   "locations": [
+    "Miami, FL",
+    "Needham, MA",
+    "NYC"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "AI/ML/Data",
+   "date_posted": 1793996661,
+   "date_updated": 1794007739,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/SharkNinja",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "key": "sharkninja_applied-ai-analytics-co-op",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/sharkninjaoperatingllc/jobs/4725275006"
+   ],
+   "latest_posted": 1793996661,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 3
+   },
+   "score": 63,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/af9f0cf8-eedf-4811-bd9f-a1a39572f2e6/logo.png",
+   "logo_slug": "SharkNinja"
+  },
+  {
    "id": "29d1edd2-e624-4f98-af6e-1325352d78bc",
    "source": "vanshb03",
    "company": "The New York Times",
@@ -1750,10 +1755,12 @@
    ],
    "key": "the-new-york-times_ios-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "jobright"
    ],
    "urls": [
-    "https://go.vansh.nyc/1l8"
+    "https://go.vansh.nyc/1l8",
+    "https://jobright.ai/jobs/info/6aee3581e0c9de7b05f8c5d5"
    ],
    "latest_posted": 1793996546,
    "breakdown": {
@@ -1768,6 +1775,78 @@
    "score": 63,
    "eligibility": "unknown",
    "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
+   "logo_slug": "The-New-York-Times"
+  },
+  {
+   "id": "855cf1a4-420b-46b0-a7af-9bc903a1571b",
+   "source": "simplify",
+   "company": "The New York Times",
+   "title": "iOS Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751919005",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793995940,
+   "date_updated": 1794006534,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/The-New-York-Times",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [
+    "ios"
+   ],
+   "key": "the-new-york-times_ios-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751919005"
+   ],
+   "latest_posted": 1793995940,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 3
+   },
+   "score": 63,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
    "logo_slug": "The-New-York-Times"
   },
@@ -1843,13 +1922,13 @@
    }
   },
   {
-   "id": "6a9e3424a7ba386c5d67105e",
+   "id": "6adfe4d7065c4e77efafca1f",
    "source": "jobright",
    "company": "IBM",
    "title": "Product Manager Spring Co-op 2027",
-   "url": "https://jobright.ai/jobs/info/6a9e3424a7ba386c5d67105e",
+   "url": "https://jobright.ai/jobs/info/6adfe4d7065c4e77efafca1f",
    "locations": [
-    "Lowell, MA"
+    "Durham, NC"
    ],
    "terms": [
     "Spring 2027"
@@ -1880,10 +1959,10 @@
     "jobright"
    ],
    "urls": [
-    "https://jobright.ai/jobs/info/6a9e3424a7ba386c5d67105e",
-    "https://jobright.ai/jobs/info/6ab7abca62bb1fbd451de2e1",
     "https://jobright.ai/jobs/info/6adfe4d7065c4e77efafca1f",
-    "https://jobright.ai/jobs/info/6ada780d950ef68d5185802b"
+    "https://jobright.ai/jobs/info/6ab7abca62bb1fbd451de2e1",
+    "https://jobright.ai/jobs/info/6ada780d950ef68d5185802b",
+    "https://jobright.ai/jobs/info/6a9e3424a7ba386c5d67105e"
    ],
    "latest_posted": 1793966400,
    "breakdown": {
@@ -1990,84 +2069,6 @@
    },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/bf3b0cf7-1238-4104-902d-dbb6f0d57449/logo.png",
    "logo_slug": "IBM"
-  },
-  {
-   "id": "911a94f7-eed7-475d-8816-a0b3b9dbfb40",
-   "source": "simplify",
-   "company": "Palantir",
-   "title": "Software Engineer Intern - Sovereign AI Systems",
-   "url": "https://jobs.lever.co/palantir/cd64bcd4-50bb-4aeb-a135-4e0487ffd312/apply",
-   "locations": [
-    "NYC"
-   ],
-   "terms": [
-    "N/A"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1793922079,
-   "date_updated": 1793922285,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Palantir",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "term_unknown": true,
-   "key": "palantir_software-engineer-intern-sovereign-ai-systems",
-   "sources": [
-    "simplify",
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.lever.co/palantir/cd64bcd4-50bb-4aeb-a135-4e0487ffd312/apply",
-    "https://jobs.lever.co/palantir/cd64bcd4-50bb-4aeb-a135-4e0487ffd312"
-   ],
-   "latest_posted": 1793922079,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 10,
-    "keywords": 3
-   },
-   "score": 63,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/f920d424-2df9-4b5d-8ff1-fece831a8fc7/logo.png",
-   "logo_slug": "Palantir"
   },
   {
    "id": "2371e632-b395-40d1-9cee-618ad458384c",
@@ -2326,84 +2327,6 @@
    },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/3cd4b225-8559-433f-8b19-7f0bd97cae5a/logo.png",
    "logo_slug": "NVIDIA"
-  },
-  {
-   "id": "LinkedIn3:744000158394370",
-   "source": "boards",
-   "company": "LinkedIn",
-   "title": "Software Engineer Intern (First Play)  - Summer 2027 (Mountain View, CA)",
-   "url": "https://jobs.smartrecruiters.com/LinkedIn3/744000158394370",
-   "locations": [
-    "Mountain View, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1793224251,
-   "date_updated": 1793224251,
-   "active": true,
-   "discovered": true,
-   "tier": 1,
-   "company_key": "microsoft",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "linkedin_software-engineer-intern-first-play-summer-2027-mountain-vie-adb5c8",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.smartrecruiters.com/LinkedIn3/744000158394370"
-   ],
-   "latest_posted": 1793224251,
-   "breakdown": {
-    "role": 30,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 61,
-   "eligibility": "ok",
-   "eligibility_note": "page names graduation 2028 or later",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [
-     [
-      2028,
-      9999
-     ]
-    ],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/139a269c-3ba1-4757-a561-242393abc8e1/logo.png",
-   "logo_slug": "LinkedIn"
   },
   {
    "id": "d1dc33d2-36e1-4f24-bd0b-d8b4f6e5694b",
@@ -2999,83 +2922,6 @@
    "score": 61,
    "eligibility": "unknown",
    "eligibility_note": "not checked (board can't be read server-side)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/139a269c-3ba1-4757-a561-242393abc8e1/logo.png",
-   "logo_slug": "LinkedIn"
-  },
-  {
-   "id": "LinkedIn3:744000156616169",
-   "source": "boards",
-   "company": "LinkedIn",
-   "title": "Software Engineer Intern, Undergraduate - Summer 2027 (Mountain View, CA)",
-   "url": "https://jobs.smartrecruiters.com/LinkedIn3/744000156616169",
-   "locations": [
-    "Mountain View, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1792515282,
-   "date_updated": 1792515282,
-   "active": true,
-   "discovered": true,
-   "tier": 1,
-   "company_key": "microsoft",
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "linkedin_software-engineer-intern-undergraduate-summer-2027-mountain-801306",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.smartrecruiters.com/LinkedIn3/744000156616169"
-   ],
-   "latest_posted": 1792515282,
-   "breakdown": {
-    "role": 30,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 61,
-   "eligibility": "ok",
-   "eligibility_note": "page names graduation 2027 or later",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [
-     [
-      2027,
-      9999
-     ]
-    ],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/139a269c-3ba1-4757-a561-242393abc8e1/logo.png",
    "logo_slug": "LinkedIn"
   },
@@ -4086,10 +3932,12 @@
    "keyword_hits": [],
    "key": "the-new-york-times_backend-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "jobright"
    ],
    "urls": [
-    "https://go.vansh.nyc/1lg"
+    "https://go.vansh.nyc/1lg",
+    "https://jobright.ai/jobs/info/6aee3b6fcaf8e660b87dd5eb"
    ],
    "latest_posted": 1793997674,
    "breakdown": {
@@ -4104,6 +3952,76 @@
    "score": 60,
    "eligibility": "unknown",
    "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
+   "logo_slug": "The-New-York-Times"
+  },
+  {
+   "id": "db6f3fe2-dcd1-4426-8502-58670887b096",
+   "source": "simplify",
+   "company": "The New York Times",
+   "title": "Backend Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751973005",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793997596,
+   "date_updated": 1794006536,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/The-New-York-Times",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "the-new-york-times_backend-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751973005"
+   ],
+   "latest_posted": 1793997596,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 60,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
    "logo_slug": "The-New-York-Times"
   },
@@ -4140,10 +4058,12 @@
    "keyword_hits": [],
    "key": "the-new-york-times_frontend-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "jobright"
    ],
    "urls": [
-    "https://go.vansh.nyc/1l5"
+    "https://go.vansh.nyc/1l5",
+    "https://jobright.ai/jobs/info/6aee3589e0c9de7b05f8c5ea"
    ],
    "latest_posted": 1793996546,
    "breakdown": {
@@ -4194,10 +4114,12 @@
    "keyword_hits": [],
    "key": "the-new-york-times_android-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "jobright"
    ],
    "urls": [
-    "https://go.vansh.nyc/1l6"
+    "https://go.vansh.nyc/1l6",
+    "https://jobright.ai/jobs/info/6aee3582caf8e660b87dd04e"
    ],
    "latest_posted": 1793996546,
    "breakdown": {
@@ -4248,10 +4170,12 @@
    "keyword_hits": [],
    "key": "the-new-york-times_full-stack-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "jobright"
    ],
    "urls": [
-    "https://go.vansh.nyc/1l7"
+    "https://go.vansh.nyc/1l7",
+    "https://jobright.ai/jobs/info/6aee358dd20350c7a507aa8d"
    ],
    "latest_posted": 1793996546,
    "breakdown": {
@@ -4266,6 +4190,216 @@
    "score": 60,
    "eligibility": "unknown",
    "eligibility_note": "not checked (board can't be read server-side)",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
+   "logo_slug": "The-New-York-Times"
+  },
+  {
+   "id": "e8209fcd-0bd8-4e54-969a-77a28e97d8eb",
+   "source": "simplify",
+   "company": "The New York Times",
+   "title": "Android Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751917005",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793995963,
+   "date_updated": 1794006536,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/The-New-York-Times",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "the-new-york-times_android-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751917005"
+   ],
+   "latest_posted": 1793995963,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 60,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
+   "logo_slug": "The-New-York-Times"
+  },
+  {
+   "id": "0e942b8e-2ea9-4241-99a8-96482e3de3ee",
+   "source": "simplify",
+   "company": "The New York Times",
+   "title": "Full-Stack Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751907005",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793995960,
+   "date_updated": 1794006536,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/The-New-York-Times",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "the-new-york-times_full-stack-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751907005"
+   ],
+   "latest_posted": 1793995960,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 60,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
+   "logo_slug": "The-New-York-Times"
+  },
+  {
+   "id": "4f786492-0f6e-4697-853b-f3fcdb446f60",
+   "source": "simplify",
+   "company": "The New York Times",
+   "title": "Frontend Engineer Intern",
+   "url": "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751909005",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793995946,
+   "date_updated": 1794006534,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/The-New-York-Times",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "the-new-york-times_frontend-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751909005"
+   ],
+   "latest_posted": 1793995946,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 60,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/233c0dd2-eec9-4ef8-99e0-03ebdd44ad6a/logo.png",
    "logo_slug": "The-New-York-Times"
   },
@@ -4841,8 +4975,7 @@
     "jobright"
    ],
    "urls": [
-    "https://jobright.ai/jobs/info/6ae35b16eab1f96730973462",
-    "https://jobright.ai/jobs/info/6ae35c10eab1f96730973528"
+    "https://jobright.ai/jobs/info/6ae35b16eab1f96730973462"
    ],
    "latest_posted": 1793966400,
    "breakdown": {
@@ -4872,6 +5005,143 @@
     "underclass": false,
     "upperclass": "",
     "v": 1
+   }
+  },
+  {
+   "id": "6adfbb5a9a8c91d5c3588a0f",
+   "source": "jobright",
+   "company": "Bauer Foundation",
+   "title": "Field Engineer Intern",
+   "url": "https://jobright.ai/jobs/info/6adfbb5a9a8c91d5c3588a0f",
+   "locations": [
+    "Odessa, FL",
+    "Remote"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://bauerfoundations.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "bauer-foundation_field-engineer-intern",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6adfbb5a9a8c91d5c3588a0f"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 60,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   }
+  },
+  {
+   "id": "6aee33cdd20350c7a507a7bb",
+   "source": "jobright",
+   "company": "VertoTech",
+   "title": "Reliability Engineering Intern",
+   "url": "https://jobright.ai/jobs/info/6aee33cdd20350c7a507a7bb",
+   "locations": [
+    "New York, NY"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "vertotech.net",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "vertotech_reliability-engineering-intern",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee33cdd20350c7a507a7bb"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 60,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
    }
   },
   {
@@ -5065,20 +5335,20 @@
    "eligibility": "unknown",
    "eligibility_note": "page says nothing about graduation year",
    "posting_facts": {
-    "v": 1,
-    "gone": false,
-    "not_enrolled": false,
     "fulltime_job": false,
-    "returning_only": false,
-    "graduate_title": false,
-    "graduate_only": "",
-    "prior_internship": false,
     "fulltime_ranges": [],
-    "relative_grad": false,
-    "standing": "",
+    "gone": false,
     "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
     "underclass": false,
-    "upperclass": ""
+    "upperclass": "",
+    "v": 1
    },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/a20823cc-7e7e-4f63-b3d9-ec469947381e/logo.png",
    "logo_slug": "GE-Vernova"
@@ -5131,6 +5401,84 @@
     "keywords": 0
    },
    "score": 60,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "",
+    "v": 1
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/f920d424-2df9-4b5d-8ff1-fece831a8fc7/logo.png",
+   "logo_slug": "Palantir"
+  },
+  {
+   "id": "911a94f7-eed7-475d-8816-a0b3b9dbfb40",
+   "source": "simplify",
+   "company": "Palantir",
+   "title": "Software Engineer Intern - Sovereign AI Systems",
+   "url": "https://jobs.lever.co/palantir/cd64bcd4-50bb-4aeb-a135-4e0487ffd312/apply",
+   "locations": [
+    "NYC"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793922079,
+   "date_updated": 1793922285,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Palantir",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "palantir_software-engineer-intern-sovereign-ai-systems",
+   "sources": [
+    "simplify",
+    "boards"
+   ],
+   "urls": [
+    "https://jobs.lever.co/palantir/cd64bcd4-50bb-4aeb-a135-4e0487ffd312/apply",
+    "https://jobs.lever.co/palantir/cd64bcd4-50bb-4aeb-a135-4e0487ffd312"
+   ],
+   "latest_posted": 1793922079,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 5,
+    "keywords": 3
+   },
+   "score": 58,
    "eligibility": "unknown",
    "eligibility_note": "page says nothing about graduation year",
    "posting_facts": {
@@ -6026,76 +6374,6 @@
    "logo_slug": "Figma"
   },
   {
-   "id": "AECOM2:744000159925579",
-   "source": "boards",
-   "company": "AECOM",
-   "title": "Water/Wastewater Engineering Intern",
-   "url": "https://jobs.smartrecruiters.com/AECOM2/744000159925579",
-   "locations": [
-    "Buffalo, NY"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1793896560,
-   "date_updated": 1793896560,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "aecom_water-wastewater-engineering-intern",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.smartrecruiters.com/AECOM2/744000159925579"
-   ],
-   "latest_posted": 1793896560,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/06be201d-a0aa-4b4c-9c51-01d3fb8dfd7f/logo.png",
-   "logo_slug": "AECOM"
-  },
-  {
    "id": "70d4b02d-9805-4789-b5d0-6e134cb4f908",
    "source": "vanshb03",
    "company": "Arango",
@@ -6487,77 +6765,6 @@
    "logo_slug": "Cincinnati-Childrens-Hospital-And-Medical-Center"
   },
   {
-   "id": "d4af5767-b5a8-4242-9292-be11ba375b8c",
-   "source": "simplify",
-   "company": "Cincinnati Children’s Hospital and Medical Center",
-   "title": "Student 2 Intern - Data Management Engineer",
-   "url": "https://cincinnatichildrens.wd5.myworkdayjobs.com/careersatcincinnatichildrens/job/Remote/Student-II---Data-Management-Engineer_JR226749",
-   "locations": [
-    "Remote in USA"
-   ],
-   "terms": [
-    "N/A"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "AI/ML/Data",
-   "date_posted": 1793577600,
-   "date_updated": 1793661515,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Cincinnati-Childrens-Hospital-And-Medical-Center",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "term_unknown": true,
-   "key": "cincinnati-childrens-hospital-and-medica-6b714d_student-2-intern-data-management-engineer",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://cincinnatichildrens.wd5.myworkdayjobs.com/careersatcincinnatichildrens/job/Remote/Student-II---Data-Management-Engineer_JR226749"
-   ],
-   "latest_posted": 1793577600,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/7ea9a967-c72d-4cb8-b3e4-946e00eff317/logo.png",
-   "logo_slug": "Cincinnati-Childrens-Hospital-And-Medical-Center"
-  },
-  {
    "id": "31a1907c-f4fa-41b9-ada3-c77ec406789e",
    "source": "vanshb03",
    "company": "Insomniac Games",
@@ -6809,10 +7016,12 @@
    "keyword_hits": [],
    "key": "clay_software-engineering-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "boards"
    ],
    "urls": [
-    "https://go.vansh.nyc/12H"
+    "https://go.vansh.nyc/12H",
+    "https://jobs.ashbyhq.com/claylabs/5b7eced2-36bd-4265-a2a8-da0f786e47aa"
    ],
    "latest_posted": 1793404800,
    "breakdown": {
@@ -6999,79 +7208,6 @@
    "logo_slug": "Solink"
   },
   {
-   "id": "f040379e-c118-4f37-83a8-5a73faa7b40b",
-   "source": "simplify",
-   "company": "Microsoft",
-   "title": "Technical Program Management Intern",
-   "url": "https://apply.careers.microsoft.com/careers/job/1970393556983238",
-   "locations": [
-    "Redmond, WA"
-   ],
-   "terms": [
-    "N/A"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Product",
-   "date_posted": 1789165429,
-   "date_updated": 1792760092,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Microsoft",
-   "tier": 1,
-   "company_key": "microsoft",
-   "role": "pm",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "term_unknown": true,
-   "key": "microsoft_technical-program-management-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://apply.careers.microsoft.com/careers/job/1970393556983238"
-   ],
-   "latest_posted": 1789165429,
-   "breakdown": {
-    "role": 24,
-    "tier": 20,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/527fc2d9-67a9-4418-a8fa-662bdb033151/logo.png",
-   "logo_slug": "Microsoft"
-  },
-  {
    "id": "39089d25-8f19-48bd-bd54-d2e778febd74",
    "source": "vanshb03",
    "company": "Shure",
@@ -7128,6 +7264,84 @@
    "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/bf2e9429-3e0a-4b04-94c1-6fa5c35b69ff/logo.png",
    "logo_slug": "Shure"
+  },
+  {
+   "id": "c35a9168-9923-4395-bcca-05777cef1cdc",
+   "source": "simplify",
+   "company": "Docusign",
+   "title": "Agentic AI Engineer Intern",
+   "url": "https://careers.docusign.com/jobs/30587?icims=1&lang=en-us",
+   "locations": [
+    "SF"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793998800,
+   "date_updated": 1794006722,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/DocuSign",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [
+    "ai"
+   ],
+   "term_unknown": true,
+   "key": "docusign_agentic-ai-engineer-intern",
+   "sources": [
+    "simplify",
+    "jobright"
+   ],
+   "urls": [
+    "https://careers.docusign.com/jobs/30587?icims=1&lang=en-us",
+    "https://jobright.ai/jobs/info/6aee40efd20350c7a507b57c"
+   ],
+   "latest_posted": 1793998800,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 3
+   },
+   "score": 54,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/fdacef9a-07eb-46bb-9147-e0197f2a7008/logo.jpg",
+   "logo_slug": "DocuSign"
   },
   {
    "id": "41537d8d-4ebe-40f4-832c-453b58b7d664",
@@ -7339,10 +7553,12 @@
    "key": "tinder_ios-engineer-intern",
    "sources": [
     "simplify",
+    "boards",
     "jobright"
    ],
    "urls": [
     "https://jobs.lever.co/matchgroup/cda906dd-c02a-4bbc-b533-1636d58958ef/apply",
+    "https://jobs.lever.co/matchgroup/cda906dd-c02a-4bbc-b533-1636d58958ef",
     "https://jobright.ai/jobs/info/6aedf4a65c81f621d310fbeb",
     "https://jobright.ai/jobs/info/6aee2b99d20350c7a5079acf"
    ],
@@ -7573,6 +7789,78 @@
     "upperclass": "",
     "v": 1
    }
+  },
+  {
+   "id": "6aee3895bd2f33eea72d9bab",
+   "source": "jobright",
+   "company": "SharkNinja",
+   "title": "Spring 2027: AI/Sharks Applied AI & Analytics Co-op (January to June)",
+   "url": "https://jobright.ai/jobs/info/6aee3895bd2f33eea72d9bab",
+   "locations": [
+    "Miami, FL"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://www.sharkninja.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [
+    "ai"
+   ],
+   "key": "sharkninja_spring-2027-ai-sharks-applied-ai-analytics-co-op-january-to-199ff8",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee3895bd2f33eea72d9bab"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 3
+   },
+   "score": 54,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/af9f0cf8-eedf-4811-bd9f-a1a39572f2e6/logo.png",
+   "logo_slug": "SharkNinja"
   },
   {
    "id": "35f3e751-83fa-456a-b2a6-37a5277d07ab",
@@ -8273,12 +8561,10 @@
    ],
    "key": "keenfinity_software-test-automation-co-op",
    "sources": [
-    "vanshb03",
-    "boards"
+    "vanshb03"
    ],
    "urls": [
-    "https://go.vansh.nyc/13W",
-    "https://jobs.smartrecruiters.com/Keenfinity/744000151395769"
+    "https://go.vansh.nyc/13W"
    ],
    "latest_posted": 1790172621,
    "breakdown": {
@@ -8352,81 +8638,6 @@
    "score": 53,
    "eligibility": "unknown",
    "eligibility_note": "not checked (board can't be read server-side)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/f743b426-fbdf-40d0-82e6-733a56b7e542/logo.png",
-   "logo_slug": "M3USA"
-  },
-  {
-   "id": "M3USA:744000148244649",
-   "source": "boards",
-   "company": "M3USA",
-   "title": "AI Engineering Intern (Remote)",
-   "url": "https://jobs.smartrecruiters.com/M3USA/744000148244649",
-   "locations": [
-    "Fort Washington, PA",
-    "Remote"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1788875225,
-   "date_updated": 1788875225,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "ai"
-   ],
-   "key": "m3usa_ai-engineering-intern-remote",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.smartrecruiters.com/M3USA/744000148244649"
-   ],
-   "latest_posted": 1788875225,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 53,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/f743b426-fbdf-40d0-82e6-733a56b7e542/logo.png",
    "logo_slug": "M3USA"
   },
@@ -9197,10 +9408,12 @@
    "keyword_hits": [],
    "key": "tinder_machine-learning-engineer-intern",
    "sources": [
-    "simplify"
+    "simplify",
+    "boards"
    ],
    "urls": [
-    "https://jobs.lever.co/matchgroup/860a839a-5be3-44dc-916f-eb2e71d67d72/apply"
+    "https://jobs.lever.co/matchgroup/860a839a-5be3-44dc-916f-eb2e71d67d72/apply",
+    "https://jobs.lever.co/matchgroup/860a839a-5be3-44dc-916f-eb2e71d67d72"
    ],
    "latest_posted": 1793978801,
    "breakdown": {
@@ -9271,10 +9484,12 @@
    "key": "tinder_android-engineer-intern",
    "sources": [
     "simplify",
+    "boards",
     "jobright"
    ],
    "urls": [
     "https://jobs.lever.co/matchgroup/f0e29495-4dd2-4bc5-9ceb-31d36f0b5a9d/apply",
+    "https://jobs.lever.co/matchgroup/f0e29495-4dd2-4bc5-9ceb-31d36f0b5a9d",
     "https://jobright.ai/jobs/info/6aede5825c81f621d310f374"
    ],
    "latest_posted": 1793978800,
@@ -9348,10 +9563,12 @@
    "key": "tinder_backend-engineer-intern",
    "sources": [
     "simplify",
+    "boards",
     "jobright"
    ],
    "urls": [
     "https://jobs.lever.co/matchgroup/54a814d1-9a73-43d7-a266-c933ffd99ce3/apply",
+    "https://jobs.lever.co/matchgroup/54a814d1-9a73-43d7-a266-c933ffd99ce3",
     "https://jobright.ai/jobs/info/6aede83fc7498922fe0c57bf"
    ],
    "latest_posted": 1793978800,
@@ -9694,11 +9911,13 @@
    "key": "shure_embedded-software-intern",
    "sources": [
     "vanshb03",
-    "simplify"
+    "simplify",
+    "jobright"
    ],
    "urls": [
     "https://go.vansh.nyc/1ka",
-    "https://careersus-shure.icims.com/jobs/5018/job?mobile=true&needsRedirect=false"
+    "https://careersus-shure.icims.com/jobs/5018/job?mobile=true&needsRedirect=false",
+    "https://jobright.ai/jobs/info/6a995f9a2b714347bbbe9f62"
    ],
    "latest_posted": 1793975779,
    "breakdown": {
@@ -9758,7 +9977,7 @@
    "urls": [
     "https://go.vansh.nyc/1kb",
     "https://careersus-shure.icims.com/jobs/5020/job?mobile=true&needsRedirect=false",
-    "https://jobright.ai/jobs/info/6a9a520cfe45b8490f603858"
+    "https://jobright.ai/jobs/info/6a989de9def18223c8550792"
    ],
    "latest_posted": 1793975779,
    "breakdown": {
@@ -9935,16 +10154,16 @@
    "logo_slug": "DocuSign"
   },
   {
-   "id": "6aee2461d20350c7a507937a",
+   "id": "6aee3f6f5c81f621d3114746",
    "source": "jobright",
-   "company": "Machina Cognita Technologies",
-   "title": "Engineering Intern",
-   "url": "https://jobright.ai/jobs/info/6aee2461d20350c7a507937a",
+   "company": "Schneider",
+   "title": "Software Engineering Intern - Summer 2027",
+   "url": "https://jobright.ai/jobs/info/6aee3f6f5c81f621d3114746",
    "locations": [
-    "Lafayette, IN"
+    "Green Bay, WI"
    ],
    "terms": [
-    "Summer 2027 (year not stated)"
+    "Summer 2027"
    ],
    "degrees": [],
    "sponsorship": "Other",
@@ -9952,7 +10171,7 @@
    "date_posted": 1793966400,
    "date_updated": 1793966400,
    "active": true,
-   "company_url": "https://www.machinacognita.com",
+   "company_url": "https://schneider.com",
    "tier": 3,
    "company_key": null,
    "role": "swe",
@@ -9965,12 +10184,12 @@
    "citizenship_blocked": false,
    "degree_class": "unknown",
    "keyword_hits": [],
-   "key": "machina-cognita-technologies_engineering-intern",
+   "key": "schneider_software-engineering-intern-summer-2027",
    "sources": [
     "jobright"
    ],
    "urls": [
-    "https://jobright.ai/jobs/info/6aee2461d20350c7a507937a"
+    "https://jobright.ai/jobs/info/6aee3f6f5c81f621d3114746"
    ],
    "latest_posted": 1793966400,
    "breakdown": {
@@ -10192,20 +10411,20 @@
    "eligibility": "unknown",
    "eligibility_note": "page says nothing about graduation year",
    "posting_facts": {
-    "v": 1,
-    "gone": false,
-    "not_enrolled": false,
     "fulltime_job": false,
-    "returning_only": false,
-    "graduate_title": false,
-    "graduate_only": "",
-    "prior_internship": false,
     "fulltime_ranges": [],
-    "relative_grad": false,
-    "standing": "",
+    "gone": false,
     "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
     "underclass": false,
-    "upperclass": ""
+    "upperclass": "",
+    "v": 1
    },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/c0a1ee29-10c4-4886-930c-2e1da6340697/logo.png",
    "logo_slug": "Rivian-And-Volkswagen-Group-Technologies"
@@ -10262,20 +10481,20 @@
    "eligibility": "unknown",
    "eligibility_note": "page says nothing about graduation year",
    "posting_facts": {
-    "v": 1,
-    "gone": false,
-    "not_enrolled": false,
     "fulltime_job": false,
-    "returning_only": false,
-    "graduate_title": false,
-    "graduate_only": "",
-    "prior_internship": false,
     "fulltime_ranges": [],
-    "relative_grad": false,
-    "standing": "",
+    "gone": false,
     "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
     "underclass": false,
-    "upperclass": ""
+    "upperclass": "",
+    "v": 1
    },
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/37e0cd83-539e-4474-a63a-abc8ce7b4694/logo.png",
    "logo_slug": "37e0cd83-539e-4474-a63a-abc8ce7b4694"
@@ -10664,11 +10883,11 @@
    "logo_slug": "Genuine-Parts-Company"
   },
   {
-   "id": "6ad140abe2d41540d4a6f718",
+   "id": "6ad80f7f67bec1d0d9c7ba74",
    "source": "jobright",
    "company": "Safran Defense & Space",
    "title": "Software Engineering Internship",
-   "url": "https://jobright.ai/jobs/info/6ad140abe2d41540d4a6f718",
+   "url": "https://jobright.ai/jobs/info/6ad80f7f67bec1d0d9c7ba74",
    "locations": [
     "Bedford, NH"
    ],
@@ -10699,8 +10918,8 @@
     "jobright"
    ],
    "urls": [
-    "https://jobright.ai/jobs/info/6ad140abe2d41540d4a6f718",
-    "https://jobright.ai/jobs/info/6ad80f7f67bec1d0d9c7ba74"
+    "https://jobright.ai/jobs/info/6ad80f7f67bec1d0d9c7ba74",
+    "https://jobright.ai/jobs/info/6ad140abe2d41540d4a6f718"
    ],
    "latest_posted": 1793966400,
    "breakdown": {
@@ -10714,23 +10933,7 @@
    },
    "score": 51,
    "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   }
+   "eligibility_note": "page could not be read"
   },
   {
    "id": "6aee0878caf8e660b87d9e83",
@@ -11203,27 +11406,27 @@
    "logo_slug": "Idemia"
   },
   {
-   "id": "6ab58cda4873fd3fd852a643",
+   "id": "6aee38ced20350c7a507ae01",
    "source": "jobright",
-   "company": "Georgia Tech Research Institute",
-   "title": "Undergraduate Software Intern - Spring 2027 - ELSYS",
-   "url": "https://jobright.ai/jobs/info/6ab58cda4873fd3fd852a643",
+   "company": "TikTok",
+   "title": "Creative Product Operations Intern (International Advertising - Creative and Brand Innovation) - 2027 Summer - Intern (Global Monetization Product and Technology) - 2027 Start",
+   "url": "https://jobright.ai/jobs/info/6aee38ced20350c7a507ae01",
    "locations": [
-    "Warner Robins, GA"
+    "San Jose, CA"
    ],
    "terms": [
-    "Spring 2027"
+    "Summer 2027"
    ],
    "degrees": [],
    "sponsorship": "Other",
-   "category": "Software-Engineer",
+   "category": "Product-Management",
    "date_posted": 1793966400,
    "date_updated": 1793966400,
    "active": true,
-   "company_url": "http://www.gtrc.gatech.edu",
+   "company_url": "https://www.tiktok.com",
    "tier": 3,
    "company_key": null,
-   "role": "swe",
+   "role": "pm",
    "early_career": "none",
    "location_class": "us",
    "outside_us_only": false,
@@ -11232,231 +11435,32 @@
    "citizens_only": false,
    "citizenship_blocked": false,
    "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "georgia-tech-research-institute_undergraduate-software-intern-spring-2027-elsys",
+   "keyword_hits": [
+    "product",
+    "creative"
+   ],
+   "key": "tiktok_creative-product-operations-intern-international-advertising-3520e9",
    "sources": [
     "jobright"
    ],
    "urls": [
-    "https://jobright.ai/jobs/info/6ab58cda4873fd3fd852a643"
+    "https://jobright.ai/jobs/info/6aee38ced20350c7a507ae01"
    ],
    "latest_posted": 1793966400,
    "breakdown": {
-    "role": 30,
+    "role": 24,
     "tier": 0,
     "early_career": 0,
     "degrees": 5,
     "location": 6,
     "freshness": 10,
-    "keywords": 0
+    "keywords": 6
    },
    "score": 51,
    "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6ab43c4e0e0ae54eeea47617",
-   "source": "jobright",
-   "company": "Georgia Tech Research Institute",
-   "title": "Student Intern - Software Developer - Spring 2027 - ASL",
-   "url": "https://jobright.ai/jobs/info/6ab43c4e0e0ae54eeea47617",
-   "locations": [
-    "Huntsville, AL"
-   ],
-   "terms": [
-    "Spring 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Software-Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.gtrc.gatech.edu",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "georgia-tech-research-institute_student-intern-software-developer-spring-2027-asl",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6ab43c4e0e0ae54eeea47617"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   }
-  },
-  {
-   "id": "6a7cde9383621355407ac5e4",
-   "source": "jobright",
-   "company": "Advisors Excel",
-   "title": "Web Development Intern",
-   "url": "https://jobright.ai/jobs/info/6a7cde9383621355407ac5e4",
-   "locations": [
-    "Topeka, KS"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Software-Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://advisorsexcel.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "advisors-excel_web-development-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6a7cde9383621355407ac5e4"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   }
-  },
-  {
-   "id": "6ae7fd6dfb2cd420ace644c9",
-   "source": "jobright",
-   "company": "CNH",
-   "title": "Embedded Software Engineer Intern",
-   "url": "https://jobright.ai/jobs/info/6ae7fd6dfb2cd420ace644c9",
-   "locations": [
-    "Tempe, AZ"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Software-Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.cnhindustrial.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "cnh_embedded-software-engineer-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6ae7fd6dfb2cd420ace644c9"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   }
+   "eligibility_note": "page could not be read",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/ca792be4-6d93-44dc-a2d5-1ab0186c3f58/logo.jpg",
+   "logo_slug": "TikTok"
   },
   {
    "id": "6aedf3a4caf8e660b87d8c44",
@@ -11601,6 +11605,267 @@
     "upperclass": "",
     "v": 1
    }
+  },
+  {
+   "id": "6aee3fefe0c9de7b05f8cfa1",
+   "source": "jobright",
+   "company": "Amtrak",
+   "title": "Summer 2027 - System Engineer Intern - 90413059 - Wilmington",
+   "url": "https://jobright.ai/jobs/info/6aee3fefe0c9de7b05f8cfa1",
+   "locations": [
+    "Wilmington, DE"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "https://www.amtrak.com/",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "amtrak_summer-2027-system-engineer-intern-90413059-wilmington",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee3fefe0c9de7b05f8cfa1"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read"
+  },
+  {
+   "id": "6aee36c5d20350c7a507ac6f",
+   "source": "jobright",
+   "company": "igus",
+   "title": "RBTX Engineering Intern- Spring 2027",
+   "url": "https://jobright.ai/jobs/info/6aee36c5d20350c7a507ac6f",
+   "locations": [
+    "East Providence, RI"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "https://www.igus.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "igus_rbtx-engineering-intern-spring-2027",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee36c5d20350c7a507ac6f"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read"
+  },
+  {
+   "id": "6aee36c4e0c9de7b05f8c7b5",
+   "source": "jobright",
+   "company": "igus",
+   "title": "Harnessing Engineering Intern- Spring 2027",
+   "url": "https://jobright.ai/jobs/info/6aee36c4e0c9de7b05f8c7b5",
+   "locations": [
+    "Rumford, RI"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "https://www.igus.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "igus_harnessing-engineering-intern-spring-2027",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee36c4e0c9de7b05f8c7b5"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read"
+  },
+  {
+   "id": "6aee348fc7498922fe0ca1c0",
+   "source": "jobright",
+   "company": "McKim & Creed",
+   "title": "Engineering Student Intern - Water/Wastewater",
+   "url": "https://jobright.ai/jobs/info/6aee348fc7498922fe0ca1c0",
+   "locations": [
+    "Boca Raton, FL"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://mckimcreed.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "mckim-creed_engineering-student-intern-water-wastewater",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee348fc7498922fe0ca1c0"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read"
+  },
+  {
+   "id": "6aee33fbd20350c7a507a81e",
+   "source": "jobright",
+   "company": "FlatironDragados",
+   "title": "Field Engineer Intern",
+   "url": "https://jobright.ai/jobs/info/6aee33fbd20350c7a507a81e",
+   "locations": [
+    "Renton, WA"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "https://www.fdcorp.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "flatirondragados_field-engineer-intern",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee33fbd20350c7a507a81e",
+    "https://jobright.ai/jobs/info/6a7cd4b2a346cb6c8d5f04d1"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read"
   },
   {
    "id": "6aee2fbcc7498922fe0c9a1c",
@@ -11934,6 +12199,397 @@
    }
   },
   {
+   "id": "6a99f0be551435518ebf2239",
+   "source": "jobright",
+   "company": "Sargent & Lundy",
+   "title": "Transmission Line Engineer Intern - Grid (Summer 2027)",
+   "url": "https://jobright.ai/jobs/info/6a99f0be551435518ebf2239",
+   "locations": [
+    "Cranberry Township, PA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://www.sargentlundy.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "sargent-lundy_transmission-line-engineer-intern-grid-summer-2027",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6a99f0be551435518ebf2239"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/c3b3ade0-87a4-4f88-a8f6-1cae6a67c2de/logo.png",
+   "logo_slug": "Sargent-And-Lundy"
+  },
+  {
+   "id": "6a996141040e5c3d07595dd6",
+   "source": "jobright",
+   "company": "Shure",
+   "title": "Process Engineering Machine Controls Intern",
+   "url": "https://jobright.ai/jobs/info/6a996141040e5c3d07595dd6",
+   "locations": [
+    "Niles, IL"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://www.shure.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "shure_process-engineering-machine-controls-intern",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6a996141040e5c3d07595dd6"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/bf2e9429-3e0a-4b04-94c1-6fa5c35b69ff/logo.png",
+   "logo_slug": "Shure"
+  },
+  {
+   "id": "6a99f07f040e5c3d07599c78",
+   "source": "jobright",
+   "company": "Sargent & Lundy",
+   "title": "Substation Engineer Intern - Grid (Summer 2027)",
+   "url": "https://jobright.ai/jobs/info/6a99f07f040e5c3d07599c78",
+   "locations": [
+    "Phoenix, AZ"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://www.sargentlundy.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "sargent-lundy_substation-engineer-intern-grid-summer-2027",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6a99f07f040e5c3d07599c78",
+    "https://jobright.ai/jobs/info/6a99f073551435518ebf220e"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/c3b3ade0-87a4-4f88-a8f6-1cae6a67c2de/logo.png",
+   "logo_slug": "Sargent-And-Lundy"
+  },
+  {
+   "id": "6a99a27690a313642c651ac6",
+   "source": "jobright",
+   "company": "Sargent & Lundy",
+   "title": "Instrumentation & Controls Engineering Intern - Nuclear (Summer 2027)",
+   "url": "https://jobright.ai/jobs/info/6a99a27690a313642c651ac6",
+   "locations": [
+    "Wilmington, DE"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://www.sargentlundy.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "sargent-lundy_instrumentation-controls-engineering-intern-nuclear-summer-2-60b3a5",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6a99a27690a313642c651ac6"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/c3b3ade0-87a4-4f88-a8f6-1cae6a67c2de/logo.png",
+   "logo_slug": "Sargent-And-Lundy"
+  },
+  {
+   "id": "6a989defdef18223c855079b",
+   "source": "jobright",
+   "company": "Shure",
+   "title": "Audio DSP Engineering Intern",
+   "url": "https://jobright.ai/jobs/info/6a989defdef18223c855079b",
+   "locations": [
+    "Niles, IL"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://www.shure.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "shure_audio-dsp-engineering-intern",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6a989defdef18223c855079b"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read",
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/bf2e9429-3e0a-4b04-94c1-6fa5c35b69ff/logo.png",
+   "logo_slug": "Shure"
+  },
+  {
+   "id": "6aee41aacaf8e660b87ddbe0",
+   "source": "jobright",
+   "company": "Oak Ridge Institute for Science and Education",
+   "title": "USARIEM Biomedical Engineering & Instrumentation Internship",
+   "url": "https://jobright.ai/jobs/info/6aee41aacaf8e660b87ddbe0",
+   "locations": [
+    "Natick, MA"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "https://orise.orau.gov",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "oak-ridge-institute-for-science-and-educ-6cc63f_usariem-biomedical-engineering-instrumentation-internship",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee41aacaf8e660b87ddbe0"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page could not be read"
+  },
+  {
+   "id": "6a9a74d890a313642c65589f",
+   "source": "jobright",
+   "company": "Swinerton",
+   "title": "Project Engineer Intern",
+   "url": "https://jobright.ai/jobs/info/6a9a74d890a313642c65589f",
+   "locations": [
+    "Concord, California"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "http://www.swinerton.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "swinerton_project-engineer-intern",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6a9a74d890a313642c65589f"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "",
+    "v": 1
+   }
+  },
+  {
    "id": "6ae9f4c6b387e4d91fac6bbb",
    "source": "jobright",
    "company": "CDM Smith",
@@ -12042,58 +12698,6 @@
    "logo_slug": "IRhythm-Technologies"
   },
   {
-   "id": "6a9a799c90a313642c6558fb",
-   "source": "jobright",
-   "company": "Swinerton",
-   "title": "Project Engineer Intern",
-   "url": "https://jobright.ai/jobs/info/6a9a799c90a313642c6558fb",
-   "locations": [
-    "Concord, California"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.swinerton.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "swinerton_project-engineer-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6a9a799c90a313642c6558fb"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
    "id": "6aee0ff4bd2f33eea72d6d77",
    "source": "jobright",
    "company": "York Space Systems",
@@ -12130,584 +12734,6 @@
    ],
    "urls": [
     "https://jobright.ai/jobs/info/6aee0ff4bd2f33eea72d6d77"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6aeded81e0c9de7b05f87e19",
-   "source": "jobright",
-   "company": "Kiewit",
-   "title": "Structural Engineer Intern - Kiewit Nuclear Solutions (Summer 2027)",
-   "url": "https://jobright.ai/jobs/info/6aeded81e0c9de7b05f87e19",
-   "locations": [
-    "Lenexa, KS"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.kiewit.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "kiewit_structural-engineer-intern-kiewit-nuclear-solutions-summer-2-d1f0d6",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6aeded81e0c9de7b05f87e19"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6aee1f35c7498922fe0c844a",
-   "source": "jobright",
-   "company": "PACCAR",
-   "title": "Liaison Engineer Intern",
-   "url": "https://jobright.ai/jobs/info/6aee1f35c7498922fe0c844a",
-   "locations": [
-    "Chillicothe, OH"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.paccar.com/",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "paccar_liaison-engineer-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6aee1f35c7498922fe0c844a"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/b0d05d62-0143-4af1-9ec0-1fe9873fb866/logo.png",
-   "logo_slug": "Paccar"
-  },
-  {
-   "id": "6abd51ed4ac55253f5d5cc53",
-   "source": "jobright",
-   "company": "ProAmpac",
-   "title": "Continuous Improvement Engineer Intern",
-   "url": "https://jobright.ai/jobs/info/6abd51ed4ac55253f5d5cc53",
-   "locations": [
-    "Westfield, MA"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.proampac.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "proampac_continuous-improvement-engineer-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6abd51ed4ac55253f5d5cc53"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6a7cd4b2a346cb6c8d5f04d1",
-   "source": "jobright",
-   "company": "FlatironDragados",
-   "title": "Field Engineer Intern",
-   "url": "https://jobright.ai/jobs/info/6a7cd4b2a346cb6c8d5f04d1",
-   "locations": [
-    "Renton, WA"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "https://www.fdcorp.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "flatirondragados_field-engineer-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6a7cd4b2a346cb6c8d5f04d1"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6abe731c372c01f6cd723907",
-   "source": "jobright",
-   "company": "HDR",
-   "title": "Transportation Engineering Intern/Co-Op (Traffic/Planning)",
-   "url": "https://jobright.ai/jobs/info/6abe731c372c01f6cd723907",
-   "locations": [
-    "Raleigh, NC"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.hdrinc.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "hdr_transportation-engineering-intern-co-op-traffic-planning",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6abe731c372c01f6cd723907"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6aee1db1bd2f33eea72d787a",
-   "source": "jobright",
-   "company": "The AZEK Company",
-   "title": "Project Engineering Intern",
-   "url": "https://jobright.ai/jobs/info/6aee1db1bd2f33eea72d787a",
-   "locations": [
-    "Wilmington, OH"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "https://azekco.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "the-azek-company_project-engineering-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6aee1db1bd2f33eea72d787a"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6a7f3a4fe2030208f276c8ed",
-   "source": "jobright",
-   "company": "Benesch",
-   "title": "Structural Engineering Internship",
-   "url": "https://jobright.ai/jobs/info/6a7f3a4fe2030208f276c8ed",
-   "locations": [
-    "Cincinnati, OH"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "https://www.benesch.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "benesch_structural-engineering-internship",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6a7f3a4fe2030208f276c8ed"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6aee1d37caf8e660b87dae63",
-   "source": "jobright",
-   "company": "Valorantum",
-   "title": "Electronic Engineer Intern",
-   "url": "https://jobright.ai/jobs/info/6aee1d37caf8e660b87dae63",
-   "locations": [
-    "El Segundo, CA"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "valorantum.net",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "valorantum_electronic-engineer-intern",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6aee1d37caf8e660b87dae63"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read"
-  },
-  {
-   "id": "6a99f07f040e5c3d07599c78",
-   "source": "jobright",
-   "company": "Sargent & Lundy",
-   "title": "Substation Engineer Intern - Grid (Summer 2027)",
-   "url": "https://jobright.ai/jobs/info/6a99f07f040e5c3d07599c78",
-   "locations": [
-    "Phoenix, AZ"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.sargentlundy.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "sargent-lundy_substation-engineer-intern-grid-summer-2027",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6a99f07f040e5c3d07599c78"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/c3b3ade0-87a4-4f88-a8f6-1cae6a67c2de/logo.png",
-   "logo_slug": "Sargent-And-Lundy"
-  },
-  {
-   "id": "6a99a27690a313642c651ac6",
-   "source": "jobright",
-   "company": "Sargent & Lundy",
-   "title": "Instrumentation & Controls Engineering Intern - Nuclear (Summer 2027)",
-   "url": "https://jobright.ai/jobs/info/6a99a27690a313642c651ac6",
-   "locations": [
-    "Wilmington, DE"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.sargentlundy.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "sargent-lundy_instrumentation-controls-engineering-intern-nuclear-summer-2-60b3a5",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6a99a27690a313642c651ac6"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page could not be read",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/c3b3ade0-87a4-4f88-a8f6-1cae6a67c2de/logo.png",
-   "logo_slug": "Sargent-And-Lundy"
-  },
-  {
-   "id": "6ab431457bd0813713316314",
-   "source": "jobright",
-   "company": "WSP in the U.S.",
-   "title": "Construction Materials Engineering and Laboratory Testing Intern - Summer 2027",
-   "url": "https://jobright.ai/jobs/info/6ab431457bd0813713316314",
-   "locations": [
-    "San Diego, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "https://www.wsp.com/en-us",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "wsp-in-the-u-s_construction-materials-engineering-and-laboratory-testing-in-c9e62d",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6ab431457bd0813713316314"
    ],
    "latest_posted": 1793966400,
    "breakdown": {
@@ -13064,6 +13090,231 @@
    "eligibility_note": "not checked (board can't be read server-side)",
    "logo": "https://storage.googleapis.com/simplify-imgs/companies/62178eff-6b05-4ad3-8e9f-800e65bcf0af/logo.png",
    "logo_slug": "Light-And-Wonder"
+  },
+  {
+   "id": "cb106770-4593-4842-8f17-c2a20661ba46",
+   "source": "simplify",
+   "company": "KLA Corporation",
+   "title": "Software Intern",
+   "url": "https://kla.wd1.myworkdayjobs.com/search/job/Milpitas-CA/Software-Intern_2642954-1",
+   "locations": [
+    "Milpitas, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1793923200,
+   "date_updated": 1794007262,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/KLA-Corporation",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "kla-corporation_software-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://kla.wd1.myworkdayjobs.com/search/job/Milpitas-CA/Software-Intern_2642954-1",
+    "https://kla.wd1.myworkdayjobs.com/UR/job/Milpitas-CA/Software-Intern_2642954",
+    "https://kla.wd1.myworkdayjobs.com/UR/job/Milpitas-CA/Software-Intern_2642700"
+   ],
+   "latest_posted": 1793923200,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/97a8bcba-02fa-42fe-b309-c04119ee50cb/logo.png",
+   "logo_slug": "KLA-Corporation"
+  },
+  {
+   "id": "7a19de96-0ecf-4c4f-abe0-dfc8d77f507b",
+   "source": "simplify",
+   "company": "Machina Cognita Technologies",
+   "title": "Engineering Intern",
+   "url": "https://jobs.ashbyhq.com/machinacognita/c36e9f62-9bbe-45e7-8bff-d52affacbe81/application?embed=true",
+   "locations": [
+    "Lafayette, IN"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "category": "AI/ML/Data",
+   "date_posted": 1793923200,
+   "date_updated": 1794006901,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Machina-Cognita-Technologies",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "machina-cognita-technologies_engineering-intern",
+   "sources": [
+    "simplify",
+    "boards",
+    "jobright"
+   ],
+   "urls": [
+    "https://jobs.ashbyhq.com/machinacognita/c36e9f62-9bbe-45e7-8bff-d52affacbe81",
+    "https://jobright.ai/jobs/info/6aee2461d20350c7a507937a"
+   ],
+   "latest_posted": 1793991553,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   }
+  },
+  {
+   "id": "3782f150-ff64-421e-b976-15d91c64802e",
+   "source": "simplify",
+   "company": "ASML",
+   "title": "Computational Imaging and Metrology Engineer Intern",
+   "url": "https://asml.wd3.myworkdayjobs.com/asmlext1/job/San-Jose-CA-USA/Internship--Computational-imaging-and-metrology-summer_J-00355102",
+   "locations": [
+    "San Jose, CA"
+   ],
+   "terms": [
+    "N/A"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1793923200,
+   "date_updated": 1794006740,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/ASML",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "term_unknown": true,
+   "key": "asml_computational-imaging-and-metrology-engineer-intern",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://asml.wd3.myworkdayjobs.com/asmlext1/job/San-Jose-CA-USA/Internship--Computational-imaging-and-metrology-summer_J-00355102"
+   ],
+   "latest_posted": 1793923200,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": ""
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/eafdbec9-57ee-4fec-9feb-ac1e64a112fc/logo.png",
+   "logo_slug": "ASML"
   },
   {
    "id": "d01605e5-ffa2-437c-a134-507bb90dc514",
@@ -13452,212 +13703,6 @@
    "score": 51,
    "eligibility": "unknown",
    "eligibility_note": "not checked (board can't be read server-side)"
-  },
-  {
-   "id": "710b5314-4a06-408b-963c-37c7df158240",
-   "source": "vanshb03",
-   "company": "DwyerOmega",
-   "title": "Software Engineer Intern",
-   "url": "https://go.vansh.nyc/1jv",
-   "locations": [
-    "Westerville, OH"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1793920540,
-   "date_updated": 1793921725,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "dwyeromega_software-engineer-intern",
-   "sources": [
-    "vanshb03",
-    "simplify"
-   ],
-   "urls": [
-    "https://go.vansh.nyc/1jv",
-    "https://recruiting.paylocity.com/Recruiting/Jobs/Details/4640548"
-   ],
-   "latest_posted": 1793920540,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/894d8def-83ce-40ef-a616-cfab4730f013/logo.png",
-   "logo_slug": "DwyerOmega"
-  },
-  {
-   "id": "220a78f8-7573-4c62-aa11-60c358390930",
-   "source": "simplify",
-   "company": "DwyerOmega",
-   "title": "Sensors Engineer Intern",
-   "url": "https://recruiting.paylocity.com/Recruiting/Jobs/Details/4640964",
-   "locations": [
-    "Westerville, OH"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": "Hardware",
-   "date_posted": 1793920540,
-   "date_updated": 1793920711,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/DwyerOmega",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "dwyeromega_sensors-engineer-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://recruiting.paylocity.com/Recruiting/Jobs/Details/4640964"
-   ],
-   "latest_posted": 1793920540,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/894d8def-83ce-40ef-a616-cfab4730f013/logo.png",
-   "logo_slug": "DwyerOmega"
-  },
-  {
-   "id": "65e41535-86d1-4d10-9d27-bac6fad3e8d9",
-   "source": "simplify",
-   "company": "Shield AI",
-   "title": "Software Engineer Co-op Intern",
-   "url": "https://jobs.lever.co/shieldai/db8fc063-8856-4404-991c-f287712de949/apply",
-   "locations": [
-    "Seattle, WA",
-    "Washington, DC",
-    "Dallas, TX",
-    "San Diego, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's",
-    "Master's"
-   ],
-   "sponsorship": "Other",
-   "category": "Software",
-   "date_posted": 1793920091,
-   "date_updated": 1793920263,
-   "active": true,
-   "company_url": "https://simplify.jobs/c/Shield-AI",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "shield-ai_software-engineer-co-op-intern",
-   "sources": [
-    "simplify"
-   ],
-   "urls": [
-    "https://jobs.lever.co/shieldai/db8fc063-8856-4404-991c-f287712de949/apply"
-   ],
-   "latest_posted": 1793920091,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "unknown",
-   "eligibility_note": "page says nothing about graduation year",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   },
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/921598e8-5f51-4fd9-b52d-5e5b075e8486/logo.png",
-   "logo_slug": "Shield-AI"
   },
   {
    "id": "1e2ea7ba-a6ec-49a0-83cf-8d27b929e1c0",
@@ -15072,7 +15117,8 @@
    "term_unknown": true,
    "key": "fsh-technologies_engineer-intern",
    "sources": [
-    "simplify"
+    "simplify",
+    "boards"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/FSH/baa9ae85-a578-4017-a41a-fc4999a4e077"
@@ -16361,6 +16407,77 @@
    "logo_slug": "Corning"
   },
   {
+   "id": "genesis-molecular-ai:44e3cbdc-949c-426e-a80a-b41c73ad6a99",
+   "source": "boards",
+   "company": "Genesis Molecular AI",
+   "title": "Software Engineer Intern - 2027",
+   "url": "https://jobs.ashbyhq.com/genesis-molecular-ai/44e3cbdc-949c-426e-a80a-b41c73ad6a99",
+   "locations": [
+    "San Mateo, CA",
+    "New York, NY"
+   ],
+   "terms": [
+    "2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": null,
+   "date_posted": 1790269848,
+   "date_updated": 1790269848,
+   "active": true,
+   "discovered": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "genesis-molecular-ai_software-engineer-intern-2027",
+   "sources": [
+    "boards"
+   ],
+   "urls": [
+    "https://jobs.ashbyhq.com/genesis-molecular-ai/44e3cbdc-949c-426e-a80a-b41c73ad6a99"
+   ],
+   "latest_posted": 1790269848,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "unknown",
+   "eligibility_note": "page says nothing about graduation year",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "",
+    "v": 1
+   },
+   "logo": "https://storage.googleapis.com/simplify-imgs/companies/6f3c112c-71e7-4955-a34d-717d64929774/logo.png",
+   "logo_slug": "Genesis-Molecular-AI"
+  },
+  {
    "id": "c554fde1-44d1-476b-9a98-849c57e15a7f",
    "source": "vanshb03",
    "company": "Grow Therapy",
@@ -16723,10 +16840,12 @@
    "keyword_hits": [],
    "key": "conductorai_software-engineer-intern",
    "sources": [
-    "vanshb03"
+    "vanshb03",
+    "boards"
    ],
    "urls": [
-    "https://go.vansh.nyc/1eM"
+    "https://go.vansh.nyc/1eM",
+    "https://jobs.ashbyhq.com/conductorai/d6a1b110-10ad-4b5e-83a0-88c5fd7bc891"
    ],
    "latest_posted": 1789662463,
    "breakdown": {
@@ -18319,63 +18438,6 @@
    "logo_slug": "Charta-Health"
   },
   {
-   "id": "68b73532-6338-4971-b2a7-5b0b9f8b5cc1",
-   "source": "vanshb03",
-   "company": "Realm",
-   "title": "Software Engineer Intern",
-   "url": "https://go.vansh.nyc/1ew",
-   "locations": [
-    "Remote",
-    "United States"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1787760720,
-   "date_updated": 1793743743,
-   "active": true,
-   "company_url": "",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [],
-   "key": "realm_software-engineer-intern",
-   "sources": [
-    "vanshb03"
-   ],
-   "urls": [
-    "https://go.vansh.nyc/1ew"
-   ],
-   "latest_posted": 1787760720,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 50,
-   "eligibility": "unknown",
-   "eligibility_note": "not checked (board can't be read server-side)",
-   "logo": "https://storage.googleapis.com/simplify-imgs/companies/6d007309-50fb-41d8-a667-78af9d1ae268/logo.png",
-   "logo_slug": "Realm-Alliance"
-  },
-  {
    "id": "notion:27090d0f-07d3-419b-adaa-837b5e22f947",
    "source": "boards",
    "company": "Notion",
@@ -18448,84 +18510,6 @@
     "standing": "",
     "underclass": false,
     "upperclass": "",
-    "v": 1
-   }
-  },
-  {
-   "id": "flagshippioneeringinc:8721195002",
-   "source": "boards",
-   "company": "Flagship Pioneering",
-   "title": "2027 Flagship Pioneering Fellowship",
-   "url": "https://boards.greenhouse.io/flagshippioneeringinc/jobs/8721195002",
-   "locations": [
-    "Cambridge, MA USA"
-   ],
-   "terms": [
-    "2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1790878264,
-   "date_updated": 1790878264,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "program",
-   "early_career": "strong",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "flagship-pioneering_2027-flagship-pioneering-fellowship",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://boards.greenhouse.io/flagshippioneeringinc/jobs/8721195002"
-   ],
-   "latest_posted": 1790878264,
-   "breakdown": {
-    "role": 20,
-    "tier": 0,
-    "early_career": 45,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 76,
-   "eligibility": "ineligible",
-   "eligibility_note": "page wants a full-time start 2026 to 2028",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [
-     [
-      2026,
-      2028
-     ]
-    ],
-    "gone": false,
-    "grad_ranges": [
-     [
-      2027,
-      2027
-     ]
-    ],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "final year",
     "v": 1
    }
   },
@@ -19099,15 +19083,12 @@
    "keyword_hits": [],
    "key": "adobe_software-engineer-intern",
    "sources": [
-    "simplify",
-    "jobright"
+    "simplify"
    ],
    "urls": [
-    "https://adobe.wd5.myworkdayjobs.com/external_experienced/job/San-Jose/XMLNAME-2027-Intern---Software-Engineer_R171666",
-    "https://jobright.ai/jobs/info/6aac52253d96632d741aa73c",
-    "https://jobright.ai/jobs/info/6a99bd37ad752e2ad55018ea"
+    "https://adobe.wd5.myworkdayjobs.com/external_experienced/job/San-Jose/XMLNAME-2027-Intern---Software-Engineer_R171666"
    ],
-   "latest_posted": 1793966400,
+   "latest_posted": 1788393600,
    "breakdown": {
     "role": 30,
     "tier": 15,
@@ -19408,10 +19389,12 @@
    "term_unknown": true,
    "key": "twitch_undergrad-software-engineer-intern",
    "sources": [
-    "simplify"
+    "simplify",
+    "boards"
    ],
    "urls": [
-    "https://job-boards.greenhouse.io/twitch/jobs/8886605002"
+    "https://job-boards.greenhouse.io/twitch/jobs/8886605002",
+    "https://boards.greenhouse.io/twitch/jobs/8886605002"
    ],
    "latest_posted": 1792707313,
    "breakdown": {
@@ -19674,79 +19657,6 @@
    }
   },
   {
-   "id": "6ab43f12ef911c35dffa42b7",
-   "source": "jobright",
-   "company": "SeatGeek",
-   "title": "Software Engineer - Internship",
-   "url": "https://jobright.ai/jobs/info/6ab43f12ef911c35dffa42b7",
-   "locations": [
-    "New York, NY"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Software-Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "https://seatgeek.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "seatgeek_software-engineer-internship",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6ab43f12ef911c35dffa42b7"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 60,
-   "eligibility": "ineligible",
-   "eligibility_note": "page requires graduation 2028",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [
-     [
-      2028,
-      2028
-     ]
-    ],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   }
-  },
-  {
    "id": "5dcd55ac-c7f2-47c8-9bb8-4b2a6c16a6b9",
    "source": "simplify",
    "company": "Amazon",
@@ -19816,75 +19726,6 @@
     "relative_grad": false,
     "returning_only": false,
     "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   }
-  },
-  {
-   "id": "AECOM2:744000159722317",
-   "source": "boards",
-   "company": "AECOM",
-   "title": "Structural Engineering Intern",
-   "url": "https://jobs.smartrecruiters.com/AECOM2/744000159722317",
-   "locations": [
-    "New York, NY"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1793824306,
-   "date_updated": 1793824306,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "priority",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "aecom_structural-engineering-intern",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.smartrecruiters.com/AECOM2/744000159722317",
-    "https://jobs.smartrecruiters.com/AECOM2/744000159722189"
-   ],
-   "latest_posted": 1793824306,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 15,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 55,
-   "eligibility": "ineligible",
-   "eligibility_note": "page requires \"completed two years of study\"",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "completed two years of study",
     "underclass": false,
     "upperclass": "",
     "v": 1
@@ -20092,25 +19933,25 @@
    "eligibility": "ineligible",
    "eligibility_note": "page asks for master's students",
    "posting_facts": {
-    "v": 1,
-    "gone": false,
-    "not_enrolled": false,
     "fulltime_job": false,
-    "returning_only": false,
-    "graduate_title": false,
-    "graduate_only": "master's",
-    "prior_internship": false,
     "fulltime_ranges": [],
-    "relative_grad": false,
-    "standing": "",
+    "gone": false,
     "grad_ranges": [
      [
       2027,
       2027
      ]
     ],
+    "graduate_only": "master's",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
     "underclass": false,
-    "upperclass": ""
+    "upperclass": "",
+    "v": 1
    }
   },
   {
@@ -20300,7 +20141,8 @@
    ],
    "key": "gecko-robotics_ai-machine-learning-engineer-intern",
    "sources": [
-    "simplify"
+    "simplify",
+    "boards"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/gecko-robotics/c097505b-0a28-4a33-a917-268f463641e8"
@@ -20581,6 +20423,75 @@
    }
   },
   {
+   "id": "6aee4381e0c9de7b05f8d251",
+   "source": "jobright",
+   "company": "ICCU",
+   "title": "Software Development Intern",
+   "url": "https://jobright.ai/jobs/info/6aee4381e0c9de7b05f8d251",
+   "locations": [
+    "Chubbuck, ID"
+   ],
+   "terms": [
+    "Summer 2027 (year not stated)"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": "Software-Engineer",
+   "date_posted": 1793966400,
+   "date_updated": 1793966400,
+   "active": true,
+   "company_url": "https://iccu.com",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "iccu_software-development-intern",
+   "sources": [
+    "jobright"
+   ],
+   "urls": [
+    "https://jobright.ai/jobs/info/6aee4381e0c9de7b05f8d251",
+    "https://jobright.ai/jobs/info/6aee437bd20350c7a507b729"
+   ],
+   "latest_posted": 1793966400,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 10,
+    "keywords": 0
+   },
+   "score": 51,
+   "eligibility": "ineligible",
+   "eligibility_note": "page asks for juniors and seniors students",
+   "posting_facts": {
+    "v": 1,
+    "gone": false,
+    "not_enrolled": false,
+    "fulltime_job": false,
+    "returning_only": false,
+    "graduate_title": false,
+    "graduate_only": "",
+    "prior_internship": false,
+    "fulltime_ranges": [],
+    "relative_grad": false,
+    "standing": "",
+    "grad_ranges": [],
+    "underclass": false,
+    "upperclass": "juniors and seniors"
+   }
+  },
+  {
    "id": "6aee30d55c81f621d31136e2",
    "source": "jobright",
    "company": "Vercel",
@@ -20632,25 +20543,25 @@
    "eligibility": "ineligible",
    "eligibility_note": "page requires graduation 2027 to 2028",
    "posting_facts": {
-    "v": 1,
-    "gone": false,
-    "not_enrolled": false,
     "fulltime_job": false,
-    "returning_only": false,
-    "graduate_title": false,
-    "graduate_only": "",
-    "prior_internship": false,
     "fulltime_ranges": [],
-    "relative_grad": false,
-    "standing": "",
+    "gone": false,
     "grad_ranges": [
      [
       2027,
       2028
      ]
     ],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
     "underclass": false,
-    "upperclass": ""
+    "upperclass": "",
+    "v": 1
    }
   },
   {
@@ -20927,74 +20838,6 @@
     "standing": "",
     "underclass": false,
     "upperclass": "",
-    "v": 1
-   }
-  },
-  {
-   "id": "6ae4dd3877c09cb3bd4af970",
-   "source": "jobright",
-   "company": "Axiom Space",
-   "title": "Software Engineering Intern (Summer 2027)",
-   "url": "https://jobright.ai/jobs/info/6ae4dd3877c09cb3bd4af970",
-   "locations": [
-    "Houston, TX"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": "Software-Engineer",
-   "date_posted": 1793966400,
-   "date_updated": 1793966400,
-   "active": true,
-   "company_url": "http://www.axiomspace.com",
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "axiom-space_software-engineering-intern-summer-2027",
-   "sources": [
-    "jobright"
-   ],
-   "urls": [
-    "https://jobright.ai/jobs/info/6ae4dd3877c09cb3bd4af970"
-   ],
-   "latest_posted": 1793966400,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 10,
-    "keywords": 0
-   },
-   "score": 51,
-   "eligibility": "ineligible",
-   "eligibility_note": "page asks for rising junior students",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "rising junior",
     "v": 1
    }
   },
@@ -22170,6 +22013,82 @@
    }
   },
   {
+   "id": "grow-therapy:92bfe88a-4c23-48c8-8f7b-4959ab6cd8d8",
+   "source": "boards",
+   "company": "Grow Therapy",
+   "title": "Software Engineering Intern (Summer 2027)",
+   "url": "https://jobs.ashbyhq.com/grow-therapy/92bfe88a-4c23-48c8-8f7b-4959ab6cd8d8",
+   "locations": [
+    "New York City"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": null,
+   "date_posted": 1790106897,
+   "date_updated": 1790106897,
+   "active": true,
+   "discovered": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "priority",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "grow-therapy_software-engineering-intern-summer-2027",
+   "sources": [
+    "boards"
+   ],
+   "urls": [
+    "https://jobs.ashbyhq.com/grow-therapy/92bfe88a-4c23-48c8-8f7b-4959ab6cd8d8"
+   ],
+   "latest_posted": 1790106897,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 15,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 50,
+   "eligibility": "ineligible",
+   "eligibility_note": "page requires graduation 2027 to 2028",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [
+     [
+      2027,
+      2028
+     ]
+    ],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "",
+    "v": 1
+   }
+  },
+  {
    "id": "c1e9b2e6-28da-405e-ae31-2d67bc34dcae",
    "source": "simplify",
    "company": "SRC, Inc",
@@ -22276,7 +22195,8 @@
    "keyword_hits": [],
    "key": "gecko-robotics_full-stack-software-engineer-intern",
    "sources": [
-    "simplify"
+    "simplify",
+    "boards"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/gecko-robotics/01138338-ff3c-4982-8ba3-5401386bf082"
@@ -22996,13 +22916,13 @@
    }
   },
   {
-   "id": "zoox:88f6cb68-1534-44af-80db-10e43c203520",
+   "id": "apex-technology-inc:692bb497-59ba-44df-bacf-fffd2f7c6344",
    "source": "boards",
-   "company": "Zoox",
-   "title": "Software Engineer Intern, Software Platforms & Product [Summer 2027]",
-   "url": "https://jobs.lever.co/zoox/88f6cb68-1534-44af-80db-10e43c203520",
+   "company": "Apex",
+   "title": "Software Engineering Internship, Test & Automation (Summer 2027)",
+   "url": "https://jobs.ashbyhq.com/apex-technology-inc/692bb497-59ba-44df-bacf-fffd2f7c6344",
    "locations": [
-    "Foster City, CA"
+    "Los Angeles"
    ],
    "terms": [
     "Summer 2027"
@@ -23010,8 +22930,8 @@
    "degrees": [],
    "sponsorship": "Other",
    "category": null,
-   "date_posted": 1793400897,
-   "date_updated": 1793400897,
+   "date_posted": 1793905041,
+   "date_updated": 1793905041,
    "active": true,
    "discovered": true,
    "tier": 3,
@@ -23026,16 +22946,16 @@
    "citizenship_blocked": false,
    "degree_class": "unknown",
    "keyword_hits": [
-    "product"
+    "automation"
    ],
-   "key": "zoox_software-engineer-intern-software-platforms-product-summer-2-d8e2f7",
+   "key": "apex_software-engineering-internship-test-automation-summer-2027",
    "sources": [
     "boards"
    ],
    "urls": [
-    "https://jobs.lever.co/zoox/88f6cb68-1534-44af-80db-10e43c203520"
+    "https://jobs.ashbyhq.com/apex-technology-inc/692bb497-59ba-44df-bacf-fffd2f7c6344"
    ],
-   "latest_posted": 1793400897,
+   "latest_posted": 1793905041,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -23108,8 +23028,7 @@
    ],
    "key": "brain-co_ai-product-engineer-co-op-intern",
    "sources": [
-    "simplify",
-    "boards"
+    "simplify"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/brainco/7ce0af56-d15e-4fc8-91a5-9e56cdb9cf42"
@@ -23298,79 +23217,6 @@
    }
   },
   {
-   "id": "zoox:8b32157b-ab44-4078-85ea-1d8d7b747a20",
-   "source": "boards",
-   "company": "Zoox",
-   "title": "Software Engineer Intern, Software Systems [Summer 2027]",
-   "url": "https://jobs.lever.co/zoox/8b32157b-ab44-4078-85ea-1d8d7b747a20",
-   "locations": [
-    "Foster City, CA"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1793401565,
-   "date_updated": 1793401565,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "zoox_software-engineer-intern-software-systems-summer-2027",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.lever.co/zoox/8b32157b-ab44-4078-85ea-1d8d7b747a20"
-   ],
-   "latest_posted": 1793401565,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 5,
-    "keywords": 0
-   },
-   "score": 46,
-   "eligibility": "ineligible",
-   "eligibility_note": "page requires graduation 2027 to 2028",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [
-     [
-      2027,
-      2028
-     ]
-    ],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": false,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "",
-    "v": 1
-   }
-  },
-  {
    "id": "eba86e55-1480-473d-814f-7d863ebba833",
    "source": "simplify",
    "company": "DriveWealth",
@@ -23487,8 +23333,7 @@
    ],
    "key": "brain-co_machine-learning-engineer-applied-ai-co-op-intern",
    "sources": [
-    "simplify",
-    "boards"
+    "simplify"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/brainco/b6adda4c-490c-4e9e-8354-e55c05d3c6ac"
@@ -23635,13 +23480,12 @@
    ],
    "key": "brain-co_machine-learning-engineer-applied-ai-intern",
    "sources": [
-    "simplify",
-    "boards"
+    "simplify"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/brainco/a4bdb254-8007-4142-bf36-a3e8622b1ed9"
    ],
-   "latest_posted": 1789418082,
+   "latest_posted": 1789344000,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -23756,83 +23600,6 @@
     "underclass": false,
     "upperclass": "",
     "v": 1
-   }
-  },
-  {
-   "id": "hex:45022740-b0ca-4a54-a98b-b90f9b4a9a30",
-   "source": "boards",
-   "company": "Hex Technologies",
-   "title": "Product Engineer Intern",
-   "url": "https://jobs.ashbyhq.com/hex/45022740-b0ca-4a54-a98b-b90f9b4a9a30",
-   "locations": [
-    "San Francisco"
-   ],
-   "terms": [
-    "Summer 2027 (year not stated)"
-   ],
-   "degrees": [
-    "Bachelor's"
-   ],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1788932351,
-   "date_updated": 1788932351,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "bachelors",
-   "keyword_hits": [
-    "product"
-   ],
-   "key": "hex-technologies_product-engineer-intern",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/hex/45022740-b0ca-4a54-a98b-b90f9b4a9a30"
-   ],
-   "latest_posted": 1788932351,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 3
-   },
-   "score": 44,
-   "eligibility": "ineligible",
-   "eligibility_note": "page requires graduation 2027 to 2028",
-   "posting_facts": {
-    "v": 1,
-    "gone": false,
-    "not_enrolled": false,
-    "fulltime_job": false,
-    "returning_only": false,
-    "graduate_title": false,
-    "graduate_only": "",
-    "prior_internship": false,
-    "fulltime_ranges": [],
-    "relative_grad": false,
-    "standing": "",
-    "grad_ranges": [
-     [
-      2027,
-      2028
-     ]
-    ],
-    "underclass": false,
-    "upperclass": ""
    }
   },
   {
@@ -23981,22 +23748,22 @@
    }
   },
   {
-   "id": "zoox:7b20b929-d9a4-4995-a472-16cd4925a877",
+   "id": "hivefinancialsystems:5274887007",
    "source": "boards",
-   "company": "Zoox",
-   "title": "Software Engineer Intern, Autonomy Software [Summer 2027]",
-   "url": "https://jobs.lever.co/zoox/7b20b929-d9a4-4995-a472-16cd4925a877",
+   "company": "Hive Financial Systems",
+   "title": "Software Internship-2027",
+   "url": "https://boards.greenhouse.io/hivefinancialsystems/jobs/5274887007",
    "locations": [
-    "Foster City, CA"
+    "Atlanta, Georgia"
    ],
    "terms": [
-    "Summer 2027"
+    "2027"
    ],
    "degrees": [],
    "sponsorship": "Other",
    "category": null,
-   "date_posted": 1793399815,
-   "date_updated": 1793399815,
+   "date_posted": 1793026080,
+   "date_updated": 1793026080,
    "active": true,
    "discovered": true,
    "tier": 3,
@@ -24011,14 +23778,14 @@
    "citizenship_blocked": false,
    "degree_class": "unknown",
    "keyword_hits": [],
-   "key": "zoox_software-engineer-intern-autonomy-software-summer-2027",
+   "key": "hive-financial-systems_software-internship-2027",
    "sources": [
     "boards"
    ],
    "urls": [
-    "https://jobs.lever.co/zoox/7b20b929-d9a4-4995-a472-16cd4925a877"
+    "https://boards.greenhouse.io/hivefinancialsystems/jobs/5274887007"
    ],
-   "latest_posted": 1793399815,
+   "latest_posted": 1793026080,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -24030,17 +23797,12 @@
    },
    "score": 41,
    "eligibility": "ineligible",
-   "eligibility_note": "page requires graduation 2027 to 2028",
+   "eligibility_note": "page asks for rising junior students",
    "posting_facts": {
     "fulltime_job": false,
     "fulltime_ranges": [],
     "gone": false,
-    "grad_ranges": [
-     [
-      2027,
-      2028
-     ]
-    ],
+    "grad_ranges": [],
     "graduate_only": "",
     "graduate_title": false,
     "not_enrolled": false,
@@ -24049,7 +23811,7 @@
     "returning_only": false,
     "standing": "",
     "underclass": false,
-    "upperclass": "",
+    "upperclass": "rising junior",
     "v": 1
    }
   },
@@ -24354,6 +24116,79 @@
    }
   },
   {
+   "id": "apex-technology-inc:be3c0535-d2e8-4129-855d-c79b23c0c68e",
+   "source": "boards",
+   "company": "Apex",
+   "title": "Mission Integration Engineer Internship (Spring or Summer 2027)",
+   "url": "https://jobs.ashbyhq.com/apex-technology-inc/be3c0535-d2e8-4129-855d-c79b23c0c68e",
+   "locations": [
+    "Los Angeles"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": null,
+   "date_posted": 1791914301,
+   "date_updated": 1791914301,
+   "active": true,
+   "discovered": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "apex_mission-integration-engineer-internship-spring-or-summer-202-ad940b",
+   "sources": [
+    "boards"
+   ],
+   "urls": [
+    "https://jobs.ashbyhq.com/apex-technology-inc/be3c0535-d2e8-4129-855d-c79b23c0c68e"
+   ],
+   "latest_posted": 1791914301,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "ineligible",
+   "eligibility_note": "page requires graduation 2027 to 2028",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [
+     [
+      2027,
+      2028
+     ]
+    ],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "",
+    "v": 1
+   }
+  },
+  {
    "id": "doordashusa:8263774",
    "source": "boards",
    "company": "DoorDash",
@@ -24386,12 +24221,14 @@
    "keyword_hits": [],
    "key": "doordash_software-engineer-intern-labs-summer-2027",
    "sources": [
-    "boards"
+    "boards",
+    "jobright"
    ],
    "urls": [
-    "https://boards.greenhouse.io/doordashusa/jobs/8263774"
+    "https://boards.greenhouse.io/doordashusa/jobs/8263774",
+    "https://jobright.ai/jobs/info/6adbc2310a4cc7090f974930"
    ],
-   "latest_posted": 1791442212,
+   "latest_posted": 1793966400,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -24723,6 +24560,79 @@
    }
   },
   {
+   "id": "helion:56636c72-2c72-4f4f-8334-3b233a235c8d",
+   "source": "boards",
+   "company": "Helion Energy",
+   "title": "Materials Engineering Summer 2027 Intern",
+   "url": "https://jobs.ashbyhq.com/helion/56636c72-2c72-4f4f-8334-3b233a235c8d",
+   "locations": [
+    "Everett, WA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": null,
+   "date_posted": 1790713332,
+   "date_updated": 1790713332,
+   "active": true,
+   "discovered": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "helion-energy_materials-engineering-summer-2027-intern",
+   "sources": [
+    "boards"
+   ],
+   "urls": [
+    "https://jobs.ashbyhq.com/helion/56636c72-2c72-4f4f-8334-3b233a235c8d"
+   ],
+   "latest_posted": 1790713332,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "ineligible",
+   "eligibility_note": "page asks for PhD students",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [
+     [
+      2027,
+      2027
+     ]
+    ],
+    "graduate_only": "PhD",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "",
+    "v": 1
+   }
+  },
+  {
    "id": "ec241207-37cb-48f4-aa65-cf19d960f7a2",
    "source": "simplify",
    "company": "Flint",
@@ -24757,7 +24667,8 @@
    "keyword_hits": [],
    "key": "flint_engineering-intern-summer-2027",
    "sources": [
-    "simplify"
+    "simplify",
+    "boards"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/flint/39f9e665-7037-4dff-b77a-ff7039df2bfc"
@@ -24940,74 +24851,6 @@
     "standing": "",
     "underclass": false,
     "upperclass": "",
-    "v": 1
-   }
-  },
-  {
-   "id": "Antares:922a527d-9826-446d-9aba-ffc611995830",
-   "source": "boards",
-   "company": "Antares Nuclear",
-   "title": "Multiphysics Software Intern - Summer 2027",
-   "url": "https://jobs.ashbyhq.com/Antares/922a527d-9826-446d-9aba-ffc611995830",
-   "locations": [
-    "Los Angeles"
-   ],
-   "terms": [
-    "Summer 2027"
-   ],
-   "degrees": [],
-   "sponsorship": "Other",
-   "category": null,
-   "date_posted": 1789540851,
-   "date_updated": 1789540851,
-   "active": true,
-   "discovered": true,
-   "tier": 3,
-   "company_key": null,
-   "role": "swe",
-   "early_career": "none",
-   "location_class": "us",
-   "outside_us_only": false,
-   "excluded": false,
-   "graduate_title": false,
-   "citizens_only": false,
-   "citizenship_blocked": false,
-   "degree_class": "unknown",
-   "keyword_hits": [],
-   "key": "antares-nuclear_multiphysics-software-intern-summer-2027",
-   "sources": [
-    "boards"
-   ],
-   "urls": [
-    "https://jobs.ashbyhq.com/Antares/922a527d-9826-446d-9aba-ffc611995830"
-   ],
-   "latest_posted": 1789540851,
-   "breakdown": {
-    "role": 30,
-    "tier": 0,
-    "early_career": 0,
-    "degrees": 5,
-    "location": 6,
-    "freshness": 0,
-    "keywords": 0
-   },
-   "score": 41,
-   "eligibility": "ineligible",
-   "eligibility_note": "page asks for junior or senior students",
-   "posting_facts": {
-    "fulltime_job": false,
-    "fulltime_ranges": [],
-    "gone": false,
-    "grad_ranges": [],
-    "graduate_only": "",
-    "graduate_title": false,
-    "not_enrolled": false,
-    "prior_internship": true,
-    "relative_grad": false,
-    "returning_only": false,
-    "standing": "",
-    "underclass": false,
-    "upperclass": "junior or senior",
     "v": 1
    }
   },
@@ -25344,13 +25187,12 @@
    ],
    "key": "brain-co_ai-product-intern",
    "sources": [
-    "simplify",
-    "boards"
+    "simplify"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/brainco/28c6cd2f-b609-4ca6-a2f6-adfa3d679d0b"
    ],
-   "latest_posted": 1789247674,
+   "latest_posted": 1789171200,
    "breakdown": {
     "role": 24,
     "tier": 0,
@@ -25689,6 +25531,74 @@
    }
   },
   {
+   "id": "castelioncorporation:4386047009",
+   "source": "boards",
+   "company": "Castelion",
+   "title": "Embedded Software Engineer Intern - Spring 2027",
+   "url": "https://boards.greenhouse.io/castelioncorporation/jobs/4386047009",
+   "locations": [
+    "Torrance, CA"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "degrees": [],
+   "sponsorship": "Other",
+   "category": null,
+   "date_posted": 1788800676,
+   "date_updated": 1788800676,
+   "active": true,
+   "discovered": true,
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "unknown",
+   "keyword_hits": [],
+   "key": "castelion_embedded-software-engineer-intern-spring-2027",
+   "sources": [
+    "boards"
+   ],
+   "urls": [
+    "https://boards.greenhouse.io/castelioncorporation/jobs/4386047009"
+   ],
+   "latest_posted": 1788800676,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "ineligible",
+   "eligibility_note": "page asks for rising junior students",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "rising junior",
+    "v": 1
+   }
+  },
+  {
    "id": "58cf8fe8-1a98-42de-92d9-2a915d02739d",
    "source": "simplify",
    "company": "Scale AI",
@@ -25800,12 +25710,13 @@
    "keyword_hits": [],
    "key": "apex_ground-software-intern-spring-or-summer-2027",
    "sources": [
-    "simplify"
+    "simplify",
+    "boards"
    ],
    "urls": [
     "https://jobs.ashbyhq.com/apex-technology-inc/2d5ad921-241f-4e7a-b9ff-9d01763da88c"
    ],
-   "latest_posted": 1788477053,
+   "latest_posted": 1793905063,
    "breakdown": {
     "role": 30,
     "tier": 0,
@@ -25913,6 +25824,157 @@
     "standing": "",
     "underclass": false,
     "upperclass": "",
+    "v": 1
+   }
+  },
+  {
+   "id": "7003357f-7a78-465d-aac0-c6c87c6cf742",
+   "source": "simplify",
+   "company": "Apex",
+   "title": "Software Engineer Intern - Embedded Systems",
+   "url": "https://jobs.ashbyhq.com/apex-technology-inc/4203604c-2330-4c89-8432-37af718a6bda/application?embed=true",
+   "locations": [
+    "LA"
+   ],
+   "terms": [
+    "Spring 2027",
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's"
+   ],
+   "sponsorship": "Other",
+   "category": "Hardware",
+   "date_posted": 1788407545,
+   "date_updated": 1788422014,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Apex",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "apex_software-engineer-intern-embedded-systems",
+   "sources": [
+    "simplify",
+    "boards"
+   ],
+   "urls": [
+    "https://jobs.ashbyhq.com/apex-technology-inc/4203604c-2330-4c89-8432-37af718a6bda"
+   ],
+   "latest_posted": 1793901980,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "ineligible",
+   "eligibility_note": "page requires graduation 2027 to 2028",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [
+     [
+      2027,
+      2028
+     ]
+    ],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "",
+    "v": 1
+   }
+  },
+  {
+   "id": "7509a79d-1085-4918-bdcc-6c82b44b486b",
+   "source": "simplify",
+   "company": "Hermeus",
+   "title": "Software Engineer Intern - Command & Control",
+   "url": "https://jobs.lever.co/hermeus/5b08e2df-c9db-4831-aece-67d89e744796/apply",
+   "locations": [
+    "Atlanta, GA"
+   ],
+   "terms": [
+    "Spring 2027",
+    "Summer 2027"
+   ],
+   "degrees": [
+    "Bachelor's",
+    "Master's",
+    "PhD"
+   ],
+   "sponsorship": "Other",
+   "category": "Software",
+   "date_posted": 1788401681,
+   "date_updated": 1788415136,
+   "active": true,
+   "company_url": "https://simplify.jobs/c/Hermeus",
+   "tier": 3,
+   "company_key": null,
+   "role": "swe",
+   "early_career": "none",
+   "location_class": "us",
+   "outside_us_only": false,
+   "excluded": false,
+   "graduate_title": false,
+   "citizens_only": false,
+   "citizenship_blocked": false,
+   "degree_class": "bachelors",
+   "keyword_hits": [],
+   "key": "hermeus_software-engineer-intern-command-control",
+   "sources": [
+    "simplify"
+   ],
+   "urls": [
+    "https://jobs.lever.co/hermeus/5b08e2df-c9db-4831-aece-67d89e744796/apply"
+   ],
+   "latest_posted": 1788401681,
+   "breakdown": {
+    "role": 30,
+    "tier": 0,
+    "early_career": 0,
+    "degrees": 5,
+    "location": 6,
+    "freshness": 0,
+    "keywords": 0
+   },
+   "score": 41,
+   "eligibility": "ineligible",
+   "eligibility_note": "page asks for rising senior students",
+   "posting_facts": {
+    "fulltime_job": false,
+    "fulltime_ranges": [],
+    "gone": false,
+    "grad_ranges": [],
+    "graduate_only": "",
+    "graduate_title": false,
+    "not_enrolled": false,
+    "prior_internship": false,
+    "relative_grad": false,
+    "returning_only": false,
+    "standing": "",
+    "underclass": false,
+    "upperclass": "rising senior",
     "v": 1
    }
   }
