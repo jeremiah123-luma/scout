@@ -277,15 +277,12 @@ def passes_filters(listing: dict, cycle_year: str = "2027", max_age_days: int | 
         listing["term_unknown"] = True
     elif not any(cycle_year in t for t in terms):
         return False, "not a 2027 term"
-    # A company board only lists jobs that are open now, so the hand-picked targets.yaml boards skip the age
-    # cutoff: Palantir reposts the same Meritocracy Fellowship every year, and its posting date is from 2025.
-    # Boards found in the lists' links (discovered) keep the cutoff: across a thousand boards, evergreen intern
-    # postings first published years ago would otherwise flood in.
-    hand_picked = listing.get("source") == "boards" and not listing.get("discovered")
-    if max_age_days and listing.get("date_posted") and not hand_picked:
+    # Every source, hand-picked boards included, drops a posting once it is max_age_days old (30): he wants
+    # only what went up this month. Undated rows (a board that gives no date) stay and are scored as unknown.
+    if max_age_days and listing.get("date_posted"):
         import time
         age_days = ((now if now is not None else time.time()) - listing["date_posted"]) / 86400
-        if age_days > max_age_days:
+        if age_days >= max_age_days:
             return False, f"older than {max_age_days} days"
     if listing.get("degree_class") == "graduate_only" or listing.get("graduate_title"):
         return False, "graduate students only"

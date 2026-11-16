@@ -96,7 +96,10 @@ def posting_id(url: str) -> str:
     return ""
 
 
-SOURCE_RANK = {"boards": 1, "jobright": 0}  # anything else is one of the lists: 2
+# SpeedyApply and Zapply link the company page like a board does, but carry no degree info, so the main
+# lists win over them; Jobright (its own page, not the company's) still loses to everyone.
+SOURCE_RANK = {"boards": 1, "speedyapply": 1, "zapply": 1, "jobright": 0}  # anything else is one of the lists: 2
+LOOSE_SOURCES = ("jobright", "speedyapply", "zapply")  # lists that reword titles
 _LOOSE_NOISE = re.compile(r"^(20[2-3][0-9]|summer|fall|winter|spring|intern|interns|internship|internships|start|s)$")
 
 
@@ -130,7 +133,7 @@ def dedupe(listings: list[dict]) -> list[dict]:
         pid = posting_id(item.get("url", ""))
         loose = loose_key(item.get("company", ""), item.get("title", ""))
         existing = (by_url.get(url) if url else None) or (by_id.get(pid) if pid else None) or by_key.get(key)
-        if existing is None and item.get("source") == "jobright":
+        if existing is None and item.get("source") in LOOSE_SOURCES:
             existing = by_loose.get(loose)
         if existing is not None:
             sources = existing.setdefault("sources", [existing.get("source")])

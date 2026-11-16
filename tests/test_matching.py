@@ -160,10 +160,10 @@ class Filters(unittest.TestCase):
 
     def test_too_old_is_dropped(self):
         now = 1_800_000_000
-        old = self.base(date_posted=now - 300 * 86400)
-        self.assertEqual(matching.passes_filters(old, max_age_days=240, now=now)[1], "older than 240 days")
-        recent = self.base(date_posted=now - 100 * 86400)
-        self.assertTrue(matching.passes_filters(recent, max_age_days=240, now=now)[0])
+        old = self.base(date_posted=now - 30 * 86400)   # exactly 30 days counts as too old
+        self.assertEqual(matching.passes_filters(old, max_age_days=30, now=now)[1], "older than 30 days")
+        recent = self.base(date_posted=now - 29 * 86400)
+        self.assertTrue(matching.passes_filters(recent, max_age_days=30, now=now)[0])
 
 
 class ReviewFixes(unittest.TestCase):

@@ -62,8 +62,8 @@ class Boards(unittest.TestCase):
         kept = [r["title"] for r in rows if matching.passes_filters(matching.describe(r, targets))[0]]
         self.assertEqual(kept, ["Meritocracy Fellowship", "Neurodivergent Fellowship"])
         self.assertTrue(all(r["early_career"] == "strong" for r in rows if r["title"] in kept))
-        # The board only lists open jobs, so a posting first published long ago is still kept.
-        self.assertTrue(matching.passes_filters(rows[0], max_age_days=240, now=1790000000 + 400 * 86400)[0])
+        # A hand-picked board's posting first published long ago drops at the 30-day cutoff like any other.
+        self.assertFalse(matching.passes_filters(rows[0], max_age_days=30, now=1790000000 + 400 * 86400)[0])
 
     def test_terms_when_the_title_has_no_year(self):
         self.assertEqual(boards.terms_for("Data Analyst, Intern", NOW), ["Summer 2027 (year not stated)"])

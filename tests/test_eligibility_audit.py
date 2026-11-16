@@ -300,7 +300,7 @@ class ShownRowsAreAllChecked(unittest.TestCase):
              mock.patch.object(eligibility, "load_cache", return_value={}), \
              mock.patch.object(watch, "could_push", return_value=False), \
              mock.patch.object(watch, "on_board", return_value=False):
-            matches, _ = watch.run(raw, matching.load_targets(), scoring.load_weights(), check_pages=5,
+            matches, _ = watch.run(raw, {**matching.load_targets(), "max_age_days": None}, scoring.load_weights(), check_pages=5,
                                    allow_network=False, now=1_800_000_000, save=False)
         shown = [m for m in matches if m["eligibility"] != "ineligible"][:5]
         self.assertEqual(len(shown), 5)

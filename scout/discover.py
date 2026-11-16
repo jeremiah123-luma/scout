@@ -8,8 +8,8 @@ picked up yet: a company the lists already know often opens a second intern post
 So every run:
   1. every list link (active or not, so the set only grows) is checked for a board, and new ones are added to
      data/boards.json with the company name the list used;
-  2. the boards read longest ago are read, a batch big enough that each one comes around about every 8 runs
-     (8 to 12 hours, since GitHub skips some hourly runs), 8 at a time, with a time budget;
+  2. the boards read longest ago are read, a batch big enough that each one comes around about every 4 runs
+     (4 to 6 hours, since GitHub skips some hourly runs), 8 at a time, with a time budget;
   3. a board that answers 404 three reads in a row is dropped (kept in the file, so it is not found again).
 
 The boards in targets.yaml are not part of this: boards.fetch_boards reads them every run.
@@ -38,7 +38,7 @@ from scout import boards
 ROOT = Path(__file__).resolve().parent.parent
 STATE_PATH = ROOT / "data" / "boards.json"
 
-ROTATION_RUNS = 8     # each board is read about once every 8 runs
+ROTATION_RUNS = 4     # each board is read about once every 4 runs, so a new posting shows within hours
 MIN_BATCH = 25
 MAX_BATCH = 400       # a ceiling, so a jump in boards found can never stretch one run past its time limit
 WORKERS = 8           # a small pool: fast enough, and no board host sees more than a few requests at once

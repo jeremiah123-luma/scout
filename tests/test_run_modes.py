@@ -187,10 +187,10 @@ class EligibilityCacheInDryRun(unittest.TestCase):
              mock.patch.object(eligibility, "is_readable_board", return_value=True), \
              mock.patch.object(eligibility, "load_cache", return_value={}), \
              mock.patch.object(eligibility, "save_cache") as save:
-            matches, _ = watch.run(raw, matching.load_targets(), W, check_pages=3, allow_network=True, now=NOW, save=False)
+            matches, _ = watch.run(raw, {**matching.load_targets(), "max_age_days": None}, W, check_pages=3, allow_network=True, now=NOW, save=False)
             save.assert_not_called()
             self.assertTrue(any(m["eligibility"] == "ok" for m in matches), "pages were still read")
-            watch.run(raw, matching.load_targets(), W, check_pages=3, allow_network=True, now=NOW)
+            watch.run(raw, {**matching.load_targets(), "max_age_days": None}, W, check_pages=3, allow_network=True, now=NOW)
             save.assert_called_once()
 
 

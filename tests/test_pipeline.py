@@ -9,11 +9,13 @@ FIXTURES = Path(__file__).parent / "fixtures"
 
 
 class Pipeline(unittest.TestCase):
+    # The fixture rows were saved months apart; the 30-day cutoff has its own tests (test_matching.py), so
+    # these pipeline tests turn it off to keep testing everything else.
     @classmethod
     def setUpClass(cls):
         raw = {"simplify": listings.load_json(FIXTURES / "simplify.json"),
                "vanshb03": listings.load_json(FIXTURES / "vanshb03.json")}
-        cls.matches, cls.counts = watch.run(raw, matching.load_targets(), scoring.load_weights(),
+        cls.matches, cls.counts = watch.run(raw, {**matching.load_targets(), "max_age_days": None}, scoring.load_weights(),
                                             check_pages=5, allow_network=False, now=1_800_000_000)
 
     def test_something_survives(self):
@@ -50,7 +52,7 @@ class Pipeline(unittest.TestCase):
         first = []
         try:
             eligibility.check = lambda item, *a, **k: (first.append(item) if not first else None, fake_check(item, *a, **k))[1]
-            matches, _ = watch.run(raw, matching.load_targets(), scoring.load_weights(), check_pages=5, allow_network=False, now=1_800_000_000)
+            matches, _ = watch.run(raw, {**matching.load_targets(), "max_age_days": None}, scoring.load_weights(), check_pages=5, allow_network=False, now=1_800_000_000)
         finally:
             eligibility.check = original
         self.assertEqual(matches[-1]["eligibility"], "ineligible")

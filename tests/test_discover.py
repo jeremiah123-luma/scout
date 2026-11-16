@@ -79,12 +79,12 @@ class Rotation(unittest.TestCase):
                  "lever:older": entry("lever", "older", last_read="2026-10-19T01:00:00+00:00")}
         self.assertEqual(discover.pick_batch(state, size=3), ["greenhouse:new", "lever:older", "lever:old"])
 
-    def test_batch_size_reads_each_board_about_every_8_runs(self):
-        self.assertEqual(discover.batch_size(1145), 144)
+    def test_batch_size_reads_each_board_about_every_4_runs(self):
+        self.assertEqual(discover.batch_size(1145), 287)
         self.assertEqual(discover.batch_size(10), discover.MIN_BATCH)
         self.assertEqual(discover.batch_size(100_000), discover.MAX_BATCH)
         state = {f"greenhouse:b{i}": entry(slug=f"b{i}") for i in range(400)}
-        self.assertEqual(len(discover.pick_batch(state)), 50)
+        self.assertEqual(len(discover.pick_batch(state)), 100)
 
     def test_a_full_rotation_reads_every_board(self):
         state = {f"greenhouse:b{i}": entry(slug=f"b{i}") for i in range(400)}
@@ -166,7 +166,7 @@ class Failures(unittest.TestCase):
 
 
 class AgeCutoff(unittest.TestCase):
-    """Hand-picked boards skip the 240-day cutoff (Palantir's yearly fellowship); discovered boards keep it."""
+    """Every board keeps the 30-day cutoff, hand-picked or discovered."""
 
     def setUp(self):
         self.targets = matching.load_targets()
@@ -181,11 +181,11 @@ class AgeCutoff(unittest.TestCase):
         state = {"lever:acme": entry("lever", "acme")}
         rows, _ = discover.read_batch(state, ["lever:acme"], NOW, readers={"lever": reader})
         row = matching.describe(rows[0], self.targets)
-        self.assertEqual(matching.passes_filters(row, max_age_days=240, now=NOW), (False, "older than 240 days"))
+        self.assertEqual(matching.passes_filters(row, max_age_days=30, now=NOW), (False, "older than 30 days"))
 
-    def test_the_same_posting_on_a_hand_picked_board_is_kept(self):
+    def test_the_same_posting_on_a_hand_picked_board_is_dropped_too(self):
         row = matching.describe(boards.lever("acme", "Acme", self.when, fetch=self.fetch)[0], self.targets)
-        self.assertTrue(matching.passes_filters(row, max_age_days=240, now=NOW)[0])
+        self.assertEqual(matching.passes_filters(row, max_age_days=30, now=NOW), (False, "older than 30 days"))
 
 
 class Dedupe(unittest.TestCase):

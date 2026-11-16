@@ -139,6 +139,6 @@ graduation_year: 2030
 # ruled out without one. Four summers at Lumasoft (2023 to 2026) and Rutgers Athletics count.
 past_internship: true
 
-# Listings posted more than this many days ago are dropped even if the list still says "active".
-# (The Simplify list only hides rows after about 2 months in its README, but the JSON keeps them active.)
-max_age_days: 240
+# Listings posted this many days ago or more are dropped, from every source, even if the list still says
+# "active". 30 = only postings from the last month.
+max_age_days: 30

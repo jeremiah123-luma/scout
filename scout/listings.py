@@ -7,6 +7,7 @@ Sources (all free, all public JSON, no login):
             for internships the lists never carry, like design roles, plus a rotating batch of the Greenhouse,
             Lever, Ashby, and SmartRecruiters boards the lists link to (scout/discover.py)
   jobright  Jobright's daily lists, the ones intern-list.com shows (scout/jobright.py), about 500 recent rows
+  speedyapply, zapply  two more community lists, company links (scout/morelists.py)
 
 Every row becomes a plain dict with the same keys, so nothing downstream cares which list it came from:
 
@@ -37,7 +38,7 @@ from pathlib import Path
 
 import yaml
 
-from scout import boards, discover, jobright
+from scout import boards, discover, jobright, morelists
 
 SOURCES = {
     "simplify": "https://raw.githubusercontent.com/SimplifyJobs/Summer2027-Internships/dev/.github/scripts/listings.json",
@@ -110,7 +111,8 @@ def normalize_vanshb03(row: dict) -> dict:
     }
 
 
-NORMALIZERS = {"simplify": normalize_simplify, "vanshb03": normalize_vanshb03, "boards": lambda row: row, "jobright": lambda row: row}
+NORMALIZERS = {"simplify": normalize_simplify, "vanshb03": normalize_vanshb03, "boards": lambda row: row, "jobright": lambda row: row,
+               "speedyapply": lambda row: row, "zapply": lambda row: row}
 TARGETS_PATH = Path(__file__).resolve().parent.parent / "config" / "targets.yaml"
 
 
@@ -127,7 +129,7 @@ def normalize_all(raw_by_source: dict[str, list]) -> list[dict]:
 
 
 def fetch_all(sources: dict[str, str] | None = None, with_boards: bool = True, with_jobright: bool = True,
-              with_discovered: bool = True, save_boards: bool = True) -> tuple[dict[str, list], list[str]]:
+              with_more: bool = True, with_discovered: bool = True, save_boards: bool = True) -> tuple[dict[str, list], list[str]]:
     """Fetch every source. Returns (raw rows by source, list of error messages).
 
     One broken source must not hide the other, so errors are collected, not raised.
@@ -151,6 +153,10 @@ def fetch_all(sources: dict[str, str] | None = None, with_boards: bool = True, w
         rows, jobright_errors = jobright.fetch_jobright()
         raw["jobright"] = rows
         errors.extend(jobright_errors)
+    if with_more:
+        more, more_errors = morelists.fetch_more(save=save_boards)
+        raw.update(more)
+        errors.extend(more_errors)
     if with_boards and with_discovered:
         # Boards found in the lists' links, a rotating batch per run (scout/discover.py). Hundreds of small
         # boards fail now and then, so only a summary line comes back as an error, and only when most failed.
